@@ -1,0 +1,11 @@
+<resources>
+    <style name="CalendarDateText" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <style name="CalendarWeekDayText" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+    <style name="CalendarHeaderText" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@android:color/holo_blue_dark</item>
+    </style>
+</resources> 

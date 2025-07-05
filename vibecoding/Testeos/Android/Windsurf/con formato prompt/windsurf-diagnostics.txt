@@ -1,0 +1,152 @@
+{
+  "systemInfo": {
+    "operatingSystem": "win32",
+    "windsurfVersion": "1.9.4",
+    "ideName": "windsurf",
+    "userName": "Esteban Carnuccio",
+    "userEmail": "estebancarnuccio@gmail.com",
+    "teamsTier": 0,
+    "timestamp": "2025-07-03T20:52:44.908Z",
+    "installationId": "82ca1b56-201b-44b6-83b1-30efa8716350"
+  },
+  "userSettings": {
+    "openMostRecentChatConversation": false,
+    "lastSelectedModel": "MODEL_UNSPECIFIED",
+    "themePreference": "THEME_PREFERENCE_UNSPECIFIED",
+    "extensionPanelTab": "EXTENSION_PANEL_TAB_UNSPECIFIED",
+    "fontSize": "FONT_SIZE_UNSPECIFIED",
+    "autocompleteSpeed": "AUTOCOMPLETE_SPEED_UNSPECIFIED",
+    "rememberLastModelSelection": "REMEMBER_LAST_MODEL_SELECTION_UNSPECIFIED",
+    "lastSelectedModelName": "",
+    "lastSelectedCascadeModel": "MODEL_CHAT_GPT_4_1_2025_04_14",
+    "cascadeNuxStates": [],
+    "cascadePlannerMode": "CONVERSATIONAL_PLANNER_MODE_DEFAULT",
+    "cascadeAllowedCommands": [],
+    "cascadeDeniedCommands": [],
+    "userNuxStates": [],
+    "cascadeWebSearchDisabled": false,
+    "disableAutocomplete": false,
+    "disableSupercomplete": false,
+    "disableSelectionPopup": false,
+    "disableExplainProblemInlayHint": false,
+    "disableInlayHintShortcuts": false,
+    "disableOpenCascadeOnReload": false,
+    "disableAutoOpenEditedFiles": false,
+    "disableTabToJump": false,
+    "cascadeAutoExecutionPolicy": "CASCADE_COMMANDS_AUTO_EXECUTION_UNSPECIFIED",
+    "explainAndFixInCurrentConversation": false,
+    "allowCascadeAccessGitignoreFiles": false,
+    "disableCascadeAutoFixLints": false,
+    "disableCascadeBrowserPreviews": false,
+    "detectProxy": false,
+    "disableTabToImport": false,
+    "useClipboardForCompletions": false,
+    "disableHighlightAfterAccept": false,
+    "lastSelectedNewConvoTab": "",
+    "disableAutoGenerateMemories": false,
+    "enableSoundsForSpecialEvents": false,
+    "enableTabSounds": false,
+    "allowCascadeInBackground": false,
+    "tabToJump": "TAB_TO_JUMP_UNSPECIFIED",
+    "cascadeWebSearch": "CASCADE_WEB_SEARCH_TOOL_UNSPECIFIED",
+    "enableTerminalCompletion": false,
+    "lastModelOverride": "MODEL_GOOGLE_GEMINI_2_5_PRO",
+    "featureUsageData": {
+      "CASCADE_WEB_AT_MENTION": {
+        "hasUsed": true
+      },
+      "CASCADE_CLICK_MODEL_SELECTOR": {
+        "hasUsed": true
+      }
+    },
+    "disableCascadeInBackground": false
+  },
+  "extensionLogs": [
+    "2025-07-03 17:07:28.914 [info] 2025/07/03 17:07:28 maxprocs: Leaving GOMAXPROCS=12: CPU quota undefined",
+    "2025-07-03 17:07:29.385 [info] I0703 17:07:29.384955 20924 main.go:585] Setting GOMAXPROCS to 4",
+    "2025-07-03 17:07:29.387 [info] I0703 17:07:29.386340 20924 main.go:800] Starting language server process with pid 20924",
+    "2025-07-03 17:07:29.388 [info] I0703 17:07:29.387343 20924 server.go:269] Language server will attempt to listen on host 127.0.0.1",
+    "2025-07-03 17:07:29.390 [info] I0703 17:07:29.390341 20924 server.go:276] Language server listening on random port at 62741",
+    "2025-07-03 17:07:29.926 [info] I0703 17:07:29.925494 20924 server.go:387] Created extension server client at port 62713",
+    "2025-07-03 17:07:34.294 [info] I0703 17:07:34.294156 20924 server.go:946] Local search is enabled, will index local files.",
+    "2025-07-03 17:07:34.295 [info] I0703 17:07:34.294156 20924 server.go:950] Using 3 indexer workers",
+    "2025-07-03 17:07:34.335 [info] (Windsurf) 2025-07-03 17:07:34.332 [INFO]: Language server started",
+    "2025-07-03 17:07:34.464 [info] (Windsurf) 2025-07-03 17:07:34.463 [INFO]: LS lspClient started successfully",
+    "2025-07-03 17:11:39.105 [info] 2025/07/03 17:11:39 maxprocs: Leaving GOMAXPROCS=12: CPU quota undefined",
+    "2025-07-03 17:11:39.293 [info] I0703 17:11:39.293128 23048 main.go:585] Setting GOMAXPROCS to 4",
+    "2025-07-03 17:11:39.293 [info] I0703 17:11:39.293171 23048 main.go:800] Starting language server process with pid 23048",
+    "2025-07-03 17:11:39.293 [info] I0703 17:11:39.293171 23048 server.go:269] Language server will attempt to listen on host 127.0.0.1",
+    "2025-07-03 17:11:39.294 [info] I0703 17:11:39.294272 23048 server.go:276] Language server listening on random port at 63169",
+    "2025-07-03 17:11:39.859 [info] I0703 17:11:39.835083 23048 server.go:387] Created extension server client at port 63168",
+    "2025-07-03 17:11:44.257 [info] I0703 17:11:44.257167 23048 server.go:946] Local search is enabled, will index local files.",
+    "2025-07-03 17:11:44.258 [info] I0703 17:11:44.257167 23048 server.go:950] Using 3 indexer workers",
+    "2025-07-03 17:11:44.281 [info] (Windsurf) 2025-07-03 17:11:44.277 [INFO]: Language server started",
+    "2025-07-03 17:11:44.417 [info] (Windsurf) 2025-07-03 17:11:44.417 [INFO]: LS lspClient started successfully",
+    "2025-07-03 17:28:27.649 [info] (Windsurf) 2025-07-03 17:28:27.649 [INFO]: [Cascade Manager] Opening diff zones for: ",
+    "2025-07-03 17:31:26.456 [info] (Windsurf) 2025-07-03 17:31:26.455 [INFO]: [Cascade Manager] Opening diff zones for: build.gradle.kts",
+    "2025-07-03 17:32:42.250 [info] (Windsurf) 2025-07-03 17:32:42.250 [INFO]: [Cascade Manager] Opening diff zones for: AndroidManifest.xml",
+    "2025-07-03 17:33:24.426 [info] (Windsurf) 2025-07-03 17:33:24.426 [INFO]: [Cascade Manager] Opening diff zones for: ShakeActivity.kt",
+    "2025-07-03 17:33:42.034 [info] (Windsurf) 2025-07-03 17:33:42.033 [INFO]: [Cascade Manager] Opening diff zones for: activity_shake.xml",
+    "2025-07-03 17:35:05.734 [info] (Windsurf) 2025-07-03 17:35:05.733 [INFO]: [Cascade Manager] Opening diff zones for: MainActivity.kt",
+    "2025-07-03 17:35:45.547 [info] (Windsurf) 2025-07-03 17:35:45.546 [INFO]: [Cascade Manager] Opening diff zones for: activity_main.xml",
+    "2025-07-03 17:37:16.245 [info] (Windsurf) 2025-07-03 17:37:16.245 [INFO]: [Cascade Manager] Opening diff zones for: activity_main.xml",
+    "2025-07-03 17:39:31.918 [info] (Windsurf) 2025-07-03 17:39:31.917 [INFO]: [Cascade Manager] Opening diff zones for: AndroidManifest.xml",
+    "2025-07-03 17:40:32.862 [info] (Windsurf) 2025-07-03 17:40:32.862 [INFO]: [Cascade Manager] Opening diff zones for: build.gradle.kts",
+    "2025-07-03 17:40:40.245 [info] (Windsurf) 2025-07-03 17:40:40.245 [INFO]: [Cascade Manager] Opening diff zones for: MainActivity.kt",
+    "2025-07-03 17:41:49.586 [info] (Windsurf) 2025-07-03 17:41:49.585 [INFO]: [Cascade Manager] Opening diff zones for: MainActivity.kt",
+    "2025-07-03 17:43:17.733 [info] (Windsurf) 2025-07-03 17:43:17.733 [INFO]: [Cascade Manager] Opening diff zones for: MainActivity.kt",
+    "2025-07-03 17:52:00.761 [info] (Windsurf) 2025-07-03 17:52:00.761 [INFO]: [Cascade Manager] Opening diff zones for: build.gradle.kts, AndroidManifest.xml, ShakeActivity.kt, activity_shake.xml, MainActivity.kt, activity_main.xml"
+  ],
+  "languageServerDiagnostics": {
+    "logs": [
+      "I0703 17:11:39.293128 23048 main.go:585] Setting GOMAXPROCS to 4\n",
+      "I0703 17:11:39.293171 23048 main.go:800] Starting language server process with pid 23048\n",
+      "I0703 17:11:39.293171 23048 server.go:269] Language server will attempt to listen on host 127.0.0.1\n",
+      "I0703 17:11:39.294272 23048 server.go:276] Language server listening on random port at 63169\n",
+      "I0703 17:11:39.835083 23048 server.go:387] Created extension server client at port 63168\n",
+      "I0703 17:11:44.257167 23048 server.go:946] Local search is enabled, will index local files.\n",
+      "I0703 17:11:44.257167 23048 server.go:950] Using 3 indexer workers\n"
+    ]
+  },
+  "recentTrajectories": [
+    {
+      "cascadeId": "faa05bd0-c25c-48ca-a921-52fc5ade1c14",
+      "trajectoryId": "ed126a24-8c1a-4dea-b6d3-eb45509c04a6",
+      "summary": "Android MQTT App with Shake Detection",
+      "lastStepIndex": 58,
+      "lastModifiedTime": "2025-07-03T20:43:24.641Z"
+    },
+    {
+      "cascadeId": "0441d25f-7f21-4abc-88ef-bc08f14dc829",
+      "trajectoryId": "1dd13c42-4236-491e-8511-af0b526338fb",
+      "summary": "Understanding Program Code",
+      "lastStepIndex": 72,
+      "lastModifiedTime": "2025-06-06T18:47:18.171Z"
+    },
+    {
+      "cascadeId": "50a009a3-5f85-48eb-9bd1-1d890be81dea",
+      "trajectoryId": "9a927e9a-32a0-43ff-bf9e-f363b5c26e8a",
+      "summary": "Fixing Unresolved Reference Error",
+      "lastStepIndex": 8,
+      "lastModifiedTime": "2025-05-21T21:57:31.101Z"
+    },
+    {
+      "cascadeId": "7671ce52-7fb6-441e-943f-8ccab453fd17",
+      "trajectoryId": "2a36ffb5-c82b-4124-a3fb-73499b073577",
+      "summary": "Configuring Wear OS Notifications",
+      "lastStepIndex": 83,
+      "lastModifiedTime": "2025-05-21T21:55:48.500Z"
+    }
+  ],
+  "fields": {
+    "cascadeId": "faa05bd0-c25c-48ca-a921-52fc5ade1c14",
+    "currentLatestStepIndex": 58,
+    "trajectoryId": "ed126a24-8c1a-4dea-b6d3-eb45509c04a6",
+    "consoleLogs": [
+      "[LOG] 2025-7-3 17:11:47.488 Sentry initialized",
+      "[WARN] 2025-7-3 17:28:27.614 SCROLL: No sections in viewport, defaulting to entire conversation",
+      "[WARN] 2025-7-3 17:28:27.619 SCROLL: No sections in viewport, defaulting to entire conversation",
+      "[WARN] 2025-7-3 17:28:27.623 SCROLL: No sections in viewport, defaulting to entire conversation"
+    ]
+  }
+}
