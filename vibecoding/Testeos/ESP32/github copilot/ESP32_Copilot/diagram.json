@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-breadboard", "id": "bb1", "top": -31.8, "left": -26, "attrs": {} },
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": -4.9, "left": -187.4, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot1", "top": 27.5, "left": 9.4, "attrs": {} },
+    {
+      "type": "wokwi-relay-module",
+      "id": "relay1",
+      "top": -160.2,
+      "left": -25.2,
+      "rotate": 270,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 47.4,
+      "left": 108.6,
+      "rotate": 90,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": -189.6,
+      "left": 193.8,
+      "attrs": { "volume": "0.1" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn2",
+      "top": 47.4,
+      "left": 243,
+      "rotate": 90,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text1",
+      "top": 192,
+      "left": 86.4,
+      "attrs": { "text": "cambio modo" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text2",
+      "top": 192,
+      "left": 240,
+      "attrs": { "text": "encender ventilador" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+    [ "esp:3V3", "bb1:bp.1", "red", [ "v0" ] ],
+    [ "esp:GND.1", "bb1:bn.1", "black", [ "h38.1", "v19.1" ] ],
+    [ "pot1:GND", "bb1:bn.3", "black", [ "v67.2" ] ],
+    [ "pot1:VCC", "bb1:bp.5", "red", [ "v0" ] ],
+    [ "esp:D34", "bb1:6b.j", "green", [ "h-19.2", "v-67.4", "h144", "v144" ] ],
+    [ "esp:VIN", "bb1:tp.1", "red", [ "h-48", "v-211.2", "h192", "v38.4", "h57.6" ] ],
+    [ "esp:GND.2", "bb1:tn.1", "black", [ "h-28.8", "v-182.5", "h153.6", "v28.8", "h9.6" ] ],
+    [ "relay1:VCC", "bb1:tp.2", "red", [ "v0" ] ],
+    [ "relay1:GND", "bb1:tn.3", "black", [ "v0" ] ],
+    [ "esp:D26", "relay1:IN", "green", [ "h-38.4", "v-192.1", "h211.2", "v57.6", "h57.6" ] ],
+    [ "bz1:1", "bb1:tn.19", "black", [ "v0" ] ],
+    [ "bb1:17b.j", "bb1:bn.13", "black", [ "v38.4" ] ],
+    [ "bz1:2", "esp:D27", "green", [ "v393.6", "h-509.2", "v-153.6" ] ],
+    [ "bb1:31b.i", "bb1:bn.25", "black", [ "v0" ] ],
+    [ "esp:D33", "bb1:29b.j", "green", [ "h-124.8", "v249.6", "h576" ] ],
+    [ "pot1:GND", "bb1:5b.g", "", [ "$bb" ] ],
+    [ "pot1:SIG", "bb1:6b.g", "", [ "$bb" ] ],
+    [ "pot1:VCC", "bb1:7b.g", "", [ "$bb" ] ],
+    [ "btn1:1.l", "bb1:17t.c", "", [ "$bb" ] ],
+    [ "btn1:2.l", "bb1:15t.c", "", [ "$bb" ] ],
+    [ "btn1:1.r", "bb1:17b.h", "", [ "$bb" ] ],
+    [ "btn1:2.r", "bb1:15b.h", "", [ "$bb" ] ],
+    [ "btn2:1.l", "bb1:31t.c", "", [ "$bb" ] ],
+    [ "btn2:2.l", "bb1:29t.c", "", [ "$bb" ] ],
+    [ "btn2:1.r", "bb1:31b.h", "", [ "$bb" ] ],
+    [ "btn2:2.r", "bb1:29b.h", "", [ "$bb" ] ],
+    [ "esp:D25", "bb1:15b.i", "green", [ "h-115.2", "v124.8", "h432", "v-28.8" ] ]
+  ],
+  "dependencies": {}
+}
