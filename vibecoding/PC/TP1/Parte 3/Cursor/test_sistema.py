@@ -11,8 +11,8 @@ import time
 def ejecutar_prueba(duracion, frecuencia, descripcion):
     """Ejecuta una prueba del sistema con los parámetros especificados"""
     print(f"\n{'='*60}")
-    print(f"🧪 PRUEBA: {descripcion}")
-    print(f"⏱️  Duración: {duracion}s | 📡 Frecuencia: {frecuencia}s")
+    print(f"PRUEBA: {descripcion}")
+    print(f"Duración: {duracion}s | Frecuencia: {frecuencia}s")
     print(f"{'='*60}")
     
     try:
@@ -34,15 +34,15 @@ def ejecutar_prueba(duracion, frecuencia, descripcion):
         return resultado.returncode == 0
         
     except subprocess.TimeoutExpired:
-        print("❌ La prueba excedió el tiempo límite")
+        print("ERROR: La prueba excedió el tiempo límite")
         return False
     except Exception as e:
-        print(f"❌ Error ejecutando la prueba: {e}")
+        print(f"ERROR: Error ejecutando la prueba: {e}")
         return False
 
 def main():
     """Función principal para ejecutar todas las pruebas"""
-    print("👻 SISTEMA DE MONITOREO PARANORMAL - PRUEBAS")
+    print("SISTEMA DE MONITOREO PARANORMAL - PRUEBAS")
     print("=" * 60)
     
     # Lista de pruebas a ejecutar
@@ -57,25 +57,25 @@ def main():
     
     for duracion, frecuencia, descripcion in pruebas:
         if ejecutar_prueba(duracion, frecuencia, descripcion):
-            print("✅ Prueba exitosa")
+            print("OK: Prueba exitosa")
             exitos += 1
         else:
-            print("❌ Prueba fallida")
+            print("ERROR: Prueba fallida")
         
         # Pausa entre pruebas
         time.sleep(2)
     
     # Resumen final
     print(f"\n{'='*60}")
-    print("📊 RESUMEN DE PRUEBAS")
+    print("RESUMEN DE PRUEBAS")
     print(f"{'='*60}")
-    print(f"✅ Pruebas exitosas: {exitos}/{total_pruebas}")
-    print(f"❌ Pruebas fallidas: {total_pruebas - exitos}/{total_pruebas}")
+    print(f"Pruebas exitosas: {exitos}/{total_pruebas}")
+    print(f"Pruebas fallidas: {total_pruebas - exitos}/{total_pruebas}")
     
     if exitos == total_pruebas:
-        print("🎉 ¡Todas las pruebas pasaron exitosamente!")
+        print("¡Todas las pruebas pasaron exitosamente!")
     else:
-        print("⚠️  Algunas pruebas fallaron. Revisar el sistema.")
+        print("Algunas pruebas fallaron. Revisar el sistema.")
     
     print(f"{'='*60}")
 

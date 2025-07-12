@@ -1,5 +1,5 @@
 # Desarrollar sistema de monitoreo paranormal
-_Exported on 11/7/2025 at 23:05:20 GMT-3 from Cursor (1.2.4)_
+_Exported on 12/7/2025 at 10:31:47 GMT-3 from Cursor (1.2.4)_
 
 ---
 
@@ -858,4 +858,178 @@ Ahora voy a probar el sistema corregido:
 Puedes consultar el archivo `README.md` para ver ejemplos de uso y detalles técnicos.
 
 ¿Te gustaría que realice alguna prueba adicional, agregue comentarios al código o necesitas otra funcionalidad?
+
+---
+
+**User**
+
+@test_sistema.py 
+
+---
+
+**Cursor**
+
+Veo que hay un problema con la codificación de caracteres Unicode (emojis) en Windows. El error indica que el sistema no puede mostrar los emojis en la consola de Windows. Voy a corregir esto eliminando los emojis y usando caracteres ASCII simples:
+
+
+```python
+        print("=" * 60)
+        print("👻 SISTEMA DE MONITOREO PARANORMAL INICIADO")
+        print("=" * 60)
+        print(f"⏱️  Duración del monitoreo: {duracion} segundos")
+        print(f"📡 Frecuencia de reportes: {frecuencia} segundos")
+        print(f"📹 Cámaras activas: {len(self.zonas)}")
+        print("=" * 60)
+
+->
+
+        print("=" * 60)
+        print("SISTEMA DE MONITOREO PARANORMAL INICIADO")
+        print("=" * 60)
+        print(f"Duración del monitoreo: {duracion} segundos")
+        print(f"Frecuencia de reportes: {frecuencia} segundos")
+        print(f"Cámaras activas: {len(self.zonas)}")
+        print("=" * 60)
+```
+
+```python
+    print(f"🔴 CÁMARA {camara_id} iniciando monitoreo de {zona}")
+
+->
+
+    print(f"[INICIO] CÁMARA {camara_id} iniciando monitoreo de {zona}")
+```
+
+```python
+    print(f"🛑 CÁMARA {camara_id} finalizada. Eventos paranormales detectados: {eventos_paranormales}")
+
+->
+
+    print(f"[FIN] CÁMARA {camara_id} finalizada. Eventos paranormales detectados: {eventos_paranormales}")
+```
+
+```python
+        print("\n" + "=" * 60)
+        print("📊 RESUMEN FINAL DEL MONITOREO")
+        print("=" * 60)
+
+->
+
+        print("\n" + "=" * 60)
+        print("RESUMEN FINAL DEL MONITOREO")
+        print("=" * 60)
+```
+
+```python
+        print("-" * 60)
+        print(f"🎯 TOTAL DE EVENTOS PARANORMALES: {total_eventos}")
+        
+        if total_eventos > 0:
+            print("⚠️  ¡ACTIVIDAD PARANORMAL DETECTADA! ¡Los investigadores deben investigar!")
+        else:
+            print("😌 No se detectó actividad paranormal. La mansión parece estar tranquila.")
+        
+        print("=" * 60)
+
+->
+
+        print("-" * 60)
+        print(f"TOTAL DE EVENTOS PARANORMALES: {total_eventos}")
+        
+        if total_eventos > 0:
+            print("¡ACTIVIDAD PARANORMAL DETECTADA! ¡Los investigadores deben investigar!")
+        else:
+            print("No se detectó actividad paranormal. La mansión parece estar tranquila.")
+        
+        print("=" * 60)
+```
+
+Ahora voy a corregir también el archivo de pruebas para eliminar los emojis:
+
+
+```python
+    print("👻 SISTEMA DE MONITOREO PARANORMAL - PRUEBAS")
+    print("=" * 60)
+
+->
+
+    print("SISTEMA DE MONITOREO PARANORMAL - PRUEBAS")
+    print("=" * 60)
+```
+
+```python
+        print(f"🧪 PRUEBA: {descripcion}")
+        print(f"⏱️  Duración: {duracion}s | 📡 Frecuencia: {frecuencia}s")
+
+->
+
+        print(f"PRUEBA: {descripcion}")
+        print(f"Duración: {duracion}s | Frecuencia: {frecuencia}s")
+```
+
+```python
+        print("❌ La prueba excedió el tiempo límite")
+        return False
+    except Exception as e:
+        print(f"❌ Error ejecutando la prueba: {e}")
+        return False
+
+->
+
+        print("ERROR: La prueba excedió el tiempo límite")
+        return False
+    except Exception as e:
+        print(f"ERROR: Error ejecutando la prueba: {e}")
+        return False
+```
+
+```python
+        if ejecutar_prueba(duracion, frecuencia, descripcion):
+            print("✅ Prueba exitosa")
+            exitos += 1
+        else:
+            print("❌ Prueba fallida")
+
+->
+
+        if ejecutar_prueba(duracion, frecuencia, descripcion):
+            print("OK: Prueba exitosa")
+            exitos += 1
+        else:
+            print("ERROR: Prueba fallida")
+```
+
+```python
+    print("📊 RESUMEN DE PRUEBAS")
+    print(f"{'='*60}")
+    print(f"✅ Pruebas exitosas: {exitos}/{total_pruebas}")
+    print(f"❌ Pruebas fallidas: {total_pruebas - exitos}/{total_pruebas}")
+    
+    if exitos == total_pruebas:
+        print("🎉 ¡Todas las pruebas pasaron exitosamente!")
+    else:
+        print("⚠️  Algunas pruebas fallaron. Revisar el sistema.")
+    
+    print(f"{'='*60}")
+
+->
+
+    print("RESUMEN DE PRUEBAS")
+    print(f"{'='*60}")
+    print(f"Pruebas exitosas: {exitos}/{total_pruebas}")
+    print(f"Pruebas fallidas: {total_pruebas - exitos}/{total_pruebas}")
+    
+    if exitos == total_pruebas:
+        print("¡Todas las pruebas pasaron exitosamente!")
+    else:
+        print("Algunas pruebas fallaron. Revisar el sistema.")
+    
+    print(f"{'='*60}")
+```
+
+Ahora voy a probar el sistema corregido:
+
+
+Parece que hubo un problema con el comando. Voy a intentar ejecutar el script de pruebas nuevamente:
+
 

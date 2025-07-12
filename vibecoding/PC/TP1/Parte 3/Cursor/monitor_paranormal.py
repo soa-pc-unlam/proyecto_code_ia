@@ -42,7 +42,7 @@ def es_evento_paranormal(evento: EventoParanormal) -> bool:
 
 def monitorear_zona(camara_id: int, zona: str, duracion: int, frecuencia: int, resultados: Dict):
     """Función que ejecuta cada proceso de cámara"""
-    print(f"🔴 CÁMARA {camara_id} iniciando monitoreo de {zona}")
+    print(f"[INICIO] CÁMARA {camara_id} iniciando monitoreo de {zona}")
     
     tiempo_inicio = time.time()
     tiempo_fin = tiempo_inicio + duracion
@@ -65,7 +65,7 @@ def monitorear_zona(camara_id: int, zona: str, duracion: int, frecuencia: int, r
     
     # Guardar resultado final
     resultados[camara_id] = eventos_paranormales
-    print(f"🛑 CÁMARA {camara_id} finalizada. Eventos paranormales detectados: {eventos_paranormales}")
+    print(f"[FIN] CÁMARA {camara_id} finalizada. Eventos paranormales detectados: {eventos_paranormales}")
 
 class SistemaMonitoreoParanormal:
     """Sistema principal de monitoreo paranormal"""
@@ -85,11 +85,11 @@ class SistemaMonitoreoParanormal:
     def iniciar_monitoreo(self, duracion: int, frecuencia: int):
         """Inicia el monitoreo con todas las cámaras"""
         print("=" * 60)
-        print("👻 SISTEMA DE MONITOREO PARANORMAL INICIADO")
+        print("SISTEMA DE MONITOREO PARANORMAL INICIADO")
         print("=" * 60)
-        print(f"⏱️  Duración del monitoreo: {duracion} segundos")
-        print(f"📡 Frecuencia de reportes: {frecuencia} segundos")
-        print(f"📹 Cámaras activas: {len(self.zonas)}")
+        print(f"Duración del monitoreo: {duracion} segundos")
+        print(f"Frecuencia de reportes: {frecuencia} segundos")
+        print(f"Cámaras activas: {len(self.zonas)}")
         print("=" * 60)
         
         # Crear procesos para cada cámara
@@ -112,7 +112,7 @@ class SistemaMonitoreoParanormal:
     def mostrar_resumen_final(self):
         """Muestra el resumen final de todos los eventos detectados"""
         print("\n" + "=" * 60)
-        print("📊 RESUMEN FINAL DEL MONITOREO")
+        print("RESUMEN FINAL DEL MONITOREO")
         print("=" * 60)
         
         total_eventos = 0
@@ -123,12 +123,12 @@ class SistemaMonitoreoParanormal:
             total_eventos += eventos
         
         print("-" * 60)
-        print(f"🎯 TOTAL DE EVENTOS PARANORMALES: {total_eventos}")
+        print(f"TOTAL DE EVENTOS PARANORMALES: {total_eventos}")
         
         if total_eventos > 0:
-            print("⚠️  ¡ACTIVIDAD PARANORMAL DETECTADA! ¡Los investigadores deben investigar!")
+            print("¡ACTIVIDAD PARANORMAL DETECTADA! ¡Los investigadores deben investigar!")
         else:
-            print("😌 No se detectó actividad paranormal. La mansión parece estar tranquila.")
+            print("No se detectó actividad paranormal. La mansión parece estar tranquila.")
         
         print("=" * 60)
 
