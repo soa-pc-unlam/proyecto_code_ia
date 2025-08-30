@@ -13,6 +13,8 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
+#include "MetricsESP32.h"
+
 // WiFi and MQTT Configuration
 const char* ssid = "Maria";
 const char* password = "44843368";
@@ -131,9 +133,18 @@ void setup() {
   
   // Conectar a MQTT
   reconnect();
+
   
   Serial.println("Smart Home Temperature Control System Started");
   Serial.println("Initial State: AUTO");
+  MetricsESP32::begin();
+
+}
+
+void publicar(const char* topic, const char* msg) {
+  if (client.publish(topic, msg)) {
+    MetricsESP32::notifyTx(strlen(msg));
+  }
 }
 
 void loop() {
@@ -150,9 +161,9 @@ void loop() {
     // Publicar temperatura
     char tempString[8];
     dtostrf(currentTemp, 1, 2, tempString);
-    client.publish(mqtt_temp_topic, tempString);
-    Serial.print("Temperatura publicada: ");
-    Serial.println(tempString);
+    publicar(mqtt_temp_topic, tempString);
+    //Serial.print("Temperatura publicada: ");
+    //Serial.println(tempString);
   }
   
   vTaskDelay(pdMS_TO_TICKS(100));
@@ -199,7 +210,7 @@ void controlTask(void *parameter) {
         switch (event) {
           case EVENT_BUTTON1_PRESS:
             currentState = STATE_AUTO;
-            Serial.println("State changed: MANUAL -> AUTO");
+            //Serial.println("State changed: MANUAL -> AUTO");
             break;
             
           case EVENT_BUTTON2_PRESS:
@@ -207,9 +218,9 @@ void controlTask(void *parameter) {
             controlFan(fanState);
             if (fanState) {
               playMelody();
-              Serial.println("Fan turned ON manually");
+              //Serial.println("Fan turned ON manually");
             } else {
-              Serial.println("Fan turned OFF manually");
+              //Serial.println("Fan turned OFF manually");
             }
             break;
             
@@ -222,7 +233,7 @@ void controlTask(void *parameter) {
         switch (event) {
           case EVENT_BUTTON1_PRESS:
             currentState = STATE_MANUAL;
-            Serial.println("State changed: AUTO -> MANUAL");
+            //Serial.println("State changed: AUTO -> MANUAL");
             break;
             
           case EVENT_TEMP_HIGH:
@@ -230,7 +241,7 @@ void controlTask(void *parameter) {
               fanState = true;
               controlFan(true);
               playMelody();
-              Serial.println("Fan turned ON (AUTO - High temp)");
+             // Serial.println("Fan turned ON (AUTO - High temp)");
             }
             break;
             
@@ -238,7 +249,7 @@ void controlTask(void *parameter) {
             if (fanState) {
               fanState = false;
               controlFan(false);
-              Serial.println("Fan turned OFF (AUTO - Low temp)");
+              //Serial.println("Fan turned OFF (AUTO - Low temp)");
             }
             break;
             
@@ -252,7 +263,7 @@ void controlTask(void *parameter) {
         switch (event) {
           case EVENT_BUTTON1_PRESS:
             currentState = STATE_MANUAL;
-            Serial.println("State changed: ALERT -> MANUAL");
+            //Serial.println("State changed: ALERT -> MANUAL");
             break;
             
           default:
@@ -345,8 +356,8 @@ void playMelody() {
  * MQTT Callback function
  */
 void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Mensaje recibido en topic: ");
-  Serial.println(topic);
+  //Serial.print("Mensaje recibido en topic: ");
+  //Serial.println(topic);
   
   String message = "";
   for (int i = 0; i < length; i++) {
@@ -357,13 +368,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
     if (message == "1") {
       fanState = true;
       controlFan(true);
-      Serial.println("Comando MQTT: Encender ventilador");
+    //  Serial.println("Comando MQTT: Encender ventilador");
     } else if (message == "2") {
       fanState = false;
       controlFan(false);
-      Serial.println("Comando MQTT: Apagar ventilador");
+      //Serial.println("Comando MQTT: Apagar ventilador");
     }
   }
+  MetricsESP32::notifyRx(length);
 }
 
 /**
