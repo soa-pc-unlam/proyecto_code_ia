@@ -12,7 +12,9 @@ void setup() {
   xTaskCreatePinnedToCore(tarea1, "Tarea1", 2048, NULL, 1, NULL, 0);
   xTaskCreatePinnedToCore(tarea2, "Tarea2", 2048, NULL, 1, NULL, 1);
 
-  startMetrics();
+  //startMetrics();
+  startMetricsCsv();
+
 }
 
 void loop() {

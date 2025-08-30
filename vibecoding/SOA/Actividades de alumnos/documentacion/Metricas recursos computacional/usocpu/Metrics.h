@@ -3,6 +3,7 @@
 
 // API pública
 void startMetrics();
+void startMetricsCsv();
 void pauseMetrics();
 void resumeMetrics();
 void stopMetrics();
