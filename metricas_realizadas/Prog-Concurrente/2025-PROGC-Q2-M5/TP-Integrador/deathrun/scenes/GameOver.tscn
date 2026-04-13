@@ -1,0 +1,93 @@
+[gd_scene load_steps=9 format=3 uid="uid://baqvfjsaak6k4"]
+
+[ext_resource type="Script" uid="uid://bnnmvojdbweoh" path="res://scripts/lose_menu.gd" id="1_4noiy"]
+[ext_resource type="FontFile" uid="uid://c2u0do6mjnbn8" path="res://Fonts/Crash Bandicoot Wumpa.ttf" id="2_gijjb"]
+[ext_resource type="Texture2D" uid="uid://bd5ycxn7p703a" path="res://assets/Backgrounds/Emzt5xhXIAEIMav.jpg" id="3_88ekj"]
+[ext_resource type="Texture2D" uid="uid://3eqgjfrr5nq3" path="res://assets/sprites/Custom _ Edited - Crash Bandicoot Customs - Crash Bandicoot - Crash Bandicoot.png" id="4_0winm"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_44pu4"]
+font = ExtResource("2_gijjb")
+font_size = 77
+font_color = Color(1, 0.47843137, 0, 1)
+outline_size = 11
+outline_color = Color(0.16862746, 0.05882353, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5gtgg"]
+atlas = ExtResource("4_0winm")
+region = Rect2(252, 931, 42, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h17s1"]
+atlas = ExtResource("4_0winm")
+region = Rect2(294, 931, 42, 49)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hsnnl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5gtgg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h17s1")
+}],
+"loop": true,
+"name": &"Death",
+"speed": 5.0
+}]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4noiy")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.5870001
+anchor_top = 1.0
+anchor_right = 1.5870001
+anchor_bottom = 1.0
+offset_left = -2166.8423
+offset_top = -620.0
+offset_right = -800.8423
+offset_bottom = -514.0
+text = "¡Derrota!"
+label_settings = SubResource("LabelSettings_44pu4")
+horizontal_alignment = 1
+
+[node name="MenuBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 137.0
+offset_top = 550.0
+offset_right = 261.0
+offset_bottom = 639.0
+text = "Volver al menú"
+
+[node name="ExitBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1056.0
+offset_top = 554.0
+offset_right = 1224.0
+offset_bottom = 643.0
+text = "Salir"
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+position = Vector2(687.5, 387.5)
+scale = Vector2(1.1508332, 1.1570371)
+texture = ExtResource("3_88ekj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+light_mask = 21
+position = Vector2(703.00006, 531)
+scale = Vector2(3.8988085, 3.4005098)
+sprite_frames = SubResource("SpriteFrames_hsnnl")
+animation = &"Death"
+autoplay = "Death"
+frame_progress = 0.114709616

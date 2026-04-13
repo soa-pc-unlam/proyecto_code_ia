@@ -1,0 +1,206 @@
+[gd_scene load_steps=6 format=3 uid="uid://b57qqm1eu4yv2"]
+
+[ext_resource type="Script" uid="uid://dnou7qehtq4sb" path="res://logic/menu.gd" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://cbc42k1vud14e" path="res://logic/main.gd" id="1_h2yge"]
+[ext_resource type="Script" uid="uid://dp882yo0tkfyd" path="res://logic/game_list_panel.gd" id="3_jyhfs"]
+[ext_resource type="Texture2D" uid="uid://co7yu1svrypuj" path="res://images/menu-wallpaper.png" id="4_jyhfs"]
+[ext_resource type="Texture2D" uid="uid://d0l2eerta6cb2" path="res://images/exit-screen.png" id="5_tbgi4"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_h2yge")
+
+[node name="Menu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_0xm2m")
+
+[node name="ConnectPanel" type="VBoxContainer" parent="Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="ServerURL" type="LineEdit" parent="Menu/ConnectPanel"]
+layout_mode = 2
+placeholder_text = "server"
+alignment = 1
+
+[node name="PlayerName" type="LineEdit" parent="Menu/ConnectPanel"]
+layout_mode = 2
+placeholder_text = "Player name"
+alignment = 1
+
+[node name="ConnectButton" type="Button" parent="Menu/ConnectPanel"]
+layout_mode = 2
+text = "Connect"
+
+[node name="LobbyPanel" type="VBoxContainer" parent="Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="CreateGameBtn" type="Button" parent="Menu/LobbyPanel"]
+layout_mode = 2
+text = "Create game
+"
+
+[node name="JoinGameBtn" type="Button" parent="Menu/LobbyPanel"]
+layout_mode = 2
+text = "Join game"
+
+[node name="ExitBtn" type="Button" parent="Menu/LobbyPanel"]
+layout_mode = 2
+text = "Exit"
+
+[node name="StatusLabel" type="Label" parent="Menu/LobbyPanel"]
+layout_mode = 2
+
+[node name="CancelBtn" type="Button" parent="Menu/LobbyPanel"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Cancel"
+
+[node name="GameListPanel" type="Panel" parent="Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_jyhfs")
+
+[node name="MarginContainer" type="MarginContainer" parent="Menu/GameListPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu/GameListPanel/MarginContainer"]
+custom_minimum_size = Vector2(380, 300)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Menu/GameListPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Selecciona la partida:"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Menu/GameListPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RowsContainer" type="VBoxContainer" parent="Menu/GameListPanel/MarginContainer/VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menu/GameListPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Back" type="Button" parent="Menu/GameListPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+text = "Back"
+
+[node name="Refresh" type="Button" parent="Menu/GameListPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+text = "Refresh"
+
+[node name="MenuWallpaper" type="TextureRect" parent="Menu"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_jyhfs")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="GameOverLayer" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Overlay" type="ColorRect" parent="GameOverLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="GameOverPanel" type="Panel" parent="GameOverLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOverLayer/GameOverPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="GameOverLayer/GameOverPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Game Over"
+horizontal_alignment = 1
+
+[node name="ResultLabel" type="Label" parent="GameOverLayer/GameOverPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "You Won!"
+horizontal_alignment = 1
+
+[node name="BackToMenuBtn" type="Button" parent="GameOverLayer/GameOverPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back to Menu"
+
+[node name="ExitLayer" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ExitScreen" type="TextureRect" parent="ExitLayer"]
+offset_right = 640.0
+offset_bottom = 640.0
+texture = ExtResource("5_tbgi4")

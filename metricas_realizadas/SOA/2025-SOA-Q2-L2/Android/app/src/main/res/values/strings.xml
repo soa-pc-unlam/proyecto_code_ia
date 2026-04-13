@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">mqtt</string>
+    <string name="splash_bg_desc">Fondo pantalla inicio</string>
+    <string name="btn_start">Comenzar</string>
+    <string name="btn_help">Ayuda</string>
+    <string name="help_content">
+    1. Pulsa play para acceder a la aplicación principal.\n
+    2. Alli puedes editar la matriz y usar los botones "Editar" y "Reproducir".\n
+    3. La app publica mensajes MQTT cuando editas celdas o pulsas acciones (Edit / PlayAll).\n
+    4. Asegúrate de que la configuración MQTT (servidor, usuario, contraseña) esté correcta.\n
+    5. Si se pierde la conexión, la app intentará reconectar automáticamente.\n
+</string>
+    <string name="help_title">Ayuda</string>
+    <string name="help_intro_title">Introducción</string>
+    <string name="help_intro">Bienvenido. Esta aplicación controla la matriz vía MQTT. Desde la pantalla principal podés editar celdas, cambiar estados y ver el valor de estado reportado por el dispositivo.</string>
+    <string name="help_steps_title">Cómo usar</string>
+    <string name="help_tips_title">Consejos y soluciones</string>
+    <string name="help_tips">• Verificá que el servidor MQTT, usuario y contraseña estén correctos.\n• Si la conexión falla, la app intentará reconectar automáticamente.\n• Asegurate de tener permisos de red y que el dispositivo esté en la misma red (si aplica).</string>
+    <string name="help_copy">Copiar</string>
+    <string name="help_share">Compartir</string>
+    <string name="help_footer">Versión 1.0 • Ashencostha</string>
+    <string name="copied">Texto copiado al portapapeles</string>
+    <string name="share_via">Compartir vía</string>
+    <string name="library">Library</string>
+    <string name="como">Como funciona nuestra aplicacion?</string>
+</resources>

@@ -1,0 +1,461 @@
+[gd_scene load_steps=14 format=4 uid="uid://bcbmt8fwybkoi"]
+
+[ext_resource type="Texture2D" uid="uid://bv3od7dxw6lut" path="res://Assets/Sprites.png" id="1_jjgbg"]
+[ext_resource type="Script" uid="uid://c5ch1pe6sfd58" path="res://Scripts/camera_follow.gd" id="3_8gbba"]
+[ext_resource type="Resource" uid="uid://dsvk1f21dlm3r" path="res://Resources/speed_up.tres" id="5_6iyac"]
+[ext_resource type="Resource" uid="uid://deimjmm4rvl7o" path="res://Resources/bomb_up.tres" id="6_fdnlq"]
+[ext_resource type="PackedScene" uid="uid://du3o4lcd7fqfw" path="res://Scenes/brick_wall.tscn" id="7_6bp64"]
+[ext_resource type="Resource" uid="uid://d2w8jmyk5vucx" path="res://Resources/fire_up.tres" id="7_d1ilt"]
+[ext_resource type="Resource" uid="uid://bef8ylbfytqrc" path="res://Resources/wall_pass.tres" id="7_jkdf5"]
+[ext_resource type="PackedScene" uid="uid://bchfjuw37wr8p" path="res://Scenes/WhiteBomberman.tscn" id="10_d1ilt"]
+[ext_resource type="PackedScene" uid="uid://codjkd1lphtxj" path="res://Scenes/BlackBomberman.tscn" id="11_6iyac"]
+[ext_resource type="PackedScene" uid="uid://dmxntlewbj8ak" path="res://Scenes/RedBomberman.tscn" id="11_d1ilt"]
+[ext_resource type="PackedScene" uid="uid://dcvi7qwkq3wbj" path="res://Scenes/GreenBomberman.tscn" id="11_fdnlq"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bo1nx"]
+texture = ExtResource("1_jjgbg")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+12:0/0 = 0
+13:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+9:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+10:1/0 = 0
+11:1/0 = 0
+12:1/0 = 0
+13:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+9:2/0 = 0
+10:2/0 = 0
+11:2/0 = 0
+12:2/0 = 0
+13:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:3/0 = 0
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+9:3/0 = 0
+10:3/0 = 0
+11:3/0 = 0
+12:3/0 = 0
+13:3/0 = 0
+2:4/0 = 0
+7:4/0 = 0
+10:4/0 = 0
+11:4/0 = 0
+12:4/0 = 0
+13:4/0 = 0
+2:5/0 = 0
+7:5/0 = 0
+10:5/0 = 0
+11:5/0 = 0
+12:5/0 = 0
+13:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+7:6/0 = 0
+8:6/0 = 0
+9:6/0 = 0
+10:6/0 = 0
+11:6/0 = 0
+12:6/0 = 0
+13:6/0 = 0
+2:7/0 = 0
+7:7/0 = 0
+10:7/0 = 0
+11:7/0 = 0
+12:7/0 = 0
+13:7/0 = 0
+2:8/0 = 0
+7:8/0 = 0
+10:8/0 = 0
+11:8/0 = 0
+12:8/0 = 0
+13:8/0 = 0
+2:9/0 = 0
+7:9/0 = 0
+10:9/0 = 0
+11:9/0 = 0
+12:9/0 = 0
+13:9/0 = 0
+2:10/0 = 0
+7:10/0 = 0
+10:10/0 = 0
+11:10/0 = 0
+12:10/0 = 0
+13:10/0 = 0
+0:11/0 = 0
+1:11/0 = 0
+2:11/0 = 0
+3:11/0 = 0
+4:11/0 = 0
+5:11/0 = 0
+6:11/0 = 0
+7:11/0 = 0
+8:11/0 = 0
+9:11/0 = 0
+10:11/0 = 0
+11:11/0 = 0
+12:11/0 = 0
+13:11/0 = 0
+2:12/0 = 0
+7:12/0 = 0
+10:12/0 = 0
+11:12/0 = 0
+12:12/0 = 0
+13:12/0 = 0
+2:13/0 = 0
+7:13/0 = 0
+10:13/0 = 0
+11:13/0 = 0
+12:13/0 = 0
+13:13/0 = 0
+0:14/0 = 0
+1:14/0 = 0
+2:14/0 = 0
+3:14/0 = 0
+4:14/0 = 0
+5:14/0 = 0
+6:14/0 = 0
+7:14/0 = 0
+8:14/0 = 0
+9:14/0 = 0
+10:14/0 = 0
+11:14/0 = 0
+12:14/0 = 0
+13:14/0 = 0
+0:15/0 = 0
+1:15/0 = 0
+2:15/0 = 0
+3:15/0 = 0
+4:15/0 = 0
+5:15/0 = 0
+6:15/0 = 0
+7:15/0 = 0
+8:15/0 = 0
+9:15/0 = 0
+10:15/0 = 0
+0:16/0 = 0
+1:16/0 = 0
+2:16/0 = 0
+3:16/0 = 0
+4:16/0 = 0
+5:16/0 = 0
+6:16/0 = 0
+8:16/0 = 0
+9:16/0 = 0
+10:16/0 = 0
+0:17/0 = 0
+1:17/0 = 0
+2:17/0 = 0
+3:17/0 = 0
+4:17/0 = 0
+5:17/0 = 0
+6:17/0 = 0
+7:17/0 = 0
+8:17/0 = 0
+9:17/0 = 0
+10:17/0 = 0
+0:18/0 = 0
+1:18/0 = 0
+2:18/0 = 0
+3:18/0 = 0
+4:18/0 = 0
+5:18/0 = 0
+6:18/0 = 0
+7:18/0 = 0
+8:18/0 = 0
+9:18/0 = 0
+10:18/0 = 0
+0:19/0 = 0
+1:19/0 = 0
+2:19/0 = 0
+3:19/0 = 0
+4:19/0 = 0
+5:19/0 = 0
+6:19/0 = 0
+0:20/0 = 0
+1:20/0 = 0
+2:20/0 = 0
+3:20/0 = 0
+4:20/0 = 0
+5:20/0 = 0
+6:20/0 = 0
+0:21/0 = 0
+1:21/0 = 0
+2:21/0 = 0
+3:21/0 = 0
+4:21/0 = 0
+5:21/0 = 0
+6:21/0 = 0
+7:21/0 = 0
+8:21/0 = 0
+9:21/0 = 0
+0:22/0 = 0
+1:22/0 = 0
+2:22/0 = 0
+3:22/0 = 0
+6:22/0 = 0
+7:22/0 = 0
+8:22/0 = 0
+9:22/0 = 0
+11:22/0 = 0
+12:22/0 = 0
+13:22/0 = 0
+9:7/0 = 0
+9:8/0 = 0
+9:9/0 = 0
+9:10/0 = 0
+6:8/0 = 0
+5:9/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_8gbba"]
+physics_layer_0/collision_layer = 2
+sources/0 = SubResource("TileSetAtlasSource_bo1nx")
+
+[node name="main" type="Node"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+position = Vector2(-8, -8)
+tile_map_data = PackedByteArray("AAAAAAAAAAADAAMAAAAAAAEAAAADAAMAAAAAAAIAAAADAAMAAAAAAAMAAAADAAMAAAAAAAQAAAADAAMAAAAAAAUAAAADAAMAAAAAAAYAAAADAAMAAAAAAAcAAAADAAMAAAAAAAgAAAADAAMAAAAAAAkAAAADAAMAAAAAAAoAAAADAAMAAAABAAAAAAADAAMAAAACAAAAAAADAAMAAAADAAAAAAADAAMAAAAEAAAAAAADAAMAAAAFAAAAAAADAAMAAAAGAAAAAAADAAMAAAAHAAAAAAADAAMAAAAIAAAAAAADAAMAAAAJAAAAAAADAAMAAAAKAAAAAAADAAMAAAALAAAAAAADAAMAAAAMAAAAAAADAAMAAAANAAAAAAADAAMAAAAOAAAAAAADAAMAAAACAAIAAAADAAMAAAAEAAIAAAADAAMAAAAGAAIAAAADAAMAAAAIAAIAAAADAAMAAAAKAAIAAAADAAMAAAAMAAIAAAADAAMAAAACAAQAAAADAAMAAAACAAYAAAADAAMAAAACAAgAAAADAAMAAAACAAoAAAADAAMAAAACAAwAAAADAAMAAAAEAAQAAAADAAMAAAAGAAQAAAADAAMAAAAEAAYAAAADAAMAAAAGAAYAAAADAAMAAAAEAAgAAAADAAMAAAAGAAgAAAADAAMAAAAEAAoAAAADAAMAAAAGAAoAAAADAAMAAAAEAAwAAAADAAMAAAAGAAwAAAADAAMAAAAIAAQAAAADAAMAAAAKAAQAAAADAAMAAAAMAAQAAAADAAMAAAAMAAYAAAADAAMAAAAKAAYAAAADAAMAAAAIAAYAAAADAAMAAAAIAAgAAAADAAMAAAAIAAoAAAADAAMAAAAIAAwAAAADAAMAAAAKAAgAAAADAAMAAAAKAAoAAAADAAMAAAAMAAgAAAADAAMAAAAMAAoAAAADAAMAAAAMAAwAAAADAAMAAAAKAAwAAAADAAMAAAAAAA4AAAADAAMAAAAAAA0AAAADAAMAAAAAAAwAAAADAAMAAAAAAAsAAAADAAMAAAAOAA4AAAADAAMAAAANAA4AAAADAAMAAAAMAA4AAAADAAMAAAALAA4AAAADAAMAAAAKAA4AAAADAAMAAAAJAA4AAAADAAMAAAAIAA4AAAADAAMAAAAHAA4AAAADAAMAAAAGAA4AAAADAAMAAAAFAA4AAAADAAMAAAAEAA4AAAADAAMAAAADAA4AAAADAAMAAAACAA4AAAADAAMAAAABAA4AAAADAAMAAAAOAAEAAAADAAMAAAAOAAIAAAADAAMAAAAOAAMAAAADAAMAAAAOAAQAAAADAAMAAAAOAAUAAAADAAMAAAAOAAYAAAADAAMAAAAOAAcAAAADAAMAAAAOAAgAAAADAAMAAAAOAAkAAAADAAMAAAAOAAoAAAADAAMAAAAOAAsAAAADAAMAAAAOAAwAAAADAAMAAAAOAA0AAAADAAMAAAA=")
+tile_set = SubResource("TileSet_8gbba")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(112, 112)
+scale = Vector2(10, 10)
+zoom = Vector2(2.5, 2.5)
+script = ExtResource("3_8gbba")
+
+[node name="BrickWall" type="Node" parent="."]
+
+[node name="BrickWall1" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(64, 16)
+power_up_res = ExtResource("7_jkdf5")
+
+[node name="BrickWall2" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(144, 112)
+power_up_res = ExtResource("5_6iyac")
+
+[node name="BrickWall3" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(80, 160)
+power_up_res = ExtResource("6_fdnlq")
+
+[node name="BrickWall4" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(208, 160)
+power_up_res = ExtResource("7_jkdf5")
+
+[node name="BrickWall5" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(96, 48)
+power_up_res = ExtResource("6_fdnlq")
+
+[node name="BrickWall6" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(112, 176)
+power_up_res = ExtResource("5_6iyac")
+
+[node name="BrickWall7" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(80, 112)
+power_up_res = ExtResource("7_d1ilt")
+
+[node name="BrickWall8" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(80, 48)
+power_up_res = ExtResource("7_d1ilt")
+
+[node name="BrickWall9" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(48, 16)
+
+[node name="BrickWall10" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(48, 32)
+
+[node name="BrickWall11" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(48, 48)
+
+[node name="BrickWall12" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(64, 48)
+
+[node name="BrickWall13" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(80, 64)
+
+[node name="BrickWall14" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(80, 32)
+
+[node name="BrickWall15" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(144, 96)
+
+[node name="BrickWall16" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(128, 112)
+
+[node name="BrickWall17" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(160, 112)
+
+[node name="BrickWall18" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(144, 128)
+
+[node name="BrickWall19" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(112, 112)
+
+[node name="BrickWall20" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(96, 112)
+
+[node name="BrickWall21" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(80, 176)
+
+[node name="BrickWall22" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(96, 176)
+
+[node name="BrickWall23" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(112, 160)
+
+[node name="BrickWall24" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(80, 144)
+
+[node name="BrickWall25" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(208, 176)
+
+[node name="BrickWall26" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(192, 176)
+
+[node name="BrickWall27" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(176, 176)
+
+[node name="BrickWall28" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(176, 160)
+
+[node name="BrickWall30" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(16, 144)
+
+[node name="BrickWall31" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(32, 144)
+
+[node name="BrickWall32" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(48, 160)
+
+[node name="BrickWall33" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(48, 176)
+
+[node name="BrickWall34" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(48, 208)
+
+[node name="BrickWall35" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(64, 208)
+
+[node name="BrickWall36" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(80, 208)
+
+[node name="BrickWall37" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(160, 208)
+
+[node name="BrickWall38" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(144, 208)
+
+[node name="BrickWall39" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(144, 192)
+
+[node name="BrickWall40" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(128, 208)
+
+[node name="BrickWall41" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(48, 80)
+
+[node name="BrickWall42" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(48, 96)
+
+[node name="BrickWall43" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(32, 80)
+
+[node name="BrickWall44" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(16, 48)
+
+[node name="BrickWall45" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(16, 64)
+
+[node name="BrickWall46" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(176, 48)
+
+[node name="BrickWall47" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(176, 32)
+
+[node name="BrickWall48" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(176, 16)
+
+[node name="BrickWall49" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(192, 48)
+
+[node name="BrickWall50" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(208, 64)
+
+[node name="BrickWall55" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(16, 80)
+
+[node name="BrickWall29" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(112, 48)
+power_up_res = ExtResource("6_fdnlq")
+
+[node name="BrickWall51" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(208, 80)
+power_up_res = ExtResource("6_fdnlq")
+
+[node name="BrickWall52" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(176, 192)
+power_up_res = ExtResource("6_fdnlq")
+
+[node name="BrickWall53" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(32, 176)
+power_up_res = ExtResource("6_fdnlq")
+
+[node name="BrickWall54" parent="BrickWall" instance=ExtResource("7_6bp64")]
+position = Vector2(32, 48)
+power_up_res = ExtResource("6_fdnlq")
+
+[node name="Bomberman" type="Node" parent="."]
+
+[node name="BlackBomberman" parent="Bomberman" instance=ExtResource("11_6iyac")]
+position = Vector2(208, 208)
+
+[node name="RedBomberman" parent="Bomberman" instance=ExtResource("11_d1ilt")]
+position = Vector2(16, 208)
+
+[node name="WhiteBomberman" parent="Bomberman" instance=ExtResource("10_d1ilt")]
+position = Vector2(16, 16)
+
+[node name="GreenBomberman" parent="Bomberman" instance=ExtResource("11_fdnlq")]
+position = Vector2(208, 16)

@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3 uid="uid://do4lmsg3sum2m"]
+
+[ext_resource type="Script" uid="uid://pe44dlcphqep" path="res://scripts/win_menu.gd" id="1_y4ssr"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_y4ssr"]
+font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_x0x70"]
+font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_44pu4"]
+font_size = 77
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y4ssr")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 1145.0
+offset_bottom = 649.0
+color = Color(0.12225223, 0.12225223, 0.12225223, 1)
+
+[node name="Muertes" type="Label" parent="."]
+layout_mode = 0
+offset_left = 103.0
+offset_top = 332.0
+offset_right = 239.0
+offset_bottom = 366.0
+text = "Te moriste:"
+label_settings = SubResource("LabelSettings_y4ssr")
+
+[node name="Tiempo" type="Label" parent="."]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 251.0
+offset_right = 308.0
+offset_bottom = 285.0
+text = "Tu tiempo fue de:"
+label_settings = SubResource("LabelSettings_x0x70")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.5870001
+anchor_top = 1.0
+anchor_right = 1.5870001
+anchor_bottom = 1.0
+offset_left = -1417.2241
+offset_top = -575.0
+offset_right = -1090.2241
+offset_bottom = -469.0
+text = "¡Victoria!"
+label_settings = SubResource("LabelSettings_44pu4")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 117.0
+offset_top = 542.0
+offset_right = -854.0
+offset_bottom = -31.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Button2" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Salir"

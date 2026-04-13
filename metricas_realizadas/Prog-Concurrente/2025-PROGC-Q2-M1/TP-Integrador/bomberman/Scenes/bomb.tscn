@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://dpwcokftcbsk3"]
+
+[ext_resource type="Script" uid="uid://bgd3phjcsjrir" path="res://Scripts/bomb.gd" id="1_kdyat"]
+[ext_resource type="Texture2D" uid="uid://bv3od7dxw6lut" path="res://Assets/Sprites.png" id="1_yx723"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdyat"]
+atlas = ExtResource("1_yx723")
+region = Rect2(0, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2fiif"]
+atlas = ExtResource("1_yx723")
+region = Rect2(16, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_60xmw"]
+atlas = ExtResource("1_yx723")
+region = Rect2(32, 48, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l8kb1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kdyat")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2fiif")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_60xmw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"explosion",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mkuqu"]
+radius = 8.0
+
+[node name="Bomb" type="Area2D"]
+script = ExtResource("1_kdyat")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_l8kb1")
+autoplay = "default"
+frame = 1
+frame_progress = 0.7642095
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_mkuqu")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

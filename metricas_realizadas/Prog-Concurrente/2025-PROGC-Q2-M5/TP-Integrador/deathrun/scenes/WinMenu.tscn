@@ -1,0 +1,142 @@
+[gd_scene load_steps=14 format=3 uid="uid://do4lmsg3sum2m"]
+
+[ext_resource type="Script" uid="uid://pe44dlcphqep" path="res://scripts/win_menu.gd" id="1_y4ssr"]
+[ext_resource type="FontFile" uid="uid://c2u0do6mjnbn8" path="res://Fonts/Crash Bandicoot Wumpa.ttf" id="2_44pu4"]
+[ext_resource type="Texture2D" uid="uid://bd5ycxn7p703a" path="res://assets/Backgrounds/Emzt5xhXIAEIMav.jpg" id="2_x0x70"]
+[ext_resource type="Texture2D" uid="uid://3eqgjfrr5nq3" path="res://assets/sprites/Custom _ Edited - Crash Bandicoot Customs - Crash Bandicoot - Crash Bandicoot.png" id="4_2we4w"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_y4ssr"]
+font = ExtResource("2_44pu4")
+font_size = 24
+font_color = Color(1, 0.47843137, 0, 1)
+outline_size = 11
+outline_color = Color(0.16862746, 0.05882353, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_x0x70"]
+font = ExtResource("2_44pu4")
+font_size = 24
+font_color = Color(1, 0.47843137, 0, 1)
+outline_size = 11
+outline_color = Color(0.16862746, 0.05882353, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_44pu4"]
+font = ExtResource("2_44pu4")
+font_size = 77
+font_color = Color(1, 0.47843137, 0, 1)
+outline_size = 11
+outline_color = Color(0.16862746, 0.05882353, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eh7ni"]
+atlas = ExtResource("4_2we4w")
+region = Rect2(46, 1035, 46, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0raux"]
+atlas = ExtResource("4_2we4w")
+region = Rect2(92, 1035, 46, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_78o4e"]
+atlas = ExtResource("4_2we4w")
+region = Rect2(132, 1035, 44, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1vms"]
+atlas = ExtResource("4_2we4w")
+region = Rect2(176, 1035, 44, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e20pp"]
+atlas = ExtResource("4_2we4w")
+region = Rect2(220, 1035, 44, 45)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_innth"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eh7ni")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0raux")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_78o4e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w1vms")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e20pp")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y4ssr")
+
+[node name="Muertes" type="Label" parent="."]
+layout_mode = 0
+offset_left = 103.0
+offset_top = 329.0
+offset_right = 239.0
+offset_bottom = 363.0
+label_settings = SubResource("LabelSettings_y4ssr")
+
+[node name="Tiempo" type="Label" parent="."]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 378.0
+offset_right = 308.0
+offset_bottom = 412.0
+label_settings = SubResource("LabelSettings_x0x70")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.5870001
+anchor_top = 1.0
+anchor_right = 1.5870001
+anchor_bottom = 1.0
+offset_left = -2165.8423
+offset_top = -600.0
+offset_right = -799.8423
+offset_bottom = -494.0
+text = "¡Victoria!"
+label_settings = SubResource("LabelSettings_44pu4")
+horizontal_alignment = 1
+
+[node name="MenuBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 166.0
+offset_top = 565.0
+offset_right = 290.0
+offset_bottom = 654.0
+text = "Volver al menú"
+
+[node name="ExitBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1073.0
+offset_top = 558.0
+offset_right = 1241.0
+offset_bottom = 647.0
+text = "Salir"
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+position = Vector2(684, 385)
+scale = Vector2(1.145, 1.1496296)
+texture = ExtResource("2_x0x70")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(686, 557.00006)
+scale = Vector2(4.275, 4.275)
+sprite_frames = SubResource("SpriteFrames_innth")
+autoplay = "default"
+frame_progress = 0.23041734

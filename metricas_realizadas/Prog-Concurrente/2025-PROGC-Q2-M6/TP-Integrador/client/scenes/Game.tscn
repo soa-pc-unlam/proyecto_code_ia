@@ -1,0 +1,47 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnsh4qis5cv18"]
+
+[ext_resource type="Script" uid="uid://blbpyrk76vov0" path="res://logic/board.gd" id="1_qbsmt"]
+
+[node name="Game" type="Node2D"]
+visible = false
+
+[node name="Board" type="Node2D" parent="."]
+script = ExtResource("1_qbsmt")
+
+[node name="Tiles" type="Node2D" parent="Board"]
+
+[node name="Pieces" type="Node2D" parent="Board"]
+
+[node name="ExitBtn" type="Button" parent="Board"]
+anchors_preset = -1
+anchor_left = 7.825
+anchor_top = -0.05
+anchor_right = 7.825
+anchor_bottom = -0.05
+offset_left = 527.0
+offset_top = 8.0
+offset_right = 587.0
+offset_bottom = 36.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 14
+text = "EXIT"
+metadata/_edit_use_anchors_ = true
+
+[node name="ExitConfirmDialog" type="ConfirmationDialog" parent="Board"]
+oversampling_override = 1.0
+size = Vector2i(250, 100)
+dialog_text = "Are you sure you want to exit?"
+
+[node name="OpponentLeftDialog" type="AcceptDialog" parent="Board"]
+oversampling_override = 1.0
+title = "Aviso"
+position = Vector2i(0, 36)
+size = Vector2i(278, 200)
+dialog_text = "El oponente abandono la partida. "
+
+[node name="PlayerLeftDialog" type="AcceptDialog" parent="Board"]
+dialog_text = "Un jugador abandono la partida."
+
+[connection signal="confirmed" from="Board/ExitConfirmDialog" to="Board" method="_on_exit_confirm_dialog_confirmed"]
+[connection signal="confirmed" from="Board/OpponentLeftDialog" to="Board" method="_on_opponent_left_dialog_confirmed"]
+[connection signal="confirmed" from="Board/PlayerLeftDialog" to="Board" method="_on_player_left_dialog_confirmed"]

@@ -1,0 +1,4 @@
+# Batalla Naval - Cliente y Servidor
+# Dependencias necesarias para ejecutar el juego
+
+pygame>=2.5.0

@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://ctfu38mwg1sb"]
+
+[ext_resource type="Script" uid="uid://c3yd358godti8" path="res://scripts/moving_platform.gd" id="1_k3dbn"]
+[ext_resource type="Texture2D" uid="uid://b6q2x4u3376xi" path="res://assets/sprites/Custom _ Edited - Crash Bandicoot Customs - Miscellaneous - Platforms.png" id="2_pir7f"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pir7f"]
+size = Vector2(64, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gu3ld"]
+atlas = ExtResource("2_pir7f")
+region = Rect2(27.5, 78.5, 46, 16)
+
+[node name="MovingPlatform" type="AnimatableBody2D"]
+script = ExtResource("1_k3dbn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-11, 2)
+shape = SubResource("RectangleShape2D_pir7f")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-10.500006, 2.999999)
+scale = Vector2(1.4565217, 1.3749999)
+texture = SubResource("AtlasTexture_gu3ld")

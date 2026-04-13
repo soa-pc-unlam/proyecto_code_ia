@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnuwmt1ojcfyn"]
+
+[ext_resource type="Script" uid="uid://b3yey0lh31wx" path="res://logic/piece.gd" id="1_gksgf"]
+
+[node name="Piece" type="TextureRect"]
+script = ExtResource("1_gksgf")
+piece_name = null

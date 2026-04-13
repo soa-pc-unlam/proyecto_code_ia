@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhcvwu8tjbjaa"]
+
+[ext_resource type="Script" uid="uid://bgha44cfahypl" path="res://scripts/main_menu.gd" id="1_yqorp"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yqorp")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.16862746, 0.16862746, 0.16862746, 1)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_top = 100.0
+offset_right = 1365.0
+offset_bottom = 167.0
+theme_override_font_sizes/font_size = 48
+text = "DEATH RUN GAME"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 474.0
+offset_top = 345.0
+offset_right = 874.0
+offset_bottom = 533.0
+
+[node name="BtnSinglePlayer" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(400, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Un jugador"
+
+[node name="BtnMultiplayer" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(400, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Multijugador"
+
+[node name="BtnQuit" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(400, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Salir"

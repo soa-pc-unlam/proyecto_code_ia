@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://bxi5i80plfr3d"]
+
+[ext_resource type="Script" uid="uid://bbewvuv3o5i0x" path="res://scripts/crusher_trap.gd" id="1_c7ce4"]
+[ext_resource type="Texture2D" uid="uid://vjuqpkg4pyoe" path="res://assets/sprites/00 All.png" id="1_uklbu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c7ce4"]
+size = Vector2(156, 67)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mysd2"]
+size = Vector2(154, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5u28g"]
+size = Vector2(81, 19.40625)
+
+[node name="CrusherTrap" type="AnimatableBody2D"]
+script = ExtResource("1_c7ce4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -11.5)
+shape = SubResource("RectangleShape2D_c7ce4")
+
+[node name="KillZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
+light_mask = 3
+visibility_layer = 16
+position = Vector2(-1, 37)
+shape = SubResource("RectangleShape2D_mysd2")
+
+[node name="TriggerZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerZone"]
+light_mask = 3
+visibility_layer = 8
+position = Vector2(-2, 181.70313)
+shape = SubResource("RectangleShape2D_5u28g")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-7.6293945e-06, 0)
+scale = Vector2(1.9693879, 1.9693878)
+texture = ExtResource("1_uklbu")
+region_enabled = true
+region_rect = Rect2(304.74176, 94.20332, 80.197205, 49.65558)

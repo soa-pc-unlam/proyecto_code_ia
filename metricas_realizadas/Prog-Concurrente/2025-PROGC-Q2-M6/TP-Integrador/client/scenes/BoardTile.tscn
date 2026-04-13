@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dpe44gd2ks6l6"]
+
+[ext_resource type="Script" uid="uid://dpbq3aq44mygw" path="res://logic/board_tile.gd" id="1_sh3bm"]
+
+[node name="BoardTile" type="ColorRect"]
+script = ExtResource("1_sh3bm")

@@ -1,0 +1,178 @@
+[gd_scene load_steps=23 format=3 uid="uid://dcvi7qwkq3wbj"]
+
+[ext_resource type="PackedScene" uid="uid://b6cvul6vk16sh" path="res://Scenes/bomberman_base.tscn" id="1_5mqyc"]
+[ext_resource type="Texture2D" uid="uid://bcfcy61q265p7" path="res://Assets/green.png" id="2_dxfgc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_coym1"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v8jpp"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qr0vy"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(32, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dn8gh"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(48, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_txe43"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(64, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_73kna"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(80, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyl7i"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(96, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jwckm"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fer2d"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b4njs"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chfa6"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o3w3n"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65t83"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eh87o"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ca8x1"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bfjop"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rllfq"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jiion"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(64, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_leq43"]
+atlas = ExtResource("2_dxfgc")
+region = Rect2(80, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_w10yp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_coym1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v8jpp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qr0vy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dn8gh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_txe43")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_73kna")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kyl7i")
+}],
+"loop": false,
+"name": &"green_die",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jwckm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fer2d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b4njs")
+}],
+"loop": false,
+"name": &"green_down",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chfa6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o3w3n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_65t83")
+}],
+"loop": false,
+"name": &"green_left",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eh87o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ca8x1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bfjop")
+}],
+"loop": false,
+"name": &"green_right",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rllfq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jiion")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_leq43")
+}],
+"loop": false,
+"name": &"green_up",
+"speed": 10.0
+}]
+
+[node name="GreenBomberman" instance=ExtResource("1_5mqyc")]
+animation_prefix = "green"
+input_up = "green_up"
+input_down = "green_down"
+input_left = "green_left"
+input_right = "green_right"
+input_bomb = "green_bomb"
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_w10yp")
+animation = &"green_up"
+autoplay = "green_down"

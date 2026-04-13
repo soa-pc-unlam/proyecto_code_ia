@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://qdpfot12tiju"]
+
+[ext_resource type="Script" uid="uid://b2pnx0kvvvykj" path="res://scripts/Acensor.gd" id="1_4hhkx"]
+[ext_resource type="Texture2D" uid="uid://b6q2x4u3376xi" path="res://assets/sprites/Custom _ Edited - Crash Bandicoot Customs - Miscellaneous - Platforms.png" id="2_53hkg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_thtea"]
+size = Vector2(31, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6js7k"]
+atlas = ExtResource("2_53hkg")
+region = Rect2(30, 33, 45, 23)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_04sf7"]
+size = Vector2(45, 16)
+
+[node name="AnimatableBody2D" type="AnimatableBody2D"]
+script = ExtResource("1_4hhkx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-5.5, -2)
+shape = SubResource("RectangleShape2D_thtea")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, 2.0000005)
+scale = Vector2(1.2759761, 1.5434783)
+texture = SubResource("AtlasTexture_6js7k")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(1.5, -4)
+shape = SubResource("RectangleShape2D_04sf7")

@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3 uid="uid://bui3na8uejor4"]
+
+[ext_resource type="Script" uid="uid://pdf4jmjae7qa" path="res://scripts/lobby_menu.gd" id="1_77kkm"]
+
+[node name="LobbyMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_77kkm")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.24356923, 0.24356923, 0.24356923, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 0
+offset_left = 475.0
+offset_top = 250.0
+offset_right = 875.0
+offset_bottom = 550.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "MULTIJUGADOR ONLINE"
+
+[node name="BtnHost" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Crear Servidor (Host)"
+
+[node name="InputIP" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+text = "127.0.0.1"
+placeholder_text = "127.0.0.1"
+
+[node name="BtnJoin" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Unirse (Client)"
+
+[node name="BtnBack" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Volver"
+
+[node name="LabelStatus" type="Label" parent="."]
+layout_mode = 0
+offset_top = 500.0
+offset_right = 1365.0
+offset_bottom = 523.0
+text = "Esperando..."
+horizontal_alignment = 1

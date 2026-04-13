@@ -1,0 +1,178 @@
+[gd_scene load_steps=23 format=3 uid="uid://dmxntlewbj8ak"]
+
+[ext_resource type="PackedScene" uid="uid://b6cvul6vk16sh" path="res://Scenes/bomberman_base.tscn" id="1_q4mcu"]
+[ext_resource type="Texture2D" uid="uid://cvh4bwcqcrh0h" path="res://Assets/red.png" id="2_chi65"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56kvq"]
+atlas = ExtResource("2_chi65")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n74qg"]
+atlas = ExtResource("2_chi65")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pe1fd"]
+atlas = ExtResource("2_chi65")
+region = Rect2(32, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14tyd"]
+atlas = ExtResource("2_chi65")
+region = Rect2(48, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vew2u"]
+atlas = ExtResource("2_chi65")
+region = Rect2(64, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hgv73"]
+atlas = ExtResource("2_chi65")
+region = Rect2(80, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rny7b"]
+atlas = ExtResource("2_chi65")
+region = Rect2(96, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p7a8s"]
+atlas = ExtResource("2_chi65")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6payi"]
+atlas = ExtResource("2_chi65")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yvc6g"]
+atlas = ExtResource("2_chi65")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_agwi1"]
+atlas = ExtResource("2_chi65")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mw153"]
+atlas = ExtResource("2_chi65")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hdarh"]
+atlas = ExtResource("2_chi65")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h18ld"]
+atlas = ExtResource("2_chi65")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r8xjb"]
+atlas = ExtResource("2_chi65")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rgyn"]
+atlas = ExtResource("2_chi65")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2kou6"]
+atlas = ExtResource("2_chi65")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gqgcl"]
+atlas = ExtResource("2_chi65")
+region = Rect2(64, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jx0br"]
+atlas = ExtResource("2_chi65")
+region = Rect2(80, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jwa8i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56kvq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n74qg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pe1fd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_14tyd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vew2u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hgv73")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rny7b")
+}],
+"loop": false,
+"name": &"red_die",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p7a8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6payi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yvc6g")
+}],
+"loop": false,
+"name": &"red_down",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_agwi1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mw153")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hdarh")
+}],
+"loop": false,
+"name": &"red_left",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h18ld")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r8xjb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6rgyn")
+}],
+"loop": false,
+"name": &"red_right",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2kou6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gqgcl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jx0br")
+}],
+"loop": false,
+"name": &"red_up",
+"speed": 10.0
+}]
+
+[node name="RedBomberman" instance=ExtResource("1_q4mcu")]
+animation_prefix = "red"
+input_up = "red_up"
+input_down = "red_down"
+input_left = "red_left"
+input_right = "red_right"
+input_bomb = "red_bomb"
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_jwa8i")
+animation = &"red_up"
+autoplay = "red_down"
