@@ -1,0 +1,3 @@
+Herramienta Vibecoding utilizada: Claude code.
+
+Modelos utilizados: Haiku 4.5, Sonnet 4.6 y Opus 4.7
