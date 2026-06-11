@@ -25,6 +25,7 @@ validar_parametros() {
 obtener_info_dispositivo() {
     MODEL=$(getprop ro.product.model)
     ANDROID=$(getprop ro.build.version.release)
+	CORE_AMOUNT=$(grep -c processor /proc/cpuinfo)
 
     MEM_TOTAL_KB=$(grep MemTotal /proc/meminfo | awk '{print $2}')
     MEM_TOTAL_MB=$(awk -v mem="$MEM_TOTAL_KB" 'BEGIN {printf "%.2f", mem/1024}')
@@ -43,7 +44,8 @@ obtener_memoria_app() {
 }
 
 obtener_cpu_promedio() {
-    CPU_AVG=$(top -d 1 -n 10 | grep "$PACKAGE" | grep -v "grep" | awk -v col="$CPU_COLUMN" '
+
+     CPU_AVG=$(top -d 1 -n 10 | grep "$PACKAGE" | awk -v col="$CPU_COLUMN" '
     {
         sum += $col
         n++
@@ -54,6 +56,7 @@ obtener_cpu_promedio() {
         else
             printf "0.00"
     }')
+
 }
 
 mostrar_resultado() {
@@ -64,7 +67,9 @@ mostrar_resultado() {
     echo "========================================"
     echo "Modelo: $MODEL"
     echo "Android: $ANDROID"
-    echo "RAM Total: $MEM_TOTAL_MB MB"
+    echo "Cant. Nucleos: $CORE_AMOUNT"
+	echo "RAM Total: $MEM_TOTAL_MB MB"
+	
 
     echo ""
     echo "========================================"
