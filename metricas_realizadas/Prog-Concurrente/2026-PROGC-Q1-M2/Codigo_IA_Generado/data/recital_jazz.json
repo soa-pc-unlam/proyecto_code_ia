@@ -1,0 +1,24 @@
+{
+  "name": "Jazz Fusion - Una Noche de Improvisación",
+  "artist": "Herbie Hancock & The Headhunters",
+  "event_date": "2026-06-22T21:00:00",
+  "venue": "Teatro Colón, Buenos Aires",
+  "description": "Una noche exclusiva con los maestros del jazz fusion. Improvisaciones en vivo y colaboraciones sorpresa. Experiencia única e irrepetible.",
+  "sections": {
+    "campo": {
+      "rows": 8,
+      "seats_per_row": 16,
+      "price": 3500.00
+    },
+    "platea": {
+      "rows": 6,
+      "seats_per_row": 12,
+      "price": 6500.00
+    },
+    "platea_vip": {
+      "rows": 3,
+      "seats_per_row": 8,
+      "price": 12000.00
+    }
+  }
+}

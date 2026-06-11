@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recitales - Sistema de Venta de Entradas</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">🎤 Entradas</h1>
+            <div class="nav-user">
+                <span id="userName"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Cerrar Sesión</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h2>Próximos Recitales</h2>
+
+        <div id="loadingSpinner" class="spinner"></div>
+
+        <div id="concertsList" class="concerts-grid">
+            <!-- Populated by JavaScript -->
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+    </main>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            document.getElementById('userName').textContent = `${user.username || 'Usuario'}`;
+
+            loadConcerts();
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/';
+        });
+
+        async function loadConcerts() {
+            const token = localStorage.getItem('token');
+            const errorDiv = document.getElementById('errorMessage');
+            const spinner = document.getElementById('loadingSpinner');
+            const list = document.getElementById('concertsList');
+
+            errorDiv.textContent = '';
+            spinner.style.display = 'block';
+            list.innerHTML = '';
+
+            try {
+                const response = await fetch('/api/concerts', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) throw new Error('Error al cargar recitales');
+
+                const concerts = await response.json();
+                spinner.style.display = 'none';
+
+                if (concerts.length === 0) {
+                    list.innerHTML = '<p>No hay recitales disponibles.</p>';
+                    return;
+                }
+
+                concerts.forEach(concert => {
+                    const card = document.createElement('div');
+                    card.className = 'concert-card';
+                    card.innerHTML = `
+                        <h3>${concert.name}</h3>
+                        <p><strong>Artista:</strong> ${concert.artist}</p>
+                        <p><strong>Fecha:</strong> ${new Date(concert.event_date).toLocaleDateString('es-AR')}</p>
+                        <p><strong>Lugar:</strong> ${concert.venue}</p>
+                        <p class="description">${concert.description}</p>
+                        <div class="seat-stats">
+                            <span>Disponibles: <strong>${concert.available_seats}</strong>/${concert.total_seats}</span>
+                        </div>
+                        <button class="btn btn-primary" onclick="goToSeats(${concert.id})">
+                            Seleccionar Asientos
+                        </button>
+                    `;
+                    list.appendChild(card);
+                });
+            } catch (error) {
+                spinner.style.display = 'none';
+                errorDiv.textContent = 'Error al cargar los recitales. Intente de nuevo.';
+                console.error(error);
+            }
+        }
+
+        function goToSeats(concertId) {
+            window.location.href = `/seats?concert=${concertId}`;
+        }
+    </script>
+</body>
+</html>

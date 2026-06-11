@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Compra - Sistema de Venta de Entradas</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/concerts" class="nav-title">🎤 Entradas</a>
+            <div class="nav-user">
+                <span id="userName"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Cerrar Sesión</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="payment-container">
+            <div class="payment-card">
+                <h2>Confirmación de Compra</h2>
+
+                <div class="order-summary">
+                    <h3>Resumen del Pedido</h3>
+
+                    <div class="concert-details">
+                        <p><strong>Recital:</strong> <span id="concertName"></span></p>
+                        <p><strong>Fecha:</strong> <span id="concertDate"></span></p>
+                        <p><strong>Lugar:</strong> <span id="concertVenue"></span></p>
+                    </div>
+
+                    <div class="seats-summary">
+                        <h4>Asientos:</h4>
+                        <div id="seatsList" class="seats-list">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="price-breakdown">
+                        <div class="price-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="price-row">
+                            <span>Impuestos (0%):</span>
+                            <span id="taxes">$0.00</span>
+                        </div>
+                        <div class="price-row total">
+                            <span>Total:</span>
+                            <span id="total">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-method">
+                    <h3>Método de Pago</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" name="paymentMethod" value="credit_card" checked>
+                            Tarjeta de Crédito
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" name="paymentMethod" value="debit_card">
+                            Tarjeta de Débito
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" name="paymentMethod" value="bank_transfer">
+                            Transferencia Bancaria
+                        </label>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="confirmBtn" class="btn btn-primary btn-block">
+                        Confirmar Compra
+                    </button>
+                    <button id="cancelBtn" class="btn btn-secondary btn-block">
+                        Volver
+                    </button>
+                </div>
+
+                <div id="message" class="message"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        let concertId;
+        let seatIds = [];
+        let seatsData = {};
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            document.getElementById('userName').textContent = user.username || 'Usuario';
+
+            const params = new URLSearchParams(window.location.search);
+            concertId = parseInt(params.get('concert'));
+            const seatsParam = params.get('seats');
+
+            if (!concertId || !seatsParam) {
+                window.location.href = '/concerts';
+                return;
+            }
+
+            seatIds = seatsParam.split(',').map(Number);
+
+            await loadConcertInfo();
+            await loadSeatsInfo();
+            renderSummary();
+        });
+
+        async function loadConcertInfo() {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`/api/concerts/${concertId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const concert = await response.json();
+
+                document.getElementById('concertName').textContent = concert.name;
+                document.getElementById('concertDate').textContent =
+                    new Date(concert.event_date).toLocaleDateString('es-AR');
+                document.getElementById('concertVenue').textContent = concert.venue;
+            } catch (error) {
+                console.error('Error loading concert info:', error);
+            }
+        }
+
+        async function loadSeatsInfo() {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`/api/concerts/${concertId}/my-seats`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const seats = await response.json();
+
+                seats.forEach(seat => {
+                    seatsData[seat.id] = seat;
+                });
+            } catch (error) {
+                console.error('Error loading seats info:', error);
+            }
+        }
+
+        function renderSummary() {
+            const list = document.getElementById('seatsList');
+            const subtotalEl = document.getElementById('subtotal');
+            const totalEl = document.getElementById('total');
+
+            list.innerHTML = '';
+            let total = 0;
+
+            const sortedSeats = seatIds
+                .map(id => seatsData[id])
+                .filter(s => s)
+                .sort((a, b) => {
+                    if (a.section !== b.section) return a.section.localeCompare(b.section);
+                    if (a.row_label !== b.row_label) return a.row_label.localeCompare(b.row_label);
+                    return parseInt(a.seat_number) - parseInt(b.seat_number);
+                });
+
+            sortedSeats.forEach(seat => {
+                const item = document.createElement('div');
+                item.className = 'seat-item';
+                item.innerHTML = `
+                    <span>${seat.section.toUpperCase()} ${seat.row_label}${seat.seat_number}</span>
+                    <span>$${parseFloat(seat.price).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</span>
+                `;
+                list.appendChild(item);
+                total += parseFloat(seat.price);
+            });
+
+            subtotalEl.textContent = `$${total.toLocaleString('es-AR', { minimumFractionDigits: 2 })}`;
+            totalEl.textContent = `$${total.toLocaleString('es-AR', { minimumFractionDigits: 2 })}`;
+        }
+
+        document.getElementById('confirmBtn').addEventListener('click', async () => {
+            const token = localStorage.getItem('token');
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const confirmBtn = document.getElementById('confirmBtn');
+            const msg = document.getElementById('message');
+
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = 'Procesando...';
+
+            try {
+                const response = await fetch('/api/payment/process', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        seat_ids: seatIds,
+                        concert_id: concertId,
+                        payment_method: paymentMethod
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    msg.textContent = data.message;
+                    msg.className = 'message success';
+                    setTimeout(() => {
+                        window.location.href = '/concerts';
+                    }, 2000);
+                } else {
+                    const error = await response.json();
+                    msg.textContent = error.detail || 'Error en la compra';
+                    msg.className = 'message error';
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = 'Confirmar Compra';
+                }
+            } catch (error) {
+                msg.textContent = 'Error al procesar el pago';
+                msg.className = 'message error';
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = 'Confirmar Compra';
+                console.error(error);
+            }
+        });
+
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            window.location.href = `/seats?concert=${concertId}`;
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>

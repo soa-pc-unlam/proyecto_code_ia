@@ -1,0 +1,11 @@
+# Bytecode / salidas de compilación Java
+bin/
+out/
+target/
+build/
+*.class
+
+# Paquete Windows (classes + exe + recursos copiados)
+dist/
+dist-portable/
+.build/

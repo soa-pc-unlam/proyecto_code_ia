@@ -1,0 +1,24 @@
+{
+  "name": "Rock Nacional: La Gran Noche",
+  "artist": "Divididos + Viejas Locas",
+  "event_date": "2026-07-18T21:00:00",
+  "venue": "Estadio Vélez Sarsfield, CABA",
+  "description": "La noche más grande del rock nacional argentino. Dos bandas icónicas en un mismo escenario.",
+  "sections": {
+    "campo": {
+      "rows": 10,
+      "seats_per_row": 20,
+      "price": 4500.00
+    },
+    "platea": {
+      "rows": 8,
+      "seats_per_row": 15,
+      "price": 8000.00
+    },
+    "platea_vip": {
+      "rows": 4,
+      "seats_per_row": 10,
+      "price": 15000.00
+    }
+  }
+}

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Asientos - Sistema de Venta de Entradas</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/concerts" class="nav-title">🎤 Entradas</a>
+            <div class="nav-user">
+                <span id="userName"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Cerrar Sesión</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="seats-layout">
+            <!-- Left: Concert Info & Seats Grid -->
+            <div class="seats-section">
+                <div class="concert-info">
+                    <h2 id="concertName"></h2>
+                    <p id="concertDate"></p>
+                    <p id="concertVenue"></p>
+                </div>
+
+                <div class="seats-container">
+                    <div class="stage">ESCENARIO</div>
+
+                    <div id="seatsGrid" class="seats-grid">
+                        <!-- Populated by JavaScript -->
+                    </div>
+
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="seat available"></div>
+                            <span>Disponible</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="seat reserved"></div>
+                            <span>Reservado</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="seat sold"></div>
+                            <span>Vendido</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="seat selected"></div>
+                            <span>Seleccionado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Sidebar with Selection Summary -->
+            <aside class="sidebar">
+                <div class="sidebar-card">
+                    <h3>Mi Selección</h3>
+
+                    <div id="selectedList" class="selected-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+
+                    <div class="total-section">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Total:</span>
+                            <span id="total" class="total-amount">$0.00</span>
+                        </div>
+                        <p id="reservationTimer" class="reservation-timer"></p>
+                    </div>
+
+                    <div class="sidebar-actions">
+                        <button id="reserveBtn" class="btn btn-primary btn-block" disabled>
+                            Reservar Asientos
+                        </button>
+                        <button id="cancelBtn" class="btn btn-secondary btn-block">
+                            Cancelar
+                        </button>
+                    </div>
+
+                    <div id="sidebarMessage" class="sidebar-message"></div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        let concertId;
+        let selectedSeats = new Set();
+        let allSeats = {};
+        let wsConnection = null;
+        let reservationStartTime = null;
+        const RESERVATION_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            document.getElementById('userName').textContent = user.username || 'Usuario';
+
+            const params = new URLSearchParams(window.location.search);
+            concertId = parseInt(params.get('concert'));
+
+            if (!concertId) {
+                window.location.href = '/concerts';
+                return;
+            }
+
+            await loadConcertInfo();
+            await loadSeats();
+            connectWebSocket();
+        });
+
+        async function loadConcertInfo() {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`/api/concerts/${concertId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const concert = await response.json();
+
+                document.getElementById('concertName').textContent = concert.name;
+                document.getElementById('concertDate').textContent =
+                    `Fecha: ${new Date(concert.event_date).toLocaleDateString('es-AR')}`;
+                document.getElementById('concertVenue').textContent = `Lugar: ${concert.venue}`;
+            } catch (error) {
+                console.error('Error loading concert info:', error);
+            }
+        }
+
+        async function loadSeats() {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`/api/concerts/${concertId}/seats`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const seats = await response.json();
+
+                seats.forEach(seat => {
+                    allSeats[seat.id] = seat;
+                });
+
+                renderSeats();
+            } catch (error) {
+                console.error('Error loading seats:', error);
+            }
+        }
+
+        function renderSeats() {
+            const grid = document.getElementById('seatsGrid');
+            grid.innerHTML = '';
+
+            const sections = {};
+            Object.values(allSeats).forEach(seat => {
+                if (!sections[seat.section]) {
+                    sections[seat.section] = {};
+                }
+                if (!sections[seat.section][seat.row_label]) {
+                    sections[seat.section][seat.row_label] = [];
+                }
+                sections[seat.section][seat.row_label].push(seat);
+            });
+
+            const sectionOrder = ['campo', 'platea', 'platea_vip'];
+            sectionOrder.forEach(section => {
+                if (!sections[section]) return;
+
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section';
+
+                const sectionTitle = document.createElement('h4');
+                sectionTitle.textContent = section.replace('_', ' ').toUpperCase();
+                sectionDiv.appendChild(sectionTitle);
+
+                const rowsDiv = document.createElement('div');
+                rowsDiv.className = 'rows';
+
+                Object.keys(sections[section]).sort().forEach(row => {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'row';
+
+                    const rowLabel = document.createElement('span');
+                    rowLabel.className = 'row-label';
+                    rowLabel.textContent = row;
+                    rowDiv.appendChild(rowLabel);
+
+                    sections[section][row].forEach(seat => {
+                        const seatBtn = document.createElement('button');
+                        seatBtn.className = `seat ${seat.status}`;
+                        if (selectedSeats.has(seat.id)) {
+                            seatBtn.classList.add('selected');
+                        }
+                        seatBtn.textContent = seat.seat_number;
+                        seatBtn.disabled = seat.status !== 'available' && !selectedSeats.has(seat.id);
+
+                        seatBtn.addEventListener('click', () => toggleSeat(seat.id, seat));
+                        rowDiv.appendChild(seatBtn);
+                    });
+
+                    rowsDiv.appendChild(rowDiv);
+                });
+
+                sectionDiv.appendChild(rowsDiv);
+                grid.appendChild(sectionDiv);
+            });
+
+            updateSidebar();
+        }
+
+        function toggleSeat(seatId, seat) {
+            if (selectedSeats.has(seatId)) {
+                selectedSeats.delete(seatId);
+            } else if (seat.status === 'available') {
+                selectedSeats.add(seatId);
+            }
+            renderSeats();
+        }
+
+        function updateSidebar() {
+            const list = document.getElementById('selectedList');
+            const subtotalEl = document.getElementById('subtotal');
+            const totalEl = document.getElementById('total');
+            const reserveBtn = document.getElementById('reserveBtn');
+
+            list.innerHTML = '';
+            let total = 0;
+
+            if (selectedSeats.size === 0) {
+                list.innerHTML = '<p class="empty-message">Sin asientos seleccionados</p>';
+                reserveBtn.disabled = true;
+            } else {
+                const selectedArray = Array.from(selectedSeats)
+                    .map(id => allSeats[id])
+                    .sort((a, b) => {
+                        if (a.section !== b.section) return a.section.localeCompare(b.section);
+                        if (a.row_label !== b.row_label) return a.row_label.localeCompare(b.row_label);
+                        return parseInt(a.seat_number) - parseInt(b.seat_number);
+                    });
+
+                selectedArray.forEach(seat => {
+                    const item = document.createElement('div');
+                    item.className = 'selected-item';
+                    item.innerHTML = `
+                        <span>${seat.section.toUpperCase()} ${seat.row_label}${seat.seat_number}</span>
+                        <span>$${parseFloat(seat.price).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</span>
+                    `;
+                    list.appendChild(item);
+                    total += parseFloat(seat.price);
+                });
+
+                reserveBtn.disabled = false;
+            }
+
+            subtotalEl.textContent = `$${total.toLocaleString('es-AR', { minimumFractionDigits: 2 })}`;
+            totalEl.textContent = `$${total.toLocaleString('es-AR', { minimumFractionDigits: 2 })}`;
+        }
+
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            wsConnection = new WebSocket(`${protocol}//${window.location.host}/ws/${concertId}`);
+
+            wsConnection.addEventListener('message', (event) => {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            });
+
+            wsConnection.addEventListener('close', () => {
+                console.log('WebSocket disconnected');
+                setTimeout(connectWebSocket, 3000);
+            });
+        }
+
+        function handleWebSocketMessage(data) {
+            const { type, seat_id, status } = data;
+
+            if (allSeats[seat_id]) {
+                allSeats[seat_id].status = status;
+                if (status !== 'available' && selectedSeats.has(seat_id)) {
+                    selectedSeats.delete(seat_id);
+                }
+                renderSeats();
+            }
+        }
+
+        document.getElementById('reserveBtn').addEventListener('click', async () => {
+            if (selectedSeats.size === 0) return;
+
+            const token = localStorage.getItem('token');
+            const seatIds = Array.from(selectedSeats);
+
+            try {
+                const response = await fetch('/api/seats/reserve', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        seat_ids: seatIds,
+                        concert_id: concertId
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    reservationStartTime = Date.now();
+                    startReservationTimer();
+                    showMessage(data.message, 'success');
+                    document.getElementById('reserveBtn').textContent = 'Ir a Pagar';
+                    document.getElementById('reserveBtn').onclick = goToPayment;
+                } else {
+                    const error = await response.json();
+                    showMessage(error.detail, 'error');
+                }
+            } catch (error) {
+                showMessage('Error al reservar asientos', 'error');
+                console.error(error);
+            }
+        });
+
+        function startReservationTimer() {
+            const timerEl = document.getElementById('reservationTimer');
+            const interval = setInterval(() => {
+                const elapsed = Date.now() - reservationStartTime;
+                const remaining = Math.max(0, RESERVATION_TIMEOUT_MS - elapsed);
+
+                if (remaining === 0) {
+                    clearInterval(interval);
+                    timerEl.textContent = 'Reserva expirada';
+                    document.getElementById('reserveBtn').textContent = 'Reservar Asientos';
+                    document.getElementById('reserveBtn').onclick = null;
+                    return;
+                }
+
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                timerEl.textContent = `Tiempo restante: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function showMessage(text, type) {
+            const msg = document.getElementById('sidebarMessage');
+            msg.textContent = text;
+            msg.className = `sidebar-message ${type}`;
+            setTimeout(() => msg.textContent = '', 5000);
+        }
+
+        function goToPayment() {
+            const seatIds = Array.from(selectedSeats);
+            window.location.href = `/payment?concert=${concertId}&seats=${seatIds.join(',')}`;
+        }
+
+        document.getElementById('cancelBtn').addEventListener('click', async () => {
+            if (selectedSeats.size === 0) return;
+
+            const token = localStorage.getItem('token');
+            const seatIds = Array.from(selectedSeats);
+
+            try {
+                const response = await fetch('/api/seats/release', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        seat_ids: seatIds,
+                        concert_id: concertId
+                    })
+                });
+
+                if (response.ok) {
+                    selectedSeats.clear();
+                    reservationStartTime = null;
+                    renderSeats();
+                    showMessage('Selección cancelada', 'info');
+                    document.getElementById('reserveBtn').textContent = 'Reservar Asientos';
+                    document.getElementById('reserveBtn').onclick = null;
+                } else {
+                    showMessage('Error al cancelar reserva', 'error');
+                }
+            } catch (error) {
+                showMessage('Error al cancelar', 'error');
+                console.error(error);
+            }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>

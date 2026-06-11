@@ -1,0 +1,81 @@
+services:
+  db:
+    image: postgres:18
+    container_name: ticket-db
+    # Aumentar max_connections para soportar el pool de la app (100) + conexiones de mantenimiento
+    command: ["postgres", "-c", "max_connections=200"]
+    environment:
+      POSTGRES_DB: ticketdb
+      POSTGRES_USER: ticketuser
+      POSTGRES_PASSWORD: ticketpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ticketuser -d ticketdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    container_name: ticket-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ticketdb
+      DB_USER: ticketuser
+      DB_PASSWORD: ticketpass
+      DB_MIN_CONNECTIONS: 5
+      DB_MAX_CONNECTIONS: 100
+      HOST: 0.0.0.0
+      PORT: 8000
+      RESERVATION_TIMEOUT_MINUTES: 5
+      PURCHASE_TIMEOUT_MINUTES: 10
+      CLEANUP_INTERVAL_SECONDS: 30
+      SECRET_KEY: docker-local-dev-secret
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/concerts', timeout=3)\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  load-test:
+    build: .
+    working_dir: /app
+    profiles:
+      - test
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      BASE_URL: http://api:8000
+    command: ["python", "tests/concurrent_test.py", "http://api:8000"]
+
+  perf-test:
+    build: .
+    working_dir: /app
+    profiles:
+      - test
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      BASE_URL: http://api:8000
+      CONCERT_ID: ${CONCERT_ID:-1}
+      TOTAL_REQUESTS: ${TOTAL_REQUESTS:-100}
+      CONCURRENCY: ${CONCURRENCY:-25}
+    command: ["python", "tests/performance_test.py", "http://api:8000"]
+
+volumes:
+  postgres_data:
