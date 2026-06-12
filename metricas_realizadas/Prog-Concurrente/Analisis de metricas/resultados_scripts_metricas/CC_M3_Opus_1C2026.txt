@@ -1,0 +1,22 @@
+=====================================
+RESUMEN LIZARD
+=====================================
+
+Cantidad de funciones: 37
+CCN total: 105.00
+CCN promedio: 2.84
+NLOC total: 432.00
+NLOC promedio: 11.68
+
+Funciones más complejas:
+-------------------------------------
+CCN=12 | NLOC=26 | EtapaSpam::calcularSpamScore | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M3\Codigo_IA_generado\version_opus_4.7\src\main\java\com\tp\analisis\EtapaSpam.java
+CCN=9 | NLOC=13 | EtapaSentimiento::analizar | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M3\Codigo_IA_generado\version_opus_4.7\src\main\java\com\tp\analisis\EtapaSentimiento.java
+CCN=7 | NLOC=27 | EtapaCategorias::loop | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M3\Codigo_IA_generado\version_opus_4.7\src\main\java\com\tp\analisis\EtapaCategorias.java
+CCN=7 | NLOC=15 | EtapaCategorias::clasificar | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M3\Codigo_IA_generado\version_opus_4.7\src\main\java\com\tp\analisis\EtapaCategorias.java
+CCN=7 | NLOC=27 | EtapaSentimiento::loop | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M3\Codigo_IA_generado\version_opus_4.7\src\main\java\com\tp\analisis\EtapaSentimiento.java
+CCN=7 | NLOC=11 | EtapaSpam::decidir | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M3\Codigo_IA_generado\version_opus_4.7\src\main\java\com\tp\analisis\EtapaSpam.java
+CCN=5 | NLOC=34 | EtapaSpam::loop | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M3\Codigo_IA_generado\version_opus_4.7\src\main\java\com\tp\analisis\EtapaSpam.java
+CCN=5 | NLOC=21 | Productor::run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M3\Codigo_IA_generado\version_opus_4.7\src\main\java\com\tp\Productor.java
+CCN=4 | NLOC=17 | EtapaCategorias::cargarDiccionarios | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M3\Codigo_IA_generado\version_opus_4.7\src\main\java\com\tp\analisis\EtapaCategorias.java
+CCN=4 | NLOC=21 | Main::imprimirMetricas | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M3\Codigo_IA_generado\version_opus_4.7\src\main\java\com\tp\Main.java

@@ -1,0 +1,22 @@
+=====================================
+RESUMEN LIZARD
+=====================================
+
+Cantidad de funciones: 913
+CCN total: 2057.00
+CCN promedio: 2.25
+NLOC total: 6536.00
+NLOC promedio: 7.16
+
+Funciones más complejas:
+-------------------------------------
+CCN=44 | NLOC=108 | GameInput::keyPressed | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M5\Codigo_IA_generado\Sheriffsss\src\SheriffsssPackage\GameInput.java
+CCN=21 | NLOC=26 | Game::updateCursor | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M5\Codigo_IA_generado\Sheriffsss\src\SheriffsssPackage\Game.java
+CCN=21 | NLOC=58 | GameInput::keyReleased | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M5\Codigo_IA_generado\Sheriffsss\src\SheriffsssPackage\GameInput.java
+CCN=18 | NLOC=52 | Game::updateSettings | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M5\Codigo_IA_generado\Sheriffsss\src\SheriffsssPackage\Game.java
+CCN=16 | NLOC=64 | Game::attemptFireProjectileWeapon | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M5\Codigo_IA_generado\Sheriffsss\src\SheriffsssPackage\Game.java
+CCN=16 | NLOC=47 | GameRenderer::drawDebugWorld | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M5\Codigo_IA_generado\Sheriffsss\src\SheriffsssPackage\GameRenderer.java
+CCN=15 | NLOC=31 | Game::updateGame | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M5\Codigo_IA_generado\Sheriffsss\src\SheriffsssPackage\Game.java
+CCN=15 | NLOC=25 | Game::facingFromDelta | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M5\Codigo_IA_generado\Sheriffsss\src\SheriffsssPackage\Game.java
+CCN=15 | NLOC=36 | Game::updateMenuSettings | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M5\Codigo_IA_generado\Sheriffsss\src\SheriffsssPackage\Game.java
+CCN=14 | NLOC=42 | DebugOptions::isRowEnabled | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M5\Codigo_IA_generado\Sheriffsss\src\SheriffsssPackage\DebugOptions.java

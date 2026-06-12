@@ -1,0 +1,17 @@
+archivo                                         nloc   fns  avgCCN  tokens     MI
+------------------------------------------------------------------------------
+concurrent_test.py                               184    13    2.69    1177   28.7
+main.py                                          173    16    1.69     902   30.3
+seat_service.py                                  166     5    4.20     663   31.2
+performance_test.py                              106     6    3.50     733   35.3
+concert_loader.py                                100     3    8.33     519   36.2
+cleaner.py                                        57     6    2.33     253   44.6
+auth.py                                           44     5    2.60     313   46.3
+ws_manager.py                                     38     7    2.14     314   47.8
+database.py                                       42     5    2.40     176   48.5
+race_logger.py                                    28     1     2.0      95   54.3
+payment_stub.py                                   10     1     1.0      66   65.3
+------------------------------------------------------------------------------
+TOTAL/PROMEDIO                                   948    68            5211   42.6
+
+Bandas Microsoft:  0-9 = inmantenible  |  10-19 = moderado  |  >=20 = bueno

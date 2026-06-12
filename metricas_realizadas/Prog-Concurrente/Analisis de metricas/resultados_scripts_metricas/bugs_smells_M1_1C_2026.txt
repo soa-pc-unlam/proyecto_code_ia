@@ -1,0 +1,33 @@
+REPORTE DE ANÁLISIS PMD - JAVA
+========================================
+
+Proyecto analizado: C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M1\Codigo_IA_generado\broker
+LOC Java aproximadas: 304
+Total de issues: 4
+Issues/KLOC: 13.16
+Issues críticos: 2
+
+SEVERIDAD
+----------------------------------------
+Media: 2
+Alta: 2
+
+CATEGORÍAS
+----------------------------------------
+Multithreading: 2
+Code Style: 1
+Error Prone: 1
+
+TOP REGLAS VIOLADAS
+----------------------------------------
+AvoidUsingVolatile: 2
+ControlStatementBraces: 1
+UseLocaleWithCaseConversions: 1
+
+OBSERVACIÓN METODOLÓGICA
+----------------------------------------
+La complejidad y el tamaño del código se analizan con Lizard. PMD se utiliza para identificar issues de calidad, severidad, categorías de reglas y reglas más violadas.
+
+MENSAJES DE PMD
+----------------------------------------
+[WARN] This analysis could be faster, please consider using Incremental Analysis: https://docs.pmd-code.org/pmd-doc-7.25.0/pmd_userdocs_incremental_analysis.html

@@ -1,0 +1,155 @@
+REPORTE DE ANÁLISIS CON PYLINT
+==================================================
+
+Proyecto analizado: C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Código\GPT-5 mini
+Líneas Python analizadas: 304
+
+MÉTRICAS COMPARABLES
+--------------------------------------------------
+Total de issues: 53
+Issues/KLOC: 174.34
+Issues críticos: 0
+
+SEVERIDAD
+--------------------------------------------------
+Baja: 28
+Media: 25
+Alta: 0
+
+CATEGORÍAS
+--------------------------------------------------
+estilo: 28
+diseño: 14
+bug potencial: 11
+
+TOP REGLAS VIOLADAS
+--------------------------------------------------
+logging-fstring-interpolation: 5
+broad-exception-caught: 4
+6/5: 4
+101/100: 3
+146/100: 2
+1/2: 2
+7/5: 2
+8/5: 2
+9/5: 2
+unused-import: 2
+
+DETALLE DE ISSUES
+--------------------------------------------------
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:32:0 C0301 127/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:77:0 C0301 160/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:91:0 C0301 137/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:101:0 C0301 150/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:125:0 C0301 131/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:127:0 C0301 151/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:139:0 C0301 165/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:153:0 C0301 108/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:175:0 C0301 133/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:178:0 C0301 146/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:180:0 C0301 141/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:196:0 C0301 178/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:226:0 C0301 107/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:229:0 C0301 102/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:234:0 C0301 147/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:243:0 C0301 146/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:270:0 C0301 170/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:276:0 C0301 101/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:284:0 C0301 179/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:292:0 C0301 109/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:339:0 C0301 115/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:345:0 C0301 101/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:350:0 C0301 144/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:369:0 C0301 157/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:372:0 C0301 101/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:378:0 C0301 140/100 - Line too long
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:23:7 W0718 broad-exception-caught - Catching too general exception Exception
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:24:4 C0103 invalid-name - Constant name "psutil" doesn't conform to UPPER_CASE naming style
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:38:0 R0902 9/7 - Too many instance attributes
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:77:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:91:12 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:38:0 R0903 1/2 - Too few public methods
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:101:4 R0913 7/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:101:4 R0917 7/5 - Too many positional arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:139:4 R0913 6/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:139:4 R0917 6/5 - Too many positional arguments
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:179:23 W0718 broad-exception-caught - Catching too general exception Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:185:23 W0718 broad-exception-caught - Catching too general exception Exception
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:196:4 R0913 8/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:196:4 R0917 8/5 - Too many positional arguments
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:234:24 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:243:4 R0913 6/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:243:4 R0917 6/5 - Too many positional arguments
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:262:23 W0718 broad-exception-caught - Catching too general exception Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:269:12 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:281:0 R0902 16/7 - Too many instance attributes
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:284:4 R0913 9/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:284:4 R0917 9/5 - Too many positional arguments
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:329:4 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:369:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:281:0 R0903 1/2 - Too few public methods
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:16:0 W0611 unused-import - Unused import collections
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:17:0 W0611 unused-import - Unused import os
+
+
+SALIDA COMPLETA DE PYLINT
+==================================================
+************* Module delivery_system
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:32:0: C0301: Line too long (127/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:77:0: C0301: Line too long (160/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:91:0: C0301: Line too long (137/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:101:0: C0301: Line too long (150/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:125:0: C0301: Line too long (131/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:127:0: C0301: Line too long (151/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:139:0: C0301: Line too long (165/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:153:0: C0301: Line too long (108/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:175:0: C0301: Line too long (133/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:178:0: C0301: Line too long (146/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:180:0: C0301: Line too long (141/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:196:0: C0301: Line too long (178/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:226:0: C0301: Line too long (107/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:229:0: C0301: Line too long (102/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:234:0: C0301: Line too long (147/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:243:0: C0301: Line too long (146/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:270:0: C0301: Line too long (170/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:276:0: C0301: Line too long (101/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:284:0: C0301: Line too long (179/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:292:0: C0301: Line too long (109/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:339:0: C0301: Line too long (115/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:345:0: C0301: Line too long (101/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:350:0: C0301: Line too long (144/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:369:0: C0301: Line too long (157/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:372:0: C0301: Line too long (101/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:378:0: C0301: Line too long (140/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:23:7: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:24:4: C0103: Constant name "psutil" doesn't conform to UPPER_CASE naming style (invalid-name)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:38:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:77:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:91:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:38:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:101:4: R0913: Too many arguments (7/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:101:4: R0917: Too many positional arguments (7/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:139:4: R0913: Too many arguments (6/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:139:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:179:23: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:185:23: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:196:4: R0913: Too many arguments (8/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:196:4: R0917: Too many positional arguments (8/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:234:24: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:243:4: R0913: Too many arguments (6/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:243:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:262:23: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:269:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:281:0: R0902: Too many instance attributes (16/7) (too-many-instance-attributes)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:284:4: R0913: Too many arguments (9/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:284:4: R0917: Too many positional arguments (9/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:329:4: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:369:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:281:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:16:0: W0611: Unused import collections (unused-import)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\GPT-5 mini\delivery_system.py:17:0: W0611: Unused import os (unused-import)
+
+-----------------------------------
+Your code has been rated at 7.62/10
+
+

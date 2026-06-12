@@ -1,0 +1,22 @@
+=====================================
+RESUMEN LIZARD
+=====================================
+
+Cantidad de funciones: 46
+CCN total: 78.00
+CCN promedio: 1.70
+NLOC total: 300.00
+NLOC promedio: 6.52
+
+Funciones más complejas:
+-------------------------------------
+CCN=7 | NLOC=9 | get_speedup | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\core\metrics.py
+CCN=4 | NLOC=10 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\pipeline\result_aggregator.py
+CCN=4 | NLOC=9 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\pipeline\worker.py
+CCN=4 | NLOC=11 | test_get_summary_during_recording | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\tests\test_metrics_collector.py
+CCN=3 | NLOC=7 | scan_folder | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\pipeline\image_loader.py
+CCN=3 | NLOC=10 | enqueue_paths | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\pipeline\image_loader.py
+CCN=3 | NLOC=10 | test_concurrent_record_10_threads | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\tests\test_metrics_collector.py
+CCN=3 | NLOC=15 | _print_summary | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\main.py
+CCN=2 | NLOC=4 | process | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\core\backend.py
+CCN=2 | NLOC=6 | get_summary | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\core\metrics.py

@@ -1,0 +1,47 @@
+archivo                                         nloc   fns  avgCCN  tokens     MI
+------------------------------------------------------------------------------
+Game.java                                       1261   170    2.65    8946    4.3
+GameRenderer.java                               1101    91    3.04   11630    4.8
+TrainingMode.java                                801    89    2.65    5716   10.0
+AudioManager.java                                327    26    2.96    2157   21.4
+EnemySystem.java                                 300    26    3.65    2262   22.0
+GameInput.java                                   319    36    3.08    1518   22.7
+Enemy.java                                       275    39    2.13    1921   23.5
+DebugOptions.java                                218    30    2.80    1145   27.2
+Player.java                                      165    38    1.66    1202   29.8
+MenuRenderer.java                                136    29    1.45    1550   30.9
+GameMap.java                                     127    19    2.79    1151   32.3
+Projectile.java                                  134    22    1.73     936   32.6
+WorldLighting.java                               119     9    4.22    1017   33.1
+GameConfig.java                                  125    21    1.67     797   33.7
+ItemDefinitionDrawConfig.java                    118    28    1.43     788   34.3
+ItemDefinition.java                               96    35    1.63    1019   35.5
+EnemyType.java                                    93    20    1.25     480   38.1
+Equipment.java                                    91    16    1.81     467   38.3
+AssetManager.java                                 63     5     3.0     401   42.1
+DayNightCycle.java                                58     9     2.0     379   43.2
+ProjectileSystem.java                             53     8     2.0     439   43.6
+TextRenderer.java                                 48     8    1.38     499   44.2
+ProjectileType.java                               50    13     1.0     313   45.3
+TutorialThread.java                               43     6    2.17     255   47.2
+MapObjectType.java                                37    15    1.13     295   48.3
+FlameBurstEffect.java                             39    12     1.0     209   48.9
+Camera.java                                       32     9     1.0     234   50.4
+MapObject.java                                    35    10    1.10     162   50.7
+ProjectileWeaponStats.java                        31     8     1.0     212   51.0
+TrainingControls.java                             34     8    1.50     145   51.3
+States.java                                       29     8    1.25     178   52.2
+CombatFloatingText.java                           30     9    1.22     153   52.3
+Main.java                                         27     2    2.50     190   52.5
+Debuff.java                                       25     7     1.0     143   54.3
+TileType.java                                     20    10    1.20     160   56.0
+ProjectileStatModifiers.java                      22     6     1.0      99   56.6
+DebugBulletTrajectory.java                        18     5     1.0      80   59.2
+TutorialStep.java                                 14     4     1.0      77   61.7
+EnemyHitSound.java                                14     4    1.25      67   62.0
+DayPhase.java                                      6     2     1.0      23   73.4
+GameTheme.java                                     2     1     1.0       5   88.4
+------------------------------------------------------------------------------
+TOTAL/PROMEDIO                                  6536   913           49420   41.7
+
+Bandas Microsoft:  0-9 = inmantenible  |  10-19 = moderado  |  >=20 = bueno

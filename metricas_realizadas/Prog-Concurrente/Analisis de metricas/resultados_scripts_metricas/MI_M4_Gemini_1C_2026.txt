@@ -1,0 +1,7 @@
+archivo                                         nloc   fns  avgCCN  tokens     MI
+------------------------------------------------------------------------------
+simulacion_delivery.py                           170    15    2.60    1282   29.2
+------------------------------------------------------------------------------
+TOTAL/PROMEDIO                                   170    15            1282   29.2
+
+Bandas Microsoft:  0-9 = inmantenible  |  10-19 = moderado  |  >=20 = bueno

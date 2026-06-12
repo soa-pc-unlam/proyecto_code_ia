@@ -1,0 +1,15 @@
+archivo                                         nloc   fns  avgCCN  tokens     MI
+------------------------------------------------------------------------------
+main.py                                           70     6    1.67     471   40.8
+test_metrics_collector.py                         67     9    1.78     493   41.1
+metrics.py                                        54     9    1.89     379   43.9
+worker.py                                         34     3    2.33     195   50.2
+backend.py                                        16     6    1.17     171   57.9
+image_loader.py                                   17     2     3.0     130   58.0
+result_aggregator.py                              18     2    2.50      89   58.6
+queue_manager.py                                  14     7     1.0     126   60.2
+report_exporter.py                                10     2    1.50      93   64.2
+------------------------------------------------------------------------------
+TOTAL/PROMEDIO                                   300    46            2147   52.8
+
+Bandas Microsoft:  0-9 = inmantenible  |  10-19 = moderado  |  >=20 = bueno

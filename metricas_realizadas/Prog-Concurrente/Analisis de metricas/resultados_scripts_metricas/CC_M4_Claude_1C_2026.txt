@@ -1,0 +1,22 @@
+=====================================
+RESUMEN LIZARD
+=====================================
+
+Cantidad de funciones: 25
+CCN total: 58.00
+CCN promedio: 2.32
+NLOC total: 311.00
+NLOC promedio: 12.44
+
+Funciones más complejas:
+-------------------------------------
+CCN=6 | NLOC=27 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Claude_4.6\delivery_system.py
+CCN=5 | NLOC=24 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Claude_4.6\delivery_system.py
+CCN=4 | NLOC=12 | registrar_entregado | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Claude_4.6\delivery_system.py
+CCN=4 | NLOC=12 | snapshot | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Claude_4.6\delivery_system.py
+CCN=4 | NLOC=18 | _crear_threads | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Claude_4.6\delivery_system.py
+CCN=3 | NLOC=15 | transicionar | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Claude_4.6\delivery_system.py
+CCN=3 | NLOC=4 | duracion_preparacion | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Claude_4.6\delivery_system.py
+CCN=3 | NLOC=4 | duracion_entrega | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Claude_4.6\delivery_system.py
+CCN=3 | NLOC=16 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Claude_4.6\delivery_system.py
+CCN=3 | NLOC=6 | actualizar_recursos | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Claude_4.6\delivery_system.py

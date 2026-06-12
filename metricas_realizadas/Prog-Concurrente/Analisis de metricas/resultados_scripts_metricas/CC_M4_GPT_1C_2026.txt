@@ -1,0 +1,22 @@
+=====================================
+RESUMEN LIZARD
+=====================================
+
+Cantidad de funciones: 15
+CCN total: 51.00
+CCN promedio: 3.40
+NLOC total: 213.00
+NLOC promedio: 14.20
+
+Funciones más complejas:
+-------------------------------------
+CCN=9 | NLOC=26 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\GPT-5 mini\delivery_system.py
+CCN=8 | NLOC=23 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\GPT-5 mini\delivery_system.py
+CCN=7 | NLOC=20 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\GPT-5 mini\delivery_system.py
+CCN=6 | NLOC=26 | cambiar_estado | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\GPT-5 mini\delivery_system.py
+CCN=6 | NLOC=25 | start | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\GPT-5 mini\delivery_system.py
+CCN=5 | NLOC=14 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\GPT-5 mini\delivery_system.py
+CCN=2 | NLOC=24 | __init__ | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\GPT-5 mini\delivery_system.py
+CCN=1 | NLOC=10 | __init__ | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\GPT-5 mini\delivery_system.py
+CCN=1 | NLOC=9 | __init__ | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\GPT-5 mini\delivery_system.py
+CCN=1 | NLOC=7 | __init__ | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\GPT-5 mini\delivery_system.py

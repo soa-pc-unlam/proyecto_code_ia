@@ -1,0 +1,147 @@
+REPORTE DE ANÁLISIS CON PYLINT
+==================================================
+
+Proyecto analizado: C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Código\Claude_4.6
+Líneas Python analizadas: 449
+
+MÉTRICAS COMPARABLES
+--------------------------------------------------
+Total de issues: 49
+Issues/KLOC: 109.13
+Issues críticos: 0
+
+SEVERIDAD
+--------------------------------------------------
+Baja: 5
+Media: 44
+Alta: 0
+
+CATEGORÍAS
+--------------------------------------------------
+bug potencial: 28
+diseño: 16
+estilo: 5
+
+TOP REGLAS VIOLADAS
+--------------------------------------------------
+logging-fstring-interpolation: 27
+6/5: 6
+7/5: 4
+10/7: 2
+consider-using-max-builtin: 2
+111/100: 1
+123/100: 1
+115/100: 1
+missing-class-docstring: 1
+9/7: 1
+
+DETALLE DE ISSUES
+--------------------------------------------------
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:347:0 C0301 111/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:348:0 C0301 123/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:349:0 C0301 115/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:55:0 C0115 missing-class-docstring - Missing class docstring
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:67:0 R0902 10/7 - Too many instance attributes
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:137:4 R0913 6/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:137:4 R0917 6/5 - Too many positional arguments
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:154:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:162:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:166:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:171:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:183:4 R0913 7/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:183:4 R0917 7/5 - Too many positional arguments
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:202:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:215:20 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:220:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:225:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:232:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:244:4 R0913 6/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:244:4 R0917 6/5 - Too many positional arguments
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:261:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:272:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:278:12 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:283:12 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:288:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:294:0 R0902 9/7 - Too many instance attributes
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:335:12 R1731 consider-using-max-builtin - Consider using 'self.peak_cpu_pct = max(self.peak_cpu_pct, cpu_pct)' instead of unnecessary if block
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:337:12 R1731 consider-using-max-builtin - Consider using 'self.peak_mem_rss_mb = max(self.peak_mem_rss_mb, mem_rss_mb)' instead of unnecessary if block
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:364:4 R0913 6/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:364:4 R0917 6/5 - Too many positional arguments
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:400:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:415:0 R0902 10/7 - Too many instance attributes
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:421:4 R0913 7/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:421:4 R0917 7/5 - Too many positional arguments
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:466:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:467:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:499:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:500:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:501:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:502:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:503:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:504:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:505:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:506:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:507:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:508:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:415:0 R0903 1/2 - Too few public methods
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:18:0 C0411 wrong-import-order - standard import "os" should be placed before third party import "psutil"
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:15:0 W0611 unused-import - Unused Counter imported from collections
+
+
+SALIDA COMPLETA DE PYLINT
+==================================================
+************* Module delivery_system
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:347:0: C0301: Line too long (111/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:348:0: C0301: Line too long (123/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:349:0: C0301: Line too long (115/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:55:0: C0115: Missing class docstring (missing-class-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:67:0: R0902: Too many instance attributes (10/7) (too-many-instance-attributes)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:137:4: R0913: Too many arguments (6/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:137:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:154:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:162:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:166:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:171:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:183:4: R0913: Too many arguments (7/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:183:4: R0917: Too many positional arguments (7/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:202:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:215:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:220:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:225:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:232:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:244:4: R0913: Too many arguments (6/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:244:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:261:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:272:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:278:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:283:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:288:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:294:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:335:12: R1731: Consider using 'self.peak_cpu_pct = max(self.peak_cpu_pct, cpu_pct)' instead of unnecessary if block (consider-using-max-builtin)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:337:12: R1731: Consider using 'self.peak_mem_rss_mb = max(self.peak_mem_rss_mb, mem_rss_mb)' instead of unnecessary if block (consider-using-max-builtin)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:364:4: R0913: Too many arguments (6/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:364:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:400:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:415:0: R0902: Too many instance attributes (10/7) (too-many-instance-attributes)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:421:4: R0913: Too many arguments (7/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:421:4: R0917: Too many positional arguments (7/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:466:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:467:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:499:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:500:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:501:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:502:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:503:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:504:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:505:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:506:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:507:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:508:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:415:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:18:0: C0411: standard import "os" should be placed before third party import "psutil" (wrong-import-order)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Claude_4.6\delivery_system.py:15:0: W0611: Unused Counter imported from collections (unused-import)
+
+------------------------------------------------------------------
+Your code has been rated at 8.23/10 (previous run: 8.23/10, +0.00)
+
+

@@ -25,7 +25,7 @@ def generar_resumen(csv_file, txt_file):
     total_funcs = 0
     funciones = []
 
-    with open(csv_file, newline='', encoding='utf-8') as f:
+    with open(csv_file, newline='', encoding='utf-8', errors='replace') as f:
         reader = csv.DictReader(f, fieldnames=columnas)
 
         for row in reader:
@@ -130,14 +130,16 @@ def main():
 
     try:
 
-        with open(archivo_csv, "w", encoding="utf-8") as salida:
-
+        #with open(archivo_csv, "w", encoding="utf-8") as salida:
+        with open(archivo_csv, "w", newline='', encoding='utf-8', errors='replace') as salida:
             resultado = subprocess.run(
-                comando,
-                stdout=salida,
-                stderr=subprocess.PIPE,
-                text=True
-            )
+                    comando,
+                    stdout=salida,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    encoding="utf-8",
+                    errors="replace"
+                )
 
         if resultado.returncode != 0:
             print(resultado.stderr)

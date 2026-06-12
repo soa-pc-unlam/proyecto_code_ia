@@ -46,7 +46,7 @@ class FileMetrics:
 def parse_lizard_csv(csv_path: str) -> dict[str, FileMetrics]:
     metrics_by_file: dict[str, FileMetrics] = defaultdict(FileMetrics)
 
-    with open(csv_path, newline="", encoding="utf-8-sig") as f:
+    with open(csv_path,newline="",encoding="cp1252",errors="replace") as f:
         reader = csv.reader(f)
         for row in reader:
             if not row:

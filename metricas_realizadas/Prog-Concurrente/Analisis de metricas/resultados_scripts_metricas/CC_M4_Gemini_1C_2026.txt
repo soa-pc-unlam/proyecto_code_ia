@@ -1,0 +1,22 @@
+=====================================
+RESUMEN LIZARD
+=====================================
+
+Cantidad de funciones: 15
+CCN total: 39.00
+CCN promedio: 2.60
+NLOC total: 170.00
+NLOC promedio: 11.33
+
+Funciones más complejas:
+-------------------------------------
+CCN=8 | NLOC=25 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Gemini 3.1 Pro\simulacion_delivery.py
+CCN=8 | NLOC=19 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Gemini 3.1 Pro\simulacion_delivery.py
+CCN=5 | NLOC=16 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Gemini 3.1 Pro\simulacion_delivery.py
+CCN=4 | NLOC=10 | cambiar_estado | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Gemini 3.1 Pro\simulacion_delivery.py
+CCN=3 | NLOC=16 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Gemini 3.1 Pro\simulacion_delivery.py
+CCN=2 | NLOC=18 | imprimir_resumen | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Gemini 3.1 Pro\simulacion_delivery.py
+CCN=1 | NLOC=10 | __init__ | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Gemini 3.1 Pro\simulacion_delivery.py
+CCN=1 | NLOC=22 | __init__ | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Gemini 3.1 Pro\simulacion_delivery.py
+CCN=1 | NLOC=4 | generar_id_pedido | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Gemini 3.1 Pro\simulacion_delivery.py
+CCN=1 | NLOC=11 | registrar_completado | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Gemini 3.1 Pro\simulacion_delivery.py

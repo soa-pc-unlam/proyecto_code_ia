@@ -1,0 +1,139 @@
+REPORTE DE ANÁLISIS CON PYLINT
+==================================================
+
+Proyecto analizado: C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Código\Deepseek v4 Flash
+Líneas Python analizadas: 389
+
+MÉTRICAS COMPARABLES
+--------------------------------------------------
+Total de issues: 45
+Issues/KLOC: 115.68
+Issues críticos: 0
+
+SEVERIDAD
+--------------------------------------------------
+Baja: 12
+Media: 33
+Alta: 0
+
+CATEGORÍAS
+--------------------------------------------------
+bug potencial: 26
+estilo: 12
+diseño: 7
+
+TOP REGLAS VIOLADAS
+--------------------------------------------------
+logging-fstring-interpolation: 21
+missing-function-docstring: 5
+broad-exception-caught: 4
+6/5: 4
+105/100: 1
+125/100: 1
+119/100: 1
+147/100: 1
+102/100: 1
+missing-class-docstring: 1
+
+DETALLE DE ISSUES
+--------------------------------------------------
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:28:0 C0301 105/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:115:0 C0301 125/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:145:0 C0301 119/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:192:0 C0301 147/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:251:0 C0301 102/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:19:0 C0115 missing-class-docstring - Missing class docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:60:0 C0103 invalid-name - Constant name "_order_id_counter" doesn't conform to UPPER_CASE naming style
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:65:4 W0603 global-statement - Using the global statement
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:73:0 R0902 9/7 - Too many instance attributes
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:95:4 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:114:12 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:73:0 R0903 1/2 - Too few public methods
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:153:19 W0718 broad-exception-caught - Catching too general exception Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:144:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:149:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:154:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:159:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:170:4 R0913 6/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:170:4 R0917 6/5 - Too many positional arguments
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:210:19 W0718 broad-exception-caught - Catching too general exception Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:191:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:201:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:206:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:211:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:219:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:230:4 R0913 6/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:230:4 R0917 6/5 - Too many positional arguments
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:269:19 W0718 broad-exception-caught - Catching too general exception Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:250:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:265:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:270:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:277:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:315:19 W0718 broad-exception-caught - Catching too general exception Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:310:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:316:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:329:0 R0902 10/7 - Too many instance attributes
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:351:4 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:356:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:386:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:391:4 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:392:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:433:4 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:443:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:451:12 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:461:0 C0116 missing-function-docstring - Missing function or method docstring
+
+
+SALIDA COMPLETA DE PYLINT
+==================================================
+************* Module delivery_system
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:28:0: C0301: Line too long (105/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:115:0: C0301: Line too long (125/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:145:0: C0301: Line too long (119/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:192:0: C0301: Line too long (147/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:251:0: C0301: Line too long (102/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:19:0: C0115: Missing class docstring (missing-class-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:60:0: C0103: Constant name "_order_id_counter" doesn't conform to UPPER_CASE naming style (invalid-name)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:65:4: W0603: Using the global statement (global-statement)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:73:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:95:4: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:114:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:73:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:153:19: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:144:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:149:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:154:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:159:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:170:4: R0913: Too many arguments (6/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:170:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:210:19: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:191:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:201:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:206:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:211:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:219:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:230:4: R0913: Too many arguments (6/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:230:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:269:19: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:250:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:265:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:270:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:277:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:315:19: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:310:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:316:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:329:0: R0902: Too many instance attributes (10/7) (too-many-instance-attributes)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:351:4: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:356:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:386:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:391:4: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:392:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:433:4: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:443:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:451:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\Cdigo\Deepseek v4 Flash\delivery_system.py:461:0: C0116: Missing function or method docstring (missing-function-docstring)
+
+-----------------------------------
+Your code has been rated at 8.19/10
+
+

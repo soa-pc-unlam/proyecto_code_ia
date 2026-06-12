@@ -1,0 +1,22 @@
+=====================================
+RESUMEN LIZARD
+=====================================
+
+Cantidad de funciones: 17
+CCN total: 56.00
+CCN promedio: 3.29
+NLOC total: 319.00
+NLOC promedio: 18.76
+
+Funciones más complejas:
+-------------------------------------
+CCN=7 | NLOC=39 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Deepseek v4 Flash\delivery_system.py
+CCN=7 | NLOC=18 | main | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Deepseek v4 Flash\delivery_system.py
+CCN=6 | NLOC=21 | cambiar_estado | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Deepseek v4 Flash\delivery_system.py
+CCN=6 | NLOC=37 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Deepseek v4 Flash\delivery_system.py
+CCN=5 | NLOC=29 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Deepseek v4 Flash\delivery_system.py
+CCN=5 | NLOC=33 | iniciar | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Deepseek v4 Flash\delivery_system.py
+CCN=4 | NLOC=25 | run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Deepseek v4 Flash\delivery_system.py
+CCN=4 | NLOC=34 | esperar_y_apagar | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Deepseek v4 Flash\delivery_system.py
+CCN=3 | NLOC=6 | format | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Deepseek v4 Flash\delivery_system.py
+CCN=2 | NLOC=25 | reportar_estadisticas | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M4\C�digo\Deepseek v4 Flash\delivery_system.py

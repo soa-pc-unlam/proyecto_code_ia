@@ -1,0 +1,404 @@
+REPORTE DE ANÁLISIS CON PYLINT
+==================================================
+
+Proyecto analizado: C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado
+Líneas Python analizadas: 1294
+
+MÉTRICAS COMPARABLES
+--------------------------------------------------
+Total de issues: 167
+Issues/KLOC: 129.06
+Issues críticos: 39
+
+SEVERIDAD
+--------------------------------------------------
+Baja: 70
+Media: 58
+Alta: 39
+
+CATEGORÍAS
+--------------------------------------------------
+bug potencial: 93
+estilo: 70
+diseño: 4
+
+TOP REGLAS VIOLADAS
+--------------------------------------------------
+missing-function-docstring: 40
+import-error: 39
+unused-variable: 13
+logging-fstring-interpolation: 12
+missing-module-docstring: 11
+missing-class-docstring: 8
+f-string-without-interpolation: 8
+broad-exception-caught: 7
+wrong-import-order: 7
+global-statement: 3
+
+DETALLE DE ISSUES
+--------------------------------------------------
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:1:0 C0114 missing-module-docstring - Missing module docstring
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:4:0 E0401 import-error - Unable to import 'jwt'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:5:0 E0401 import-error - Unable to import 'passlib.context'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:6:0 E0401 import-error - Unable to import 'fastapi'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:7:0 E0401 import-error - Unable to import 'fastapi.security'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:8:0 E0401 import-error - Unable to import 'database'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:9:0 E0401 import-error - Unable to import 'config'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:15:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:19:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:23:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:56:8 W0707 raise-missing-from - Consider explicitly re-raising using 'except Exception as exc' and 'raise credentials_exception from exc'
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:58:8 W0707 TypeError, ValueError - Consider explicitly re-raising using 'except
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:63:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:64:43 W0612 unused-variable - Unused variable 'conn'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:1:0 C0114 missing-module-docstring - Missing module docstring
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:3:0 E0401 import-error - Unable to import 'database'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:4:0 E0401 import-error - Unable to import 'ws_manager'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:5:0 E0401 import-error - Unable to import 'config'
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:29:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:35:19 W0718 broad-exception-caught - Catching too general exception Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:36:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:39:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:66:12 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:75:4 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:79:0 C0103 invalid-name - Constant name "_cleaner" doesn't conform to UPPER_CASE naming style
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:82:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:83:4 W0603 global-statement - Using the global statement
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:88:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:89:4 W0602 global-variable-not-assigned - Using global for '_cleaner' but no assignment is done
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:1:0 C0114 missing-module-docstring - Missing module docstring
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:4:0 E0401 import-error - Unable to import 'database'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:5:0 E0401 import-error - Unable to import 'config'
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:52:0 R0914 16/15 - Too many local variables
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:90:16 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:111:4 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:60:31 W0612 unused-variable - Unused variable 'conn'
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:120:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:131:15 W0718 broad-exception-caught - Catching too general exception Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:132:12 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\config.py:1:0 C0114 missing-module-docstring - Missing module docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:17:0 C0301 131/100 - Line too long
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:1:0 C0114 missing-module-docstring - Missing module docstring
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:3:0 E0401 import-error - Unable to import 'psycopg_pool'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:4:0 E0401 import-error - Unable to import 'psycopg.rows'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:5:0 E0401 import-error - Unable to import 'config'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:9:0 C0103 invalid-name - Constant name "_pool" doesn't conform to UPPER_CASE naming style
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:13:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:14:4 W0603 global-statement - Using the global statement
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:26:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:62:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:63:4 W0603 global-statement - Using the global statement
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:1:0 C0114 missing-module-docstring - Missing module docstring
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:6:0 E0401 import-error - Unable to import 'fastapi'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:9:0 E0401 import-error - Unable to import 'fastapi.middleware.cors'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:10:0 E0401 import-error - Unable to import 'fastapi.responses'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:11:0 E0401 import-error - Unable to import 'fastapi.staticfiles'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:12:0 E0401 import-error - Unable to import 'slowapi'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:13:0 E0401 import-error - Unable to import 'slowapi.errors'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:14:0 E0401 import-error - Unable to import 'slowapi.util'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:16:0 E0401 import-error - Unable to import 'config'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:17:0 E0401 import-error - Unable to import 'database'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:18:0 E0401 import-error - Unable to import 'auth'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:19:0 E0401 import-error - Unable to import 'models'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:20:0 E0401 import-error - Unable to import 'ws_manager'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:21:0 E0401 import-error - Unable to import 'seat_service'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:25:0 E0401 import-error - Unable to import 'payment_stub'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:26:0 E0401 import-error - Unable to import 'cleaner'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:27:0 E0401 import-error - Unable to import 'concert_loader'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:43:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:43:19 W0621 line 62 - Redefining name 'app' from outer scope
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:43:19 W0613 unused-argument - Unused argument 'app'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:88:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:88:10 W0613 unused-argument - Unused argument 'request'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:110:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:112:43 W0612 unused-variable - Unused variable 'conn'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:128:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:132:43 W0612 unused-variable - Unused variable 'conn'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:151:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:152:43 W0612 unused-variable - Unused variable 'conn'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:172:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:177:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:188:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:207:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:210:4 W0612 unused-variable - Unused variable 'success'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:223:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:226:43 W0612 unused-variable - Unused variable 'conn'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:262:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:264:4 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:273:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:281:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:282:4 W0613 unused-argument - Unused argument 'current_user'
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:285:43 W0612 unused-variable - Unused variable 'conn'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:307:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:312:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:317:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:322:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:1:0 C0114 missing-module-docstring - Missing module docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:6:0 C0115 missing-class-docstring - Missing class docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:11:0 C0115 missing-class-docstring - Missing class docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:17:0 C0115 missing-class-docstring - Missing class docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:22:0 C0115 missing-class-docstring - Missing class docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:27:0 C0115 missing-class-docstring - Missing class docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:2:0 C0411 wrong-import-order - standard import "typing.Optional" should be placed before third party import "pydantic.BaseModel"
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:3:0 C0411 wrong-import-order - standard import "datetime.datetime" should be placed before third party import "pydantic.BaseModel"
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:3:0 W0611 unused-import - Unused datetime imported from datetime
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\payment_stub.py:1:0 C0114 missing-module-docstring - Missing module docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:1:0 C0114 missing-module-docstring - Missing module docstring
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:4:0 E0401 import-error - Unable to import 'config'
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:36:4 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:57:11 W0718 broad-exception-caught - Catching too general exception Exception
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:46:8 E0401 import-error - Unable to import 'database'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:46:8 C0415 database.get_cursor - Import outside toplevel
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:58:8 W1203 logging-fstring-interpolation - Use lazy % formatting in logging functions
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:48:35 W0612 unused-variable - Unused variable 'conn'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:1:0 C0114 missing-module-docstring - Missing module docstring
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:2:0 E0401 import-error - Unable to import 'database'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:3:0 E0401 import-error - Unable to import 'config'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:4:0 E0401 import-error - Unable to import 'race_logger'
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:5:0 E0401 import-error - Unable to import 'ws_manager'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:8:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:9:43 W0612 unused-variable - Unused variable 'conn'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:119:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:122:31 W0612 unused-variable - Unused variable 'conn'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:146:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:200:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:201:43 W0612 unused-variable - Unused variable 'conn'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:1:0 C0114 missing-module-docstring - Missing module docstring
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:4:0 E0401 import-error - Unable to import 'fastapi'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:20:4 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:23:4 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:30:4 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:35:4 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:43:19 W0718 broad-exception-caught - Catching too general exception Exception
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:63:4 C0116 missing-function-docstring - Missing function or method docstring
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:8:0 E0401 import-error - Unable to import 'aiohttp'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:17:0 C0115 missing-class-docstring - Missing class docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:25:0 C0115 missing-class-docstring - Missing class docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:52:16 W0719 broad-exception-raised - Raising too general exception: Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:81:16 W0719 broad-exception-raised - Raising too general exception: Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:92:16 W0719 broad-exception-raised - Raising too general exception: Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:131:15 W0718 broad-exception-caught - Catching too general exception Exception
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:113:16 R1705 no-else-return - Unnecessary "else" after "return", remove the "else" and de-indent the code inside it
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:148:14 W1309 f-string-without-interpolation - Using an f-string that does not have any interpolated variables
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:186:14 W1309 f-string-without-interpolation - Using an f-string that does not have any interpolated variables
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:192:14 W1309 f-string-without-interpolation - Using an f-string that does not have any interpolated variables
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:201:14 W1309 f-string-without-interpolation - Using an f-string that does not have any interpolated variables
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:206:18 W1309 f-string-without-interpolation - Using an f-string that does not have any interpolated variables
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:193:12 W0612 unused-variable - Unused variable 'i'
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:210:14 W1309 f-string-without-interpolation - Using an f-string that does not have any interpolated variables
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:216:14 W1309 f-string-without-interpolation - Using an f-string that does not have any interpolated variables
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:267:11 W0718 broad-exception-caught - Catching too general exception Exception
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:265:14 W1309 f-string-without-interpolation - Using an f-string that does not have any interpolated variables
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:9:0 C0411 wrong-import-order - standard import "time" should be placed before third party import "aiohttp"
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:10:0 C0411 wrong-import-order - standard import "os" should be placed before third party import "aiohttp"
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:11:0 C0411 wrong-import-order - standard import "sys" should be placed before third party import "aiohttp"
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:12:0 C0411 wrong-import-order - standard import "typing.List" should be placed before third party import "aiohttp"
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:13:0 C0411 wrong-import-order - standard import "dataclasses.dataclass" should be placed before third party import "aiohttp"
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:17:0 E0401 import-error - Unable to import 'aiohttp'
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:21:0 C0115 missing-class-docstring - Missing class docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:28:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:39:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:55:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:71:15 W0718 broad-exception-caught - Catching too general exception Exception
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:81:0 C0116 missing-function-docstring - Missing function or method docstring
+[Baja] [estilo] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:89:0 C0116 missing-function-docstring - Missing function or method docstring
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:89:0 R0914 17/15 - Too many local variables
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:110:8 R1730 consider-using-min-builtin - Consider using 'total_requests = min(total_requests, len(available))' instead of unnecessary if block
+
+
+SALIDA COMPLETA DE PYLINT
+==================================================
+************* Module backend.auth
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:4:0: E0401: Unable to import 'jwt' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:5:0: E0401: Unable to import 'passlib.context' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:6:0: E0401: Unable to import 'fastapi' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:7:0: E0401: Unable to import 'fastapi.security' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:8:0: E0401: Unable to import 'database' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:9:0: E0401: Unable to import 'config' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:15:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:19:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:23:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:56:8: W0707: Consider explicitly re-raising using 'except Exception as exc' and 'raise credentials_exception from exc' (raise-missing-from)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:58:8: W0707: Consider explicitly re-raising using 'except (TypeError, ValueError) as exc' and 'raise credentials_exception from exc' (raise-missing-from)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:63:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py:64:43: W0612: Unused variable 'conn' (unused-variable)
+************* Module backend.cleaner
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:3:0: E0401: Unable to import 'database' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:4:0: E0401: Unable to import 'ws_manager' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:5:0: E0401: Unable to import 'config' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:29:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:35:19: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:36:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:39:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:66:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:75:4: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:79:0: C0103: Constant name "_cleaner" doesn't conform to UPPER_CASE naming style (invalid-name)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:82:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:83:4: W0603: Using the global statement (global-statement)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:88:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py:89:4: W0602: Using global for '_cleaner' but no assignment is done (global-variable-not-assigned)
+************* Module backend.concert_loader
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:4:0: E0401: Unable to import 'database' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:5:0: E0401: Unable to import 'config' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:52:0: R0914: Too many local variables (16/15) (too-many-locals)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:90:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:111:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:60:31: W0612: Unused variable 'conn' (unused-variable)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:120:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:131:15: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py:132:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+************* Module backend.config
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\config.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+************* Module backend.database
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:17:0: C0301: Line too long (131/100) (line-too-long)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:3:0: E0401: Unable to import 'psycopg_pool' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:4:0: E0401: Unable to import 'psycopg.rows' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:5:0: E0401: Unable to import 'config' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:9:0: C0103: Constant name "_pool" doesn't conform to UPPER_CASE naming style (invalid-name)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:13:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:14:4: W0603: Using the global statement (global-statement)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:26:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:62:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\database.py:63:4: W0603: Using the global statement (global-statement)
+************* Module backend.main
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:6:0: E0401: Unable to import 'fastapi' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:9:0: E0401: Unable to import 'fastapi.middleware.cors' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:10:0: E0401: Unable to import 'fastapi.responses' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:11:0: E0401: Unable to import 'fastapi.staticfiles' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:12:0: E0401: Unable to import 'slowapi' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:13:0: E0401: Unable to import 'slowapi.errors' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:14:0: E0401: Unable to import 'slowapi.util' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:16:0: E0401: Unable to import 'config' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:17:0: E0401: Unable to import 'database' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:18:0: E0401: Unable to import 'auth' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:19:0: E0401: Unable to import 'models' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:20:0: E0401: Unable to import 'ws_manager' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:21:0: E0401: Unable to import 'seat_service' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:25:0: E0401: Unable to import 'payment_stub' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:26:0: E0401: Unable to import 'cleaner' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:27:0: E0401: Unable to import 'concert_loader' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:43:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:43:19: W0621: Redefining name 'app' from outer scope (line 62) (redefined-outer-name)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:43:19: W0613: Unused argument 'app' (unused-argument)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:88:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:88:10: W0613: Unused argument 'request' (unused-argument)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:110:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:112:43: W0612: Unused variable 'conn' (unused-variable)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:128:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:132:43: W0612: Unused variable 'conn' (unused-variable)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:151:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:152:43: W0612: Unused variable 'conn' (unused-variable)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:172:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:177:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:188:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:207:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:210:4: W0612: Unused variable 'success' (unused-variable)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:223:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:226:43: W0612: Unused variable 'conn' (unused-variable)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:262:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:264:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:273:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:281:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:282:4: W0613: Unused argument 'current_user' (unused-argument)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:285:43: W0612: Unused variable 'conn' (unused-variable)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:307:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:312:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:317:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\main.py:322:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module backend.models
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:6:0: C0115: Missing class docstring (missing-class-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:11:0: C0115: Missing class docstring (missing-class-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:17:0: C0115: Missing class docstring (missing-class-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:22:0: C0115: Missing class docstring (missing-class-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:27:0: C0115: Missing class docstring (missing-class-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:2:0: C0411: standard import "typing.Optional" should be placed before third party import "pydantic.BaseModel" (wrong-import-order)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:3:0: C0411: standard import "datetime.datetime" should be placed before third party import "pydantic.BaseModel" (wrong-import-order)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\models.py:3:0: W0611: Unused datetime imported from datetime (unused-import)
+************* Module backend.payment_stub
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\payment_stub.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+************* Module backend.race_logger
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:4:0: E0401: Unable to import 'config' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:36:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:57:11: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:46:8: E0401: Unable to import 'database' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:46:8: C0415: Import outside toplevel (database.get_cursor) (import-outside-toplevel)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:58:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\race_logger.py:48:35: W0612: Unused variable 'conn' (unused-variable)
+************* Module backend.seat_service
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:2:0: E0401: Unable to import 'database' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:3:0: E0401: Unable to import 'config' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:4:0: E0401: Unable to import 'race_logger' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:5:0: E0401: Unable to import 'ws_manager' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:8:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:9:43: W0612: Unused variable 'conn' (unused-variable)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:119:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:122:31: W0612: Unused variable 'conn' (unused-variable)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:146:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:200:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py:201:43: W0612: Unused variable 'conn' (unused-variable)
+************* Module backend.ws_manager
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:4:0: E0401: Unable to import 'fastapi' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:20:4: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:23:4: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:30:4: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:35:4: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:43:19: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py:63:4: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module tests.concurrent_test
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:8:0: E0401: Unable to import 'aiohttp' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:17:0: C0115: Missing class docstring (missing-class-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:25:0: C0115: Missing class docstring (missing-class-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:52:16: W0719: Raising too general exception: Exception (broad-exception-raised)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:81:16: W0719: Raising too general exception: Exception (broad-exception-raised)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:92:16: W0719: Raising too general exception: Exception (broad-exception-raised)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:131:15: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:113:16: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:148:14: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:186:14: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:192:14: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:201:14: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:206:18: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:193:12: W0612: Unused variable 'i' (unused-variable)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:210:14: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:216:14: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:267:11: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:265:14: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:9:0: C0411: standard import "time" should be placed before third party import "aiohttp" (wrong-import-order)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:10:0: C0411: standard import "os" should be placed before third party import "aiohttp" (wrong-import-order)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:11:0: C0411: standard import "sys" should be placed before third party import "aiohttp" (wrong-import-order)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:12:0: C0411: standard import "typing.List" should be placed before third party import "aiohttp" (wrong-import-order)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py:13:0: C0411: standard import "dataclasses.dataclass" should be placed before third party import "aiohttp" (wrong-import-order)
+************* Module tests.performance_test
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:17:0: E0401: Unable to import 'aiohttp' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:21:0: C0115: Missing class docstring (missing-class-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:28:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:39:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:55:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:71:15: W0718: Catching too general exception Exception (broad-exception-caught)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:81:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:89:0: C0116: Missing function or method docstring (missing-function-docstring)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:89:0: R0914: Too many local variables (17/15) (too-many-locals)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:110:8: R1730: Consider using 'total_requests = min(total_requests, len(available))' instead of unnecessary if block (consider-using-min-builtin)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py:1:0: R0801: Similar lines in 2 files
+==backend.cleaner:[58:64]
+==backend.database:[54:62]
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            p.putconn(conn)
+ (duplicate-code)
+
+-----------------------------------
+Your code has been rated at 5.53/10
+
+

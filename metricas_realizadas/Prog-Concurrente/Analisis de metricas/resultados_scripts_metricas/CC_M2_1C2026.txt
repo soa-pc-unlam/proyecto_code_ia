@@ -1,0 +1,22 @@
+=====================================
+RESUMEN LIZARD
+=====================================
+
+Cantidad de funciones: 68
+CCN total: 186.00
+CCN promedio: 2.74
+NLOC total: 948.00
+NLOC promedio: 13.94
+
+Funciones más complejas:
+-------------------------------------
+CCN=13 | NLOC=33 | _validate_concert_json | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py
+CCN=9 | NLOC=48 | main | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\performance_test.py
+CCN=7 | NLOC=13 | load_all_concerts | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py
+CCN=7 | NLOC=72 | reserve_seats | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py
+CCN=7 | NLOC=46 | confirm_purchase | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\seat_service.py
+CCN=6 | NLOC=32 | _cleanup | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\cleaner.py
+CCN=6 | NLOC=21 | _print_results | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\tests\concurrent_test.py
+CCN=5 | NLOC=21 | get_current_user | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\auth.py
+CCN=5 | NLOC=54 | load_concert_from_json | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\concert_loader.py
+CCN=5 | NLOC=13 | broadcast_to_concert | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M2\Codigo_IA_Generado\backend\ws_manager.py

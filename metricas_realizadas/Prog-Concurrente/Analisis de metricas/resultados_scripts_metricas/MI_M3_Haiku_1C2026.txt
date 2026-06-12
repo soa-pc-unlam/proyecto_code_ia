@@ -1,0 +1,14 @@
+archivo                                         nloc   fns  avgCCN  tokens     MI
+------------------------------------------------------------------------------
+Main.java                                        174     5     4.0    1594   28.2
+EtapaCategorias.java                              77     5    3.40     609   38.9
+EtapaSpam.java                                    78     4     5.0     542   38.9
+EtapaSentimiento.java                             70     5    3.60     572   40.0
+Resultado.java                                    54    16     1.0     225   45.6
+Post.java                                         42    13     1.0     175   48.8
+Productor.java                                    34     2     3.0     271   49.2
+PoisonPill.java                                    2     1     1.0       5   88.4
+------------------------------------------------------------------------------
+TOTAL/PROMEDIO                                   531    51            3993   47.2
+
+Bandas Microsoft:  0-9 = inmantenible  |  10-19 = moderado  |  >=20 = bueno

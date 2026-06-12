@@ -1,0 +1,55 @@
+REPORTE DE ANÁLISIS CON PYLINT
+==================================================
+
+Proyecto analizado: C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado
+Líneas Python analizadas: 566
+
+MÉTRICAS COMPARABLES
+--------------------------------------------------
+Total de issues: 6
+Issues/KLOC: 10.60
+Issues críticos: 2
+
+SEVERIDAD
+--------------------------------------------------
+Baja: 0
+Media: 4
+Alta: 2
+
+CATEGORÍAS
+--------------------------------------------------
+bug potencial: 3
+diseño: 3
+
+TOP REGLAS VIOLADAS
+--------------------------------------------------
+import-error: 2
+1/2: 2
+fixme: 1
+6/5: 1
+
+DETALLE DE ISSUES
+--------------------------------------------------
+[Media] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\core\backend.py:82:5 W0511 fixme - TODO: deteccin CUDA/OpenCL en futura iteracin
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\core\backend.py:9:0 E0401 import-error - Unable to import 'cv2'
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\core\backend.py:54:0 R0903 1/2 - Too few public methods
+[Alta] [bug potencial] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\pipeline\worker.py:9:0 E0401 import-error - Unable to import 'cv2'
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\pipeline\worker.py:23:4 R0913 6/5 - Too many arguments
+[Media] [diseño] C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\pipeline\worker.py:20:0 R0903 1/2 - Too few public methods
+
+
+SALIDA COMPLETA DE PYLINT
+==================================================
+************* Module core.backend
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\core\backend.py:82:5: W0511: TODO: deteccin CUDA/OpenCL en futura iteracin (fixme)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\core\backend.py:9:0: E0401: Unable to import 'cv2' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\core\backend.py:54:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+************* Module pipeline.worker
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\pipeline\worker.py:9:0: E0401: Unable to import 'cv2' (import-error)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\pipeline\worker.py:23:4: R0913: Too many arguments (6/5) (too-many-arguments)
+C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M6\Codigo_IA_generado\pipeline\worker.py:20:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+
+------------------------------------------------------------------
+Your code has been rated at 9.57/10 (previous run: 5.53/10, +4.04)
+
+

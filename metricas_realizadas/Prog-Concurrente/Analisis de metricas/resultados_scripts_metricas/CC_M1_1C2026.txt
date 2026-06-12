@@ -1,0 +1,22 @@
+=====================================
+RESUMEN LIZARD
+=====================================
+
+Cantidad de funciones: 40
+CCN total: 58.00
+CCN promedio: 1.45
+NLOC total: 247.00
+NLOC promedio: 6.17
+
+Funciones más complejas:
+-------------------------------------
+CCN=5 | NLOC=18 | MatchingEngine::run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M1\Codigo_IA_generado\broker\MatchingEngine.java
+CCN=5 | NLOC=21 | Trader::run | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M1\Codigo_IA_generado\broker\Trader.java
+CCN=4 | NLOC=20 | Asset::tryMatch | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M1\Codigo_IA_generado\broker\Asset.java
+CCN=3 | NLOC=11 | Broker::shutdown | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M1\Codigo_IA_generado\broker\Broker.java
+CCN=2 | NLOC=14 | Asset::addToBook | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M1\Codigo_IA_generado\broker\Asset.java
+CCN=2 | NLOC=7 | Broker::startTraders | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M1\Codigo_IA_generado\broker\Broker.java
+CCN=2 | NLOC=9 | Broker::submitOrder | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M1\Codigo_IA_generado\broker\Broker.java
+CCN=2 | NLOC=24 | Main::main | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M1\Codigo_IA_generado\broker\Main.java
+CCN=2 | NLOC=24 | Main::printSummary | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M1\Codigo_IA_generado\broker\Main.java
+CCN=1 | NLOC=3 | Asset::Asset | C:\proyecto_code_ia\metricas_realizadas\Prog-Concurrente\2026-PROGC-Q1-M1\Codigo_IA_generado\broker\Asset.java

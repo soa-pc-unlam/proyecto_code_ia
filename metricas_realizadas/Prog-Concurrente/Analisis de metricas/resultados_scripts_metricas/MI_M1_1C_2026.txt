@@ -1,0 +1,13 @@
+archivo                                         nloc   fns  avgCCN  tokens     MI
+------------------------------------------------------------------------------
+Asset.java                                        63    10    1.40     407   42.3
+Main.java                                         48     2     2.0     368   45.1
+Broker.java                                       47     8    1.50     323   45.8
+Trader.java                                       29     3    2.33     257   50.9
+MatchingEngine.java                               25     3    2.33     173   53.5
+Order.java                                        20     9     1.0     165   56.0
+Transaction.java                                  15     5     1.0     122   59.6
+------------------------------------------------------------------------------
+TOTAL/PROMEDIO                                   247    40            1815   50.4
+
+Bandas Microsoft:  0-9 = inmantenible  |  10-19 = moderado  |  >=20 = bueno
