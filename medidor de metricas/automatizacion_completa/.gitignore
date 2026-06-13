@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+metricas_calidad.xlsx
+resultados/*.csv
+resultados/*.txt
+logs/*.log

@@ -1,0 +1,18 @@
+[
+  {
+    "codigo": "M1",
+    "nombre_proyecto": "Broker de Acciones",
+    "ruta_codigo": "C:\\proyecto_code_ia\\metricas_realizadas\\Prog-Concurrente\\2026-PROGC-Q1-M1\\Codigo_IA_generado",
+    "herramienta_ia": "Claude.ia",
+    "modelo_ia": "Sonnet",
+    "lenguaje": "Java"
+  },
+  {
+    "codigo": "M2",
+    "nombre_proyecto": "Sistema de ventas de asientos",
+    "ruta_codigo": "C:\\proyecto_code_ia\\metricas_realizadas\\Prog-Concurrente\\2026-PROGC-Q1-M2\\Codigo_IA_Generado",
+    "herramienta_ia": "Claude Code",
+    "modelo_ia": "Haiku+Sonnet+Opus",
+    "lenguaje": "Python"
+  }
+]

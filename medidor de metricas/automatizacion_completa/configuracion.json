@@ -1,0 +1,31 @@
+{
+  "archivo_excel": "metricas_calidad.xlsx",
+  "carpeta_resultados": "resultados",
+  "carpeta_logs": "logs",
+  "umbrales_cc": [
+    {
+      "min": 1,
+      "max": 5,
+      "nivel": "Bajo",
+      "interpretacion": "Testeabilidad alta"
+    },
+    {
+      "min": 6,
+      "max": 10,
+      "nivel": "Moderado",
+      "interpretacion": "Tolerable"
+    },
+    {
+      "min": 11,
+      "max": 20,
+      "nivel": "Alto",
+      "interpretacion": "Considerar refactoring"
+    },
+    {
+      "min": 21,
+      "max": null,
+      "nivel": "Muy alto",
+      "interpretacion": "Crítico"
+    }
+  ]
+}
