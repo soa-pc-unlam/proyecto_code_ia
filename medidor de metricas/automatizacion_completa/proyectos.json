@@ -14,5 +14,69 @@
     "herramienta_ia": "Claude Code",
     "modelo_ia": "Haiku+Sonnet+Opus",
     "lenguaje": "Python"
+  },
+  {
+    "codigo": "M3-CC-Haiku",
+    "nombre_proyecto": "Analizador de post de Twitter",
+    "ruta_codigo": "C:\\proyecto_code_ia\\metricas_realizadas\\Prog-Concurrente\\2026-PROGC-Q1-M3\\Codigo_IA_generado\\version_haiku_4.5",
+    "herramienta_ia": "Claude Code",
+    "modelo_ia": "Haiku",
+    "lenguaje": "Java"
+  },
+  {
+    "codigo": "M3-CC-Opus",
+    "nombre_proyecto": "Analizador de post de Twitter",
+    "ruta_codigo": "C:\\proyecto_code_ia\\metricas_realizadas\\Prog-Concurrente\\2026-PROGC-Q1-M3\\Codigo_IA_generado\\version_opus_4.7",
+    "herramienta_ia": "Claude Code",
+    "modelo_ia": "Opus",
+    "lenguaje": "Java"
+  },
+  {
+    "codigo": "M4-IDE-Gemini",
+    "nombre_proyecto": "Simulador de reparto de pedidos",
+    "ruta_codigo": "C:\\proyecto_code_ia\\metricas_realizadas\\Prog-Concurrente\\2026-PROGC-Q1-M4\\Codigo\\Gemini 3.1 Pro",
+    "herramienta_ia": "WEB/IDE",
+    "modelo_ia": "Gemini Pro",
+    "lenguaje": "Python"
+  },
+  {
+    "codigo": "M4-IDE-Sonnet",
+    "nombre_proyecto": "Simulador de reparto de pedidos",
+    "ruta_codigo": "C:\\proyecto_code_ia\\metricas_realizadas\\Prog-Concurrente\\2026-PROGC-Q1-M4\\Codigo\\Claude_4.6",
+    "herramienta_ia": "WEB/IDE",
+    "modelo_ia": "Sonnet",
+    "lenguaje": "Python"
+  },
+  {
+    "codigo": "M4-IDE-GPT",
+    "nombre_proyecto": "Simulador de reparto de pedidos",
+    "ruta_codigo": "C:\\proyecto_code_ia\\metricas_realizadas\\Prog-Concurrente\\2026-PROGC-Q1-M4\\Codigo\\GPT-5 mini",
+    "herramienta_ia": "WEB/IDE",
+    "modelo_ia": "GPT Mini",
+    "lenguaje": "Python"
+  },
+  {
+    "codigo": "M4-IDE-Deepseek",
+    "nombre_proyecto": "Simulador de reparto de pedidos",
+    "ruta_codigo": "C:\\proyecto_code_ia\\metricas_realizadas\\Prog-Concurrente\\2026-PROGC-Q1-M4\\Codigo\\Deepseek v4 Flash",
+    "herramienta_ia": "WEB/IDE",
+    "modelo_ia": "Deepseek",
+    "lenguaje": "Python"
+  },
+  {
+    "codigo": "M5",
+    "nombre_proyecto": "Videojuego 2D Sheriff",
+    "ruta_codigo": "C:\\proyecto_code_ia\\metricas_realizadas\\Prog-Concurrente\\2026-PROGC-Q1-M5\\Codigo_IA_generado\\Sheriffsss",
+    "herramienta_ia": "Claude Sonnet",
+    "modelo_ia": "Sonnet+Opus",
+    "lenguaje": "Java"
+  },
+  {
+    "codigo": "M6",
+    "nombre_proyecto": "Procesamiento imagenes concurrente",
+    "ruta_codigo": "C:\\proyecto_code_ia\\metricas_realizadas\\Prog-Concurrente\\2026-PROGC-Q1-M6\\Codigo_IA_generado",
+    "herramienta_ia": "Claude Sonnet",
+    "modelo_ia": "Opus",
+    "lenguaje": "Python"
   }
 ]

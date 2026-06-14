@@ -27,5 +27,31 @@
       "nivel": "Muy alto",
       "interpretacion": "Crítico"
     }
+  ],
+  "umbrales_mi": [
+    {
+      "min": 0,
+      "max": 19.99,
+      "nivel": "Bajo",
+      "interpretacion": "Factores que afectan la mantenibilidad"
+    },
+    {
+      "min": 20,
+      "max": 39.99,
+      "nivel": "Aceptable",
+      "interpretacion": "Mantenibilidad aceptable"
+    },
+    {
+      "min": 40,
+      "max": 59.99,
+      "nivel": "Buena",
+      "interpretacion": "Buena mantenibilidad"
+    },
+    {
+      "min": 60,
+      "max": null,
+      "nivel": "Muy buena",
+      "interpretacion": "Muy buena mantenibilidad"
+    }
   ]
 }
