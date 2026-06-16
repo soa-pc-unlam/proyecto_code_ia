@@ -7,6 +7,7 @@ from openpyxl.styles import Font, PatternFill, Alignment
 HOJA_RESUMEN = "Resumen"
 HOJA_COMPLEJIDAD = "Complejidad"
 HOJA_MANTENIBILIDAD = "Mantenibilidad"
+HOJA_BUGS_SMELLS = "Bugs_Smells"
 HOJA_ERRORES = "Errores"
 
 ENCABEZADOS_RESUMEN = [
@@ -19,6 +20,9 @@ ENCABEZADOS_RESUMEN = [
     "Nivel de CC",
     "MI",
     "Nivel de MI",
+    "Issues/KLOC",
+    "ISI",
+    "Interpretación de Issue",
 ]
 
 ENCABEZADOS_COMPLEJIDAD = [
@@ -40,6 +44,21 @@ ENCABEZADOS_MANTENIBILIDAD = [
     "MI",
     "Nivel de MI",
     "Interpretación MI",
+]
+
+ENCABEZADOS_BUGS_SMELLS = [
+    "Código",
+    "Analizador",
+    "Total de issues",
+    "Issues/KLOC",
+    "ISI",
+    "Nivel de ISI",
+    "Interpretación de ISI",
+    "Observacion",
+    "Cant. severidad alta",
+    "Cant. severidad media",
+    "Cant. severidad baja",
+    "Reglas incumplidas",
 ]
 
 ENCABEZADOS_ERRORES = [
@@ -75,6 +94,16 @@ def asegurar_encabezados(hoja, encabezados):
             encabezados_actuales.append(encabezado)
 
 
+
+def eliminar_columnas_obsoletas(hoja, encabezados_validos):
+    """Elimina columnas que ya no forman parte del diseño esperado de la hoja."""
+    encabezados_validos = set(encabezados_validos)
+
+    for columna in range(hoja.max_column, 0, -1):
+        encabezado = hoja.cell(row=1, column=columna).value
+        if encabezado is not None and encabezado not in encabezados_validos:
+            hoja.delete_cols(columna)
+
 def crear_hojas_si_no_existen(libro):
     if HOJA_RESUMEN not in libro.sheetnames:
         hoja = libro.create_sheet(HOJA_RESUMEN)
@@ -93,6 +122,14 @@ def crear_hojas_si_no_existen(libro):
         hoja.append(ENCABEZADOS_MANTENIBILIDAD)
     else:
         asegurar_encabezados(libro[HOJA_MANTENIBILIDAD], ENCABEZADOS_MANTENIBILIDAD)
+
+    if HOJA_BUGS_SMELLS not in libro.sheetnames:
+        hoja = libro.create_sheet(HOJA_BUGS_SMELLS)
+        hoja.append(ENCABEZADOS_BUGS_SMELLS)
+    else:
+        hoja = libro[HOJA_BUGS_SMELLS]
+        asegurar_encabezados(hoja, ENCABEZADOS_BUGS_SMELLS)
+        eliminar_columnas_obsoletas(hoja, ENCABEZADOS_BUGS_SMELLS)
 
     if HOJA_ERRORES not in libro.sheetnames:
         hoja = libro.create_sheet(HOJA_ERRORES)
@@ -139,13 +176,18 @@ def escribir_o_actualizar_fila(hoja, codigo, valores):
             hoja.cell(row=fila_existente, column=columna).value = valor
 
 
-def guardar_resultado_excel(archivo_excel, proyecto, metricas, metricas_mi):
+def guardar_resultado_excel(archivo_excel, proyecto, metricas, metricas_mi, metricas_bugs_smells=None):
     libro = crear_o_abrir_excel(archivo_excel)
 
     hoja_resumen = libro[HOJA_RESUMEN]
     hoja_complejidad = libro[HOJA_COMPLEJIDAD]
     hoja_mantenibilidad = libro[HOJA_MANTENIBILIDAD]
-
+    hoja_bugs_smells = libro[HOJA_BUGS_SMELLS]
+    issues_kloc = metricas_bugs_smells.issues_kloc if metricas_bugs_smells else ""
+    isi = metricas_bugs_smells.isi if metricas_bugs_smells else ""
+    interpretacion_isi = metricas_bugs_smells.interpretacion_isi if metricas_bugs_smells else ""
+    observacion = metricas_bugs_smells.observacion if metricas_bugs_smells else ""
+    
     escribir_o_actualizar_fila(
         hoja_resumen,
         proyecto.codigo,
@@ -159,6 +201,10 @@ def guardar_resultado_excel(archivo_excel, proyecto, metricas, metricas_mi):
             metricas.nivel_cc,
             metricas_mi.mi,
             metricas_mi.nivel_mi,
+            issues_kloc,
+            isi,
+            interpretacion_isi
+            
         ],
     )
 
@@ -191,9 +237,41 @@ def guardar_resultado_excel(archivo_excel, proyecto, metricas, metricas_mi):
         ],
     )
 
+    if metricas_bugs_smells is not None:
+        escribir_o_actualizar_fila(
+            hoja_bugs_smells,
+            proyecto.codigo,
+            [
+                proyecto.codigo,
+                metricas_bugs_smells.analizador,
+                metricas_bugs_smells.total_issues,
+                metricas_bugs_smells.issues_kloc,
+                metricas_bugs_smells.isi,
+                metricas_bugs_smells.nivel_isi,
+                metricas_bugs_smells.interpretacion_isi,
+                metricas_bugs_smells.observacion,
+                metricas_bugs_smells.cantidad_alta,
+                metricas_bugs_smells.cantidad_media,
+                metricas_bugs_smells.cantidad_baja,
+                formatear_top_reglas(metricas_bugs_smells.top_reglas_violadas),
+            ],
+        )
+
+    fila = buscar_fila_por_codigo(hoja_bugs_smells,proyecto.codigo)
+
+    if fila:
+        celda_top_reglas = hoja_bugs_smells.cell(row=fila,column=13)
+
+        celda_top_reglas.alignment = Alignment(wrap_text=True,vertical="top")
+
+        hoja_bugs_smells.column_dimensions["M"].width = 45
+
     aplicar_estilos_basicos(libro)
     generar_graficos(libro)
     libro.save(archivo_excel)
+
+def formatear_top_reglas(top_reglas):
+    return "; ".join(f"{regla}: {cantidad}"for regla, cantidad in top_reglas)
 
 
 def guardar_error_excel(archivo_excel, proyecto, mensaje_error):
@@ -297,3 +375,28 @@ def generar_graficos(libro):
         grafico_mi.add_data(datos_mi, titles_from_data=True)
         grafico_mi.set_categories(categorias_mi)
         hoja_graficos.add_chart(grafico_mi, "A35")
+
+    hoja_bugs_smells = libro[HOJA_BUGS_SMELLS]
+    if hoja_bugs_smells.max_row >= 2:
+        grafico_isi = BarChart()
+        grafico_isi.title = "ISI por proyecto"
+        grafico_isi.y_axis.title = "Índice de severidad de issues"
+        grafico_isi.x_axis.title = "Proyecto"
+
+        datos_isi = Reference(
+            hoja_bugs_smells,
+            min_col=5,
+            min_row=1,
+            max_row=hoja_bugs_smells.max_row,
+        )
+
+        categorias_isi = Reference(
+            hoja_bugs_smells,
+            min_col=1,
+            min_row=2,
+            max_row=hoja_bugs_smells.max_row,
+        )
+
+        grafico_isi.add_data(datos_isi, titles_from_data=True)
+        grafico_isi.set_categories(categorias_isi)
+        hoja_graficos.add_chart(grafico_isi, "A52")

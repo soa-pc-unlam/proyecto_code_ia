@@ -53,5 +53,63 @@
       "nivel": "Muy buena",
       "interpretacion": "Muy buena mantenibilidad"
     }
+  ],
+  "umbrales_issues": [
+    {
+      "min": 0,
+      "max": 20,
+      "nivel": "Bajo",
+      "interpretacion": "Baja densidad de problemas"
+    },
+    {
+      "min": 20.1,
+      "max": 50,
+      "nivel": "Moderado",
+      "interpretacion": "Densidad aceptable"
+    },
+    {
+      "min": 50.01,
+      "max": 100,
+      "nivel": "Alto",
+      "interpretacion": "Alta densidad de problemas"
+    },
+    {
+      "min": 100.01,
+      "max": null,
+      "nivel": "Muy alto",
+      "interpretacion": "Revisar calidad del código"
+    }
+  ],
+  "umbrales_isi": [
+    {
+      "min": 0,
+      "max": 0,
+      "nivel": "Sin issues",
+      "interpretacion": "No se detectaron issues"
+    },
+    {
+      "min": 1,
+      "max": 1.49,
+      "nivel": "Baja",
+      "interpretacion": "Predominan issues bajos"
+    },
+    {
+      "min": 1.5,
+      "max": 2.49,
+      "nivel": "Moderada",
+      "interpretacion": "Predominan issues medios"
+    },
+    {
+      "min": 2.5,
+      "max": 3.99,
+      "nivel": "Alta",
+      "interpretacion": "Presencia de issues altos"
+    },
+    {
+      "min": 4,
+      "max": null,
+      "nivel": "Muy alta",
+      "interpretacion": "Predominan issues altos"
+    }
   ]
 }

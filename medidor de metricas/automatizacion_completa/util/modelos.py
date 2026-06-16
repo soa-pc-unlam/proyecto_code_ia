@@ -40,3 +40,18 @@ class MetricaMantenibilidad:
     nivel_mi: str = ""
     interpretacion_mi: str = ""
     archivos: dict | None = None
+
+
+@dataclass
+class MetricaBugsSmells:
+    analizador: str
+    total_issues: int
+    issues_kloc: float
+    isi: float
+    nivel_isi: str
+    interpretacion_isi: str
+    observacion :str
+    cantidad_baja: int
+    cantidad_media: int
+    cantidad_alta: int
+    top_reglas_violadas: list[tuple[str, int]] = field(default_factory=list)

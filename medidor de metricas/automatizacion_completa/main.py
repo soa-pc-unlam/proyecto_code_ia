@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from metricas.bugs_smells import analizar_bugs_smells
 from metricas.complejidad import ejecutar_lizard
 from metricas.mantenibilidad import analizar_mantenibilidad
 from reportes.excel import guardar_error_excel, guardar_resultado_excel
@@ -16,6 +17,8 @@ def main():
     carpeta_logs = configuracion["carpeta_logs"]
     umbrales_cc = configuracion["umbrales_cc"]
     umbrales_mi = configuracion["umbrales_mi"]
+    umbrales_issues = configuracion["umbrales_issues"]
+    umbrales_isi = configuracion["umbrales_isi"]
 
     crear_directorio(carpeta_resultados)
     crear_directorio(carpeta_logs)
@@ -52,11 +55,31 @@ def main():
                 logger=logger,
             )
 
+            metricas_bugs_smells = None
+            try:
+                metricas_bugs_smells = analizar_bugs_smells(
+                    proyecto=proyecto,
+                    carpeta_resultados=carpeta_resultados,
+                    umbrales_issues=umbrales_issues,
+                    umbrales_isi=umbrales_isi,
+                    logger=logger,
+                    loc_codigo=metricas_mi.nloc_mi
+                )
+            except Exception as error_bugs_smells:
+                mensaje_error = f"Error en analisis de bugs/smells: {error_bugs_smells}"
+                logger.error(f"{proyecto.codigo}: {mensaje_error}")
+                guardar_error_excel(
+                    archivo_excel=archivo_excel,
+                    proyecto=proyecto,
+                    mensaje_error=mensaje_error,
+                )
+
             guardar_resultado_excel(
                 archivo_excel=archivo_excel,
                 proyecto=proyecto,
                 metricas=metricas,
                 metricas_mi=metricas_mi,
+                metricas_bugs_smells=metricas_bugs_smells
             )
 
             logger.info(
@@ -64,7 +87,9 @@ def main():
                 f"CCN promedio={metricas.ccn_promedio}, "
                 f"Nivel CC={metricas.nivel_cc}, "
                 f"MI={metricas_mi.mi}, "
-                f"Nivel MI={metricas_mi.nivel_mi}"
+                f"Nivel MI={metricas_mi.nivel_mi}, "
+                f"Issues/KLOC={metricas_bugs_smells.issues_kloc if metricas_bugs_smells else 'Sin datos'}, "
+                f"ISI={metricas_bugs_smells.isi if metricas_bugs_smells else 'Sin datos'}"
             )
 
         except Exception as error:

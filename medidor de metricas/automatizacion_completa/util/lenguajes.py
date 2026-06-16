@@ -7,4 +7,7 @@ def normalizar_lenguaje(lenguaje):
     if lenguaje in ["java", "jav"]:
         return "java"
 
+    if lenguaje in ["kotlin", "kt"]:
+        return "kotlin"
+
     raise ValueError(f"Lenguaje no soportado: {lenguaje}")

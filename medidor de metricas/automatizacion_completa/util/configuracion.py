@@ -23,6 +23,8 @@ def cargar_configuracion(ruta_archivo="configuracion.json"):
         "carpeta_logs",
         "umbrales_cc",
         "umbrales_mi",
+        "umbrales_issues",
+        "umbrales_isi",
     ]
 
     for campo in campos_obligatorios:
@@ -86,3 +88,11 @@ def clasificar_ccn(ccn_promedio, umbrales):
         return "Sin funciones", "No se detectaron funciones analizables"
 
     return clasificar_por_umbrales(ccn_promedio, umbrales)
+
+
+def clasificar_issues(issues_kloc, umbrales):
+    return clasificar_por_umbrales(issues_kloc, umbrales)
+
+
+def clasificar_isi(isi, umbrales):
+    return clasificar_por_umbrales(isi, umbrales)

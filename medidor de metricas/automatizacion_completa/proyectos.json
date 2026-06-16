@@ -78,5 +78,13 @@
     "herramienta_ia": "Claude Sonnet",
     "modelo_ia": "Opus",
     "lenguaje": "Python"
+  },
+  {
+    "codigo": "Propio",
+    "nombre_proyecto": "Analizador metricas",
+    "ruta_codigo": "C:\\proyecto_code_ia\\medidor de metricas\\automatizacion_completa",
+    "herramienta_ia": "Web/IDE",
+    "modelo_ia": "GPT",
+    "lenguaje": "Python"
   }
 ]
