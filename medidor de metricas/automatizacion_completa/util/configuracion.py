@@ -36,6 +36,17 @@ def cargar_configuracion(ruta_archivo="configuracion.json"):
 
     return configuracion
 
+def obtener_nombre_archivo_excel(ruta_archivo="configuracion.json"):
+    configuracion = cargar_json(ruta_archivo)
+
+    campo_excel = ["archivo_excel"]
+
+    if campo_excel not in configuracion:
+        raise ValueError(f"Falta el campo obligatorio en configuracion.json: {campo_excel}")
+
+    return configuracion
+
+
 
 def cargar_proyectos(ruta_archivo="proyectos.json"):
     datos = cargar_json(ruta_archivo)

@@ -107,7 +107,7 @@ def crear_metrica_concurrencia(codigo, valores, ponderacion, umbrales):
     )
 
 
-def analizar_concurrencia(proyecto, archivo_datos_entrada, ponderacion, umbrales):
+def analizar_concurrencia(proyecto, archivo_datos_entrada, ponderacion, umbrales,logger):
     hoja = cargar_hoja_concurrencia(archivo_datos_entrada)
     encabezados = mapear_encabezados(hoja)
     columna_codigo = obtener_columna(encabezados, "Código")
