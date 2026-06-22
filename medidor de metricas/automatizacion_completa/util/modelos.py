@@ -55,3 +55,14 @@ class MetricaBugsSmells:
     cantidad_media: int
     cantidad_alta: int
     top_reglas_violadas: list[tuple[str, int]] = field(default_factory=list)
+
+
+@dataclass
+class MetricaConcurrencia:
+    codigo: str
+    sincronizacion_correcta: str
+    ausencia_de_deadlocks: str
+    ausencia_de_condicion_de_carrera: str
+    uso_correcto_de_exclusion_mutua: str
+    promedio: float
+    interpretacion: str

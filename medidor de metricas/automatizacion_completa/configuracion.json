@@ -111,5 +111,28 @@
       "nivel": "Muy alta",
       "interpretacion": "Predominan issues altos"
     }
+  ],
+  "archivo_datos_entrada": "datos_entrada/datos_entrada.xlsx",
+  "ponderacion_concurrencia": {
+    "Alta": 3,
+    "Media": 2,
+    "Baja": 1
+  },
+  "umbrales_concurrencia": [
+    {
+      "min": 3,
+      "max": null,
+      "interpretacion": "Muy buen uso de concurrencia"
+    },
+    {
+      "min": 2.5,
+      "max": 2.99,
+      "interpretacion": "Hay aspectos que requieren observación"
+    },
+    {
+      "min": 0,
+      "max": 2.49,
+      "interpretacion": "Requiere revisión"
+    }
   ]
 }

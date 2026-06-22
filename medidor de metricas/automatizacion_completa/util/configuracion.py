@@ -25,6 +25,9 @@ def cargar_configuracion(ruta_archivo="configuracion.json"):
         "umbrales_mi",
         "umbrales_issues",
         "umbrales_isi",
+        "archivo_datos_entrada",
+        "ponderacion_concurrencia",
+        "umbrales_concurrencia",
     ]
 
     for campo in campos_obligatorios:

@@ -2,8 +2,9 @@ from pathlib import Path
 
 from metricas.bugs_smells import analizar_bugs_smells
 from metricas.complejidad import ejecutar_lizard
+from metricas.concurrencia import analizar_concurrencia
 from metricas.mantenibilidad import analizar_mantenibilidad
-from reportes.excel import guardar_error_excel, guardar_resultado_excel
+from reportes.excel import guardar_concurrencia_excel, guardar_error_excel, guardar_resultado_excel
 from util.archivos import crear_directorio
 from util.configuracion import cargar_configuracion, cargar_proyectos, clasificar_ccn
 from util.logging_config import configurar_logger
@@ -19,6 +20,9 @@ def main():
     umbrales_mi = configuracion["umbrales_mi"]
     umbrales_issues = configuracion["umbrales_issues"]
     umbrales_isi = configuracion["umbrales_isi"]
+    archivo_datos_entrada = configuracion["archivo_datos_entrada"]
+    ponderacion_concurrencia = configuracion["ponderacion_concurrencia"]
+    umbrales_concurrencia = configuracion["umbrales_concurrencia"]
 
     crear_directorio(carpeta_resultados)
     crear_directorio(carpeta_logs)
@@ -82,6 +86,20 @@ def main():
                 metricas_bugs_smells=metricas_bugs_smells
             )
 
+            metricas_concurrencia = None
+            try:
+                metricas_concurrencia = analizar_concurrencia(
+                    proyecto=proyecto,
+                    archivo_datos_entrada=archivo_datos_entrada,
+                    ponderacion=ponderacion_concurrencia,
+                    umbrales=umbrales_concurrencia,
+                )
+                guardar_concurrencia_excel(archivo_excel, metricas_concurrencia)
+            except Exception as error_concurrencia:
+                mensaje_error = f"Error en análisis de concurrencia: {error_concurrencia}"
+                logger.error(f"{proyecto.codigo}: {mensaje_error}")
+                guardar_error_excel(archivo_excel, proyecto, mensaje_error)
+
             logger.info(
                 f"Finalizado {proyecto.codigo}: "
                 f"CCN promedio={metricas.ccn_promedio}, "
@@ -89,7 +107,9 @@ def main():
                 f"MI={metricas_mi.mi}, "
                 f"Nivel MI={metricas_mi.nivel_mi}, "
                 f"Issues/KLOC={metricas_bugs_smells.issues_kloc if metricas_bugs_smells else 'Sin datos'}, "
-                f"ISI={metricas_bugs_smells.isi if metricas_bugs_smells else 'Sin datos'}"
+                f"ISI={metricas_bugs_smells.isi if metricas_bugs_smells else 'Sin datos'}, "
+                f"Promedio concurrencia="
+                f"{metricas_concurrencia.promedio if metricas_concurrencia else 'Sin datos'}"
             )
 
         except Exception as error:

@@ -9,6 +9,7 @@ HOJA_COMPLEJIDAD = "Complejidad"
 HOJA_MANTENIBILIDAD = "Mantenibilidad"
 HOJA_BUGS_SMELLS = "Bugs_Smells"
 HOJA_ERRORES = "Errores"
+HOJA_CONCURRENCIA = "Concurrencia"
 
 ENCABEZADOS_RESUMEN = [
     "Código",
@@ -23,6 +24,8 @@ ENCABEZADOS_RESUMEN = [
     "Issues/KLOC",
     "ISI",
     "Interpretación de Issue",
+    "Promedio concurrencia",
+    "Interpretación concurrencia",
 ]
 
 ENCABEZADOS_COMPLEJIDAD = [
@@ -65,6 +68,16 @@ ENCABEZADOS_ERRORES = [
     "Código",
     "Nombre del proyecto",
     "Error",
+]
+
+ENCABEZADOS_CONCURRENCIA = [
+    "Código",
+    "Sincronización correcta",
+    "Ausencia de deadlocks",
+    "Ausencia de condición de carrera",
+    "Uso correcto de exclusión mutua",
+    "Promedio concurrencia",
+    "Interpretación concurrencia",
 ]
 
 
@@ -137,6 +150,12 @@ def crear_hojas_si_no_existen(libro):
     else:
         asegurar_encabezados(libro[HOJA_ERRORES], ENCABEZADOS_ERRORES)
 
+    if HOJA_CONCURRENCIA not in libro.sheetnames:
+        hoja = libro.create_sheet(HOJA_CONCURRENCIA)
+        hoja.append(ENCABEZADOS_CONCURRENCIA)
+    else:
+        asegurar_encabezados(libro[HOJA_CONCURRENCIA], ENCABEZADOS_CONCURRENCIA)
+
     aplicar_estilos_basicos(libro)
 
 
@@ -174,6 +193,29 @@ def escribir_o_actualizar_fila(hoja, codigo, valores):
     else:
         for columna, valor in enumerate(valores, start=1):
             hoja.cell(row=fila_existente, column=columna).value = valor
+
+
+def escribir_valor_por_encabezado(hoja, fila, encabezado, valor):
+    encabezados = obtener_mapa_encabezados(hoja)
+    columna = encabezados.get(encabezado)
+    if columna is not None:
+        hoja.cell(row=fila, column=columna).value = valor
+
+
+def obtener_mapa_encabezados(hoja):
+    return {
+        hoja.cell(row=1, column=columna).value: columna
+        for columna in range(1, hoja.max_column + 1)
+    }
+
+
+def actualizar_resumen_concurrencia(libro, metricas_concurrencia):
+    hoja = libro[HOJA_RESUMEN]
+    fila = buscar_fila_por_codigo(hoja, metricas_concurrencia.codigo)
+    if fila is None:
+        return
+    escribir_valor_por_encabezado(hoja, fila, "Promedio concurrencia", metricas_concurrencia.promedio)
+    escribir_valor_por_encabezado(hoja, fila, "Interpretación concurrencia", metricas_concurrencia.interpretacion)
 
 
 def guardar_resultado_excel(archivo_excel, proyecto, metricas, metricas_mi, metricas_bugs_smells=None):
@@ -272,6 +314,43 @@ def guardar_resultado_excel(archivo_excel, proyecto, metricas, metricas_mi, metr
 
 def formatear_top_reglas(top_reglas):
     return "; ".join(f"{regla}: {cantidad}"for regla, cantidad in top_reglas)
+
+
+
+def valores_concurrencia(metricas_concurrencia):
+    return [
+        metricas_concurrencia.codigo,
+        metricas_concurrencia.sincronizacion_correcta,
+        metricas_concurrencia.ausencia_de_deadlocks,
+        metricas_concurrencia.ausencia_de_condicion_de_carrera,
+        metricas_concurrencia.uso_correcto_de_exclusion_mutua,
+        metricas_concurrencia.promedio,
+        metricas_concurrencia.interpretacion,
+    ]
+
+
+def guardar_concurrencia_excel(archivo_excel, metricas_concurrencia):
+    libro = crear_o_abrir_excel(archivo_excel)
+    hoja = libro[HOJA_CONCURRENCIA]
+    valores = valores_concurrencia(metricas_concurrencia)
+    escribir_o_actualizar_fila(hoja, metricas_concurrencia.codigo, valores)
+    actualizar_resumen_concurrencia(libro, metricas_concurrencia)
+    aplicar_estilos_basicos(libro)
+    generar_graficos(libro)
+    libro.save(archivo_excel)
+
+def agregar_grafico_concurrencia(hoja_graficos, hoja_resumen):
+    if hoja_resumen.max_row < 2:
+        return
+    grafico = BarChart()
+    grafico.title = "Promedio de concurrencia por proyecto"
+    grafico.y_axis.title = "Promedio concurrencia"
+    grafico.x_axis.title = "Código"
+    datos = Reference(hoja_resumen, min_col=13, min_row=1, max_row=hoja_resumen.max_row)
+    categorias = Reference(hoja_resumen, min_col=1, min_row=2, max_row=hoja_resumen.max_row)
+    grafico.add_data(datos, titles_from_data=True)
+    grafico.set_categories(categorias)
+    hoja_graficos.add_chart(grafico, "A69")
 
 
 def guardar_error_excel(archivo_excel, proyecto, mensaje_error):
@@ -400,3 +479,5 @@ def generar_graficos(libro):
         grafico_isi.add_data(datos_isi, titles_from_data=True)
         grafico_isi.set_categories(categorias_isi)
         hoja_graficos.add_chart(grafico_isi, "A52")
+
+    agregar_grafico_concurrencia(hoja_graficos, hoja_resumen)
