@@ -1,7 +1,10 @@
+"""Limpia los artefactos generados por ejecuciones anteriores."""
+
 from pathlib import Path
 
 
 def borrar_archivos_directorios():
+    """Elimina los archivos contenidos en los directorios de salida y logs."""
     directorios = [Path("logs"), Path("resultados")]
 
     for directorio in directorios:
@@ -19,6 +22,7 @@ def borrar_archivos_directorios():
 
 
 def borrar_archivo_excel():
+    """Elimina el libro Excel de métricas si existe."""
     archivo_excel = Path("metricas_calidad.xlsx")
 
     if archivo_excel.exists():
@@ -32,6 +36,7 @@ def borrar_archivo_excel():
 
 
 def main():
+    """Ejecuta la limpieza de archivos generados."""
     borrar_archivos_directorios()
     borrar_archivo_excel()
     print("Proceso finalizado.")

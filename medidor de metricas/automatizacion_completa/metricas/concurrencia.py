@@ -1,3 +1,5 @@
+"""Evaluación de concurrencia a partir de una rúbrica en Excel."""
+
 import unicodedata
 from pathlib import Path
 
@@ -15,12 +17,32 @@ CAMPOS_RUBRICA = [
 
 
 def normalizar_texto(texto):
+    """Normaliza un valor para realizar comparaciones sin acentos.
+
+    Args:
+        texto: Valor que se desea normalizar.
+
+    Returns:
+        Texto en minúsculas, sin espacios externos ni diacríticos.
+    """
     texto = "" if texto is None else str(texto).strip().lower()
     texto = unicodedata.normalize("NFKD", texto)
     return "".join(c for c in texto if not unicodedata.combining(c))
 
 
 def cargar_hoja_concurrencia(archivo_datos_entrada):
+    """Carga la hoja que contiene la rúbrica de concurrencia.
+
+    Args:
+        archivo_datos_entrada: Ruta del libro Excel de entrada.
+
+    Returns:
+        La hoja de concurrencia del libro.
+
+    Raises:
+        FileNotFoundError: Si el libro no existe.
+        ValueError: Si el libro no contiene la hoja esperada.
+    """
     ruta = Path(archivo_datos_entrada)
     if not ruta.exists():
         raise FileNotFoundError(f"No se encontró el archivo: {ruta}")
@@ -31,6 +53,14 @@ def cargar_hoja_concurrencia(archivo_datos_entrada):
 
 
 def mapear_encabezados(hoja):
+    """Crea un mapa normalizado de encabezados a columnas.
+
+    Args:
+        hoja: Hoja de cálculo que se desea inspeccionar.
+
+    Returns:
+        Diccionario de encabezados normalizados y números de columna.
+    """
     encabezados = {}
     for columna in range(1, hoja.max_column + 1):
         valor = hoja.cell(row=1, column=columna).value
@@ -39,6 +69,18 @@ def mapear_encabezados(hoja):
 
 
 def obtener_columna(encabezados, nombre):
+    """Obtiene la columna asociada con un encabezado obligatorio.
+
+    Args:
+        encabezados: Mapa de encabezados a columnas.
+        nombre: Nombre del encabezado buscado.
+
+    Returns:
+        El número de columna encontrado.
+
+    Raises:
+        ValueError: Si el encabezado no existe.
+    """
     columna = encabezados.get(normalizar_texto(nombre))
     if columna is None:
         raise ValueError(f"Falta la columna '{nombre}' en la solapa Concurrencia")
@@ -46,6 +88,16 @@ def obtener_columna(encabezados, nombre):
 
 
 def buscar_fila_rubrica(hoja, columna_codigo, codigo):
+    """Busca la fila de la rúbrica correspondiente a un proyecto.
+
+    Args:
+        hoja: Hoja que contiene la rúbrica.
+        columna_codigo: Columna con los códigos de proyecto.
+        codigo: Código que se desea localizar.
+
+    Returns:
+        El número de fila encontrado o ``None``.
+    """
     for fila in range(2, hoja.max_row + 1):
         valor = hoja.cell(row=fila, column=columna_codigo).value
         if normalizar_texto(valor) == normalizar_texto(codigo):
@@ -54,6 +106,16 @@ def buscar_fila_rubrica(hoja, columna_codigo, codigo):
 
 
 def leer_valores_rubrica(hoja, fila, encabezados):
+    """Lee los criterios de concurrencia de una fila.
+
+    Args:
+        hoja: Hoja que contiene la rúbrica.
+        fila: Número de fila que se desea leer.
+        encabezados: Mapa de encabezados a columnas.
+
+    Returns:
+        Diccionario con los valores de cada criterio.
+    """
     valores = {}
     for campo in CAMPOS_RUBRICA:
         columna = obtener_columna(encabezados, campo)
@@ -62,6 +124,18 @@ def leer_valores_rubrica(hoja, fila, encabezados):
 
 
 def obtener_puntaje(valor, ponderacion):
+    """Convierte un nivel textual en su puntaje configurado.
+
+    Args:
+        valor: Nivel de concurrencia evaluado.
+        ponderacion: Mapa de niveles a puntajes.
+
+    Returns:
+        Puntaje asociado con el nivel.
+
+    Raises:
+        ValueError: Si el nivel no está contemplado.
+    """
     nivel = normalizar_texto(valor).capitalize()
     if nivel not in ponderacion:
         raise ValueError(f"Nivel de concurrencia inválido: {valor}")
@@ -69,6 +143,15 @@ def obtener_puntaje(valor, ponderacion):
 
 
 def calcular_puntajes(valores, ponderacion):
+    """Calcula los puntajes de todos los criterios de una rúbrica.
+
+    Args:
+        valores: Valores textuales de los criterios.
+        ponderacion: Mapa de niveles a puntajes.
+
+    Returns:
+        Lista de puntajes calculados.
+    """
     puntajes = []
     for valor in valores.values():
         puntajes.append(obtener_puntaje(valor, ponderacion))
@@ -76,12 +159,29 @@ def calcular_puntajes(valores, ponderacion):
 
 
 def calcular_promedio(puntajes):
+    """Calcula el promedio de una colección de puntajes.
+
+    Args:
+        puntajes: Puntajes que se desean promediar.
+
+    Returns:
+        El promedio redondeado a dos decimales, o cero sin datos.
+    """
     if not puntajes:
         return 0
     return round(sum(puntajes) / len(puntajes), 2)
 
 
 def interpretar_concurrencia(promedio, umbrales):
+    """Obtiene la interpretación correspondiente a un promedio.
+
+    Args:
+        promedio: Puntaje promedio de concurrencia.
+        umbrales: Intervalos de interpretación configurados.
+
+    Returns:
+        La interpretación encontrada o un texto sustituto.
+    """
     for umbral in umbrales:
         minimo = umbral["min"]
         maximo = umbral["max"]
@@ -93,6 +193,17 @@ def interpretar_concurrencia(promedio, umbrales):
 
 
 def crear_metrica_concurrencia(codigo, valores, ponderacion, umbrales):
+    """Construye la métrica de concurrencia de un proyecto.
+
+    Args:
+        codigo: Código del proyecto.
+        valores: Valores obtenidos de la rúbrica.
+        ponderacion: Mapa de niveles a puntajes.
+        umbrales: Intervalos de interpretación.
+
+    Returns:
+        La métrica de concurrencia calculada.
+    """
     puntajes = calcular_puntajes(valores, ponderacion)
     promedio = calcular_promedio(puntajes)
     interpretacion = interpretar_concurrencia(promedio, umbrales)
@@ -107,7 +218,23 @@ def crear_metrica_concurrencia(codigo, valores, ponderacion, umbrales):
     )
 
 
-def analizar_concurrencia(proyecto, archivo_datos_entrada, ponderacion, umbrales,logger):
+def analizar_concurrencia(proyecto, archivo_datos_entrada, ponderacion, umbrales, logger):
+    """Analiza la rúbrica de concurrencia de un proyecto.
+
+    Args:
+        proyecto: Proyecto que se desea evaluar.
+        archivo_datos_entrada: Ruta del libro con la rúbrica.
+        ponderacion: Mapa de niveles a puntajes.
+        umbrales: Intervalos de interpretación.
+        logger: Logger de la aplicación.
+
+    Returns:
+        La métrica de concurrencia calculada.
+
+    Raises:
+        ValueError: Si el proyecto no aparece en la rúbrica.
+    """
+    logger.info(f"Leyendo rúbrica de concurrencia para {proyecto.codigo}")
     hoja = cargar_hoja_concurrencia(archivo_datos_entrada)
     encabezados = mapear_encabezados(hoja)
     columna_codigo = obtener_columna(encabezados, "Código")

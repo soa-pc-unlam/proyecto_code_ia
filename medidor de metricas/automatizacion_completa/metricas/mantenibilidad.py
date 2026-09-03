@@ -1,3 +1,5 @@
+"""Cálculo y reporte del índice de mantenibilidad."""
+
 import csv
 import math
 import os
@@ -5,12 +7,20 @@ from collections import defaultdict
 from dataclasses import asdict, dataclass
 from pathlib import Path, PureWindowsPath
 
-from util.configuracion import clasificar_por_umbrales
+from configuracion.configuracion import clasificar_por_umbrales
 from util.modelos import MetricaMantenibilidad
 
 
 @dataclass
 class FileMetricsMI:
+    """Acumula las métricas necesarias para calcular el MI de un archivo.
+
+    Attributes:
+        nloc: Cantidad de líneas de código del archivo.
+        functions: Cantidad de funciones encontradas.
+        ccn_sum: Suma de la complejidad ciclomática de las funciones.
+        tokens: Cantidad de tokens de código del archivo.
+    """
     nloc: int = 0
     functions: int = 0
     ccn_sum: float = 0.0
@@ -18,13 +28,23 @@ class FileMetricsMI:
 
     @property
     def avg_ccn(self) -> float:
+        """Devuelve la complejidad ciclomática promedio del archivo.
+
+        Returns:
+            La complejidad promedio o cero cuando no hay funciones.
+        """
         return self.ccn_sum / self.functions if self.functions else 0.0
 
     @property
     def mi(self) -> float:
-        """
-        Fórmula de MI usada por el programa:
-        MI = (171 - 5.2*ln(tokens) - 0.23*avgCCN - 16.2*ln(nloc)) * 100 / 171
+        """Calcula el índice de mantenibilidad normalizado entre 0 y 100.
+
+        Returns:
+            El índice de mantenibilidad del archivo.
+
+        Notes:
+            Usa la fórmula ``(171 - 5.2*ln(tokens) - 0.23*avgCCN -
+            16.2*ln(nloc)) * 100 / 171``.
         """
         if self.nloc <= 0 or self.tokens <= 0:
             return 100.0
@@ -40,9 +60,13 @@ class FileMetricsMI:
 
 
 def parse_lizard_csv_mi(csv_path):
-    """
-    Procesa el CSV generado por Lizard y devuelve un diccionario con métricas por archivo.
-    Se mantiene separado de la lógica de Excel para poder reutilizar el resultado dentro del programa.
+    """Procesa un CSV de Lizard y agrega sus métricas por archivo.
+
+    Args:
+        csv_path: Ruta del CSV generado por Lizard.
+
+    Returns:
+        Un diccionario que asocia cada archivo con sus métricas.
     """
     metrics_by_file = defaultdict(FileMetricsMI)
 
@@ -78,10 +102,28 @@ def parse_lizard_csv_mi(csv_path):
 
 
 def clasificar_mi(mi, umbrales):
+    """Clasifica un índice de mantenibilidad según los umbrales.
+
+    Args:
+        mi: Índice de mantenibilidad.
+        umbrales: Intervalos de clasificación configurados.
+
+    Returns:
+        Una tupla con el nivel y su interpretación.
+    """
     return clasificar_por_umbrales(mi, umbrales)
 
 
 def calcular_metricas_mi(metrics_by_file, umbrales_mi):
+    """Agrega las métricas por archivo en una métrica de proyecto.
+
+    Args:
+        metrics_by_file: Métricas de mantenibilidad por archivo.
+        umbrales_mi: Intervalos de clasificación del MI.
+
+    Returns:
+        Las métricas de mantenibilidad agregadas.
+    """
     files = sorted(metrics_by_file.items(), key=lambda item: item[1].mi)
 
     total_nloc = sum(m.nloc for _, m in files)
@@ -114,6 +156,13 @@ def calcular_metricas_mi(metrics_by_file, umbrales_mi):
 
 
 def generar_resumen_mi_txt(proyecto, metricas_mi, archivo_txt):
+    """Escribe un resumen de mantenibilidad en texto plano.
+
+    Args:
+        proyecto: Proyecto al que pertenecen las métricas.
+        metricas_mi: Métricas de mantenibilidad calculadas.
+        archivo_txt: Ruta del archivo de salida.
+    """
     with open(archivo_txt, "w", encoding="utf-8") as archivo:
         archivo.write("RESUMEN DE MANTENIBILIDAD\n")
         archivo.write("=" * 45 + "\n\n")
@@ -147,6 +196,21 @@ def generar_resumen_mi_txt(proyecto, metricas_mi, archivo_txt):
 
 
 def analizar_mantenibilidad(proyecto, archivo_csv_lizard, carpeta_resultados, umbrales_mi, logger):
+    """Calcula y reporta la mantenibilidad de un proyecto.
+
+    Args:
+        proyecto: Proyecto que debe analizarse.
+        archivo_csv_lizard: CSV de métricas generado por Lizard.
+        carpeta_resultados: Directorio para los resultados.
+        umbrales_mi: Intervalos de clasificación del MI.
+        logger: Logger utilizado para registrar el proceso.
+
+    Returns:
+        Las métricas de mantenibilidad calculadas.
+
+    Raises:
+        RuntimeError: Si el CSV no contiene métricas válidas.
+    """
     archivo_txt = Path(carpeta_resultados) / f"{proyecto.codigo}_resumen_mi.txt"
 
     logger.info(f"Calculando índice de mantenibilidad para {proyecto.codigo}")
@@ -162,4 +226,12 @@ def analizar_mantenibilidad(proyecto, archivo_csv_lizard, carpeta_resultados, um
 
 
 def metrica_mantenibilidad_a_dict(metricas_mi):
+    """Convierte una métrica de mantenibilidad en un diccionario.
+
+    Args:
+        metricas_mi: Instancia que se desea convertir.
+
+    Returns:
+        Un diccionario con todos los campos de la métrica.
+    """
     return asdict(metricas_mi)

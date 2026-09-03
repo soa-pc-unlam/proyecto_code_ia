@@ -1,7 +1,10 @@
+"""Creación y actualización del libro Excel de resultados."""
+
 from pathlib import Path
 from openpyxl import Workbook, load_workbook
-from openpyxl.chart import BarChart, Reference
 from openpyxl.styles import Font, PatternFill, Alignment
+
+from reportes.graficos import generar_graficos
 
 
 HOJA_RESUMEN = "Resumen"
@@ -80,8 +83,33 @@ ENCABEZADOS_CONCURRENCIA = [
     "Interpretación concurrencia",
 ]
 
+HOJAS_REPORTE = {
+    HOJA_RESUMEN: ENCABEZADOS_RESUMEN,
+    HOJA_COMPLEJIDAD: ENCABEZADOS_COMPLEJIDAD,
+    HOJA_MANTENIBILIDAD: ENCABEZADOS_MANTENIBILIDAD,
+    HOJA_BUGS_SMELLS: ENCABEZADOS_BUGS_SMELLS,
+    HOJA_ERRORES: ENCABEZADOS_ERRORES,
+    HOJA_CONCURRENCIA: ENCABEZADOS_CONCURRENCIA,
+}
+
+CONFIGURACION_GRAFICOS = [
+    (HOJA_RESUMEN, 6, "CCN promedio por proyecto", "CCN promedio", "A1"),
+    (HOJA_COMPLEJIDAD, 5, "NLOC total por proyecto", "NLOC total", "A18"),
+    (HOJA_MANTENIBILIDAD, 5, "MI por proyecto", "Índice de mantenibilidad", "A35"),
+    (HOJA_BUGS_SMELLS, 5, "ISI por proyecto", "Índice de severidad de issues", "A52"),
+    (HOJA_RESUMEN, 13, "Promedio de concurrencia por proyecto", "Promedio concurrencia", "A69"),
+]
+
 
 def crear_o_abrir_excel(archivo_excel):
+    """Abre un libro existente o crea uno con las hojas requeridas.
+
+    Args:
+        archivo_excel: Ruta del libro de resultados.
+
+    Returns:
+        El libro preparado para recibir datos.
+    """
     if Path(archivo_excel).exists():
         libro = load_workbook(archivo_excel)
     else:
@@ -93,7 +121,12 @@ def crear_o_abrir_excel(archivo_excel):
 
 
 def asegurar_encabezados(hoja, encabezados):
-    """Crea o actualiza encabezados sin borrar datos existentes."""
+    """Crea o actualiza encabezados sin borrar datos existentes.
+
+    Args:
+        hoja: Hoja cuyos encabezados deben actualizarse.
+        encabezados: Encabezados que deben estar presentes.
+    """
     if hoja.max_row == 1 and all(celda.value is None for celda in hoja[1]):
         hoja.append(encabezados)
         hoja.delete_rows(1)
@@ -109,7 +142,12 @@ def asegurar_encabezados(hoja, encabezados):
 
 
 def eliminar_columnas_obsoletas(hoja, encabezados_validos):
-    """Elimina columnas que ya no forman parte del diseño esperado de la hoja."""
+    """Elimina las columnas ajenas al diseño esperado.
+
+    Args:
+        hoja: Hoja que se desea depurar.
+        encabezados_validos: Encabezados que deben conservarse.
+    """
     encabezados_validos = set(encabezados_validos)
 
     for columna in range(hoja.max_column, 0, -1):
@@ -118,48 +156,29 @@ def eliminar_columnas_obsoletas(hoja, encabezados_validos):
             hoja.delete_cols(columna)
 
 def crear_hojas_si_no_existen(libro):
-    if HOJA_RESUMEN not in libro.sheetnames:
-        hoja = libro.create_sheet(HOJA_RESUMEN)
-        hoja.append(ENCABEZADOS_RESUMEN)
-    else:
-        asegurar_encabezados(libro[HOJA_RESUMEN], ENCABEZADOS_RESUMEN)
+    """Crea y prepara todas las hojas requeridas por el reporte.
 
-    if HOJA_COMPLEJIDAD not in libro.sheetnames:
-        hoja = libro.create_sheet(HOJA_COMPLEJIDAD)
-        hoja.append(ENCABEZADOS_COMPLEJIDAD)
-    else:
-        asegurar_encabezados(libro[HOJA_COMPLEJIDAD], ENCABEZADOS_COMPLEJIDAD)
+    Args:
+        libro: Libro de Excel que se desea preparar.
+    """
+    for nombre, encabezados in HOJAS_REPORTE.items():
+        if nombre not in libro.sheetnames:
+            libro.create_sheet(nombre).append(encabezados)
+            continue
 
-    if HOJA_MANTENIBILIDAD not in libro.sheetnames:
-        hoja = libro.create_sheet(HOJA_MANTENIBILIDAD)
-        hoja.append(ENCABEZADOS_MANTENIBILIDAD)
-    else:
-        asegurar_encabezados(libro[HOJA_MANTENIBILIDAD], ENCABEZADOS_MANTENIBILIDAD)
+        hoja = libro[nombre]
+        asegurar_encabezados(hoja, encabezados)
 
-    if HOJA_BUGS_SMELLS not in libro.sheetnames:
-        hoja = libro.create_sheet(HOJA_BUGS_SMELLS)
-        hoja.append(ENCABEZADOS_BUGS_SMELLS)
-    else:
-        hoja = libro[HOJA_BUGS_SMELLS]
-        asegurar_encabezados(hoja, ENCABEZADOS_BUGS_SMELLS)
-        eliminar_columnas_obsoletas(hoja, ENCABEZADOS_BUGS_SMELLS)
-
-    if HOJA_ERRORES not in libro.sheetnames:
-        hoja = libro.create_sheet(HOJA_ERRORES)
-        hoja.append(ENCABEZADOS_ERRORES)
-    else:
-        asegurar_encabezados(libro[HOJA_ERRORES], ENCABEZADOS_ERRORES)
-
-    if HOJA_CONCURRENCIA not in libro.sheetnames:
-        hoja = libro.create_sheet(HOJA_CONCURRENCIA)
-        hoja.append(ENCABEZADOS_CONCURRENCIA)
-    else:
-        asegurar_encabezados(libro[HOJA_CONCURRENCIA], ENCABEZADOS_CONCURRENCIA)
-
-    aplicar_estilos_basicos(libro)
+        if nombre == HOJA_BUGS_SMELLS:
+            eliminar_columnas_obsoletas(hoja, encabezados)
 
 
 def aplicar_estilos_basicos(libro):
+    """Aplica formato a encabezados y ajusta anchos de columnas.
+
+    Args:
+        libro: Libro de Excel que se desea formatear.
+    """
     for hoja in libro.worksheets:
         for celda in hoja[1]:
             celda.font = Font(bold=True)
@@ -178,6 +197,15 @@ def aplicar_estilos_basicos(libro):
 
 
 def buscar_fila_por_codigo(hoja, codigo):
+    """Busca una fila por el código almacenado en la primera columna.
+
+    Args:
+        hoja: Hoja donde se realiza la búsqueda.
+        codigo: Código de proyecto buscado.
+
+    Returns:
+        El número de fila encontrado o ``None``.
+    """
     for fila in range(2, hoja.max_row + 1):
         if hoja.cell(row=fila, column=1).value == codigo:
             return fila
@@ -186,6 +214,13 @@ def buscar_fila_por_codigo(hoja, codigo):
 
 
 def escribir_o_actualizar_fila(hoja, codigo, valores):
+    """Agrega una fila o actualiza la que corresponde a un código.
+
+    Args:
+        hoja: Hoja que se desea modificar.
+        codigo: Código usado como clave de la fila.
+        valores: Valores que deben escribirse.
+    """
     fila_existente = buscar_fila_por_codigo(hoja, codigo)
 
     if fila_existente is None:
@@ -195,81 +230,163 @@ def escribir_o_actualizar_fila(hoja, codigo, valores):
             hoja.cell(row=fila_existente, column=columna).value = valor
 
 
-def escribir_valor_por_encabezado(hoja, fila, encabezado, valor):
+def escribir_valores_por_encabezado(hoja, fila, valores):
+    """Escribe varios valores en columnas identificadas por sus encabezados.
+
+    Args:
+        hoja: Hoja que se desea modificar.
+        fila: Número de fila de destino.
+        valores: Pares formados por encabezado y valor.
+    """
     encabezados = obtener_mapa_encabezados(hoja)
-    columna = encabezados.get(encabezado)
-    if columna is not None:
-        hoja.cell(row=fila, column=columna).value = valor
+
+    for encabezado, valor in valores.items():
+        columna = encabezados.get(encabezado)
+        if columna is not None:
+            hoja.cell(row=fila, column=columna).value = valor
 
 
 def obtener_mapa_encabezados(hoja):
+    """Crea un mapa entre encabezados y números de columna.
+
+    Args:
+        hoja: Hoja que se desea inspeccionar.
+
+    Returns:
+        Diccionario de encabezados a columnas.
+    """
     return {
         hoja.cell(row=1, column=columna).value: columna
         for columna in range(1, hoja.max_column + 1)
     }
 
 
-def actualizar_resumen_concurrencia(libro, metricas_concurrencia):
-    hoja = libro[HOJA_RESUMEN]
-    fila = buscar_fila_por_codigo(hoja, metricas_concurrencia.codigo)
-    if fila is None:
-        return
-    escribir_valor_por_encabezado(hoja, fila, "Promedio concurrencia", metricas_concurrencia.promedio)
-    escribir_valor_por_encabezado(hoja, fila, "Interpretación concurrencia", metricas_concurrencia.interpretacion)
+def finalizar_libro(libro, archivo_excel, incluir_graficos=False):
+    """Aplica las tareas finales y guarda el libro una sola vez.
+
+    Args:
+        libro: Libro de Excel que se desea finalizar.
+        archivo_excel: Ruta en la que se guarda el libro.
+        incluir_graficos: Indica si deben regenerarse los gráficos.
+    """
+    aplicar_estilos_basicos(libro)
+
+    if incluir_graficos:
+        generar_graficos(libro, CONFIGURACION_GRAFICOS)
+
+    ruta_salida = Path(archivo_excel)
+    ruta_salida.parent.mkdir(parents=True, exist_ok=True)
+    ruta_temporal = ruta_salida.with_name(f".{ruta_salida.stem}.tmp{ruta_salida.suffix}")
+    libro.save(ruta_temporal)
+    ruta_temporal.replace(ruta_salida)
 
 
-def guardar_resultado_excel(archivo_excel, proyecto, metricas, metricas_mi, metricas_bugs_smells=None):
-    libro = crear_o_abrir_excel(archivo_excel)
+def guardar_resultado_excel(
+    libro,
+    proyecto,
+    metricas_cc,
+    metricas_mi,
+    metricas_bugs_smells=None,
+    metricas_concurrencia=None,
+):
+    """Guarda todas las métricas de un proyecto en Excel.
 
+    Args:
+        libro: Libro de Excel en el que se escriben las métricas.
+        proyecto: Proyecto analizado.
+        metricas_cc: Métricas de complejidad.
+        metricas_mi: Métricas de mantenibilidad.
+        metricas_bugs_smells: Métricas de incidencias, si existen.
+        metricas_concurrencia: Métricas de concurrencia, si existen.
+    """
     hoja_resumen = libro[HOJA_RESUMEN]
     hoja_complejidad = libro[HOJA_COMPLEJIDAD]
     hoja_mantenibilidad = libro[HOJA_MANTENIBILIDAD]
     hoja_bugs_smells = libro[HOJA_BUGS_SMELLS]
+    hoja_concurrencia = libro[HOJA_CONCURRENCIA]
+
+    escribir_hoja_resumen(hoja_resumen, proyecto, metricas_cc, metricas_mi, metricas_bugs_smells, metricas_concurrencia)
+    
+    escribir_hoja_complejidad(hoja_complejidad, proyecto.codigo, metricas_cc)
+    escribir_hoja_mantenibilidad(hoja_mantenibilidad, proyecto.codigo, metricas_mi)
+    escribir_hoja_bugs_smells(hoja_bugs_smells, proyecto, metricas_bugs_smells)
+
+    escribir_hoja_concurrencia(hoja_concurrencia, proyecto.codigo, metricas_concurrencia)
+
+def escribir_hoja_resumen(hoja, proyecto, metricas_cc, metricas_mi, metricas_bugs_smells=None, metricas_concurrencia=None):
+    """Escribe las métricas de un proyecto en la hoja de resumen.
+
+    Args:
+        hoja: Hoja de Excel donde se escriben los datos.
+        proyecto: Proyecto analizado.
+        metricas_cc: Métricas de complejidad.
+        metricas_mi: Métricas de mantenibilidad.
+        metricas_bugs_smells: Métricas de incidencias, si existen.
+        metricas_concurrencia: Métricas de concurrencia, si existen.
+    """
     issues_kloc = metricas_bugs_smells.issues_kloc if metricas_bugs_smells else ""
     isi = metricas_bugs_smells.isi if metricas_bugs_smells else ""
     interpretacion_isi = metricas_bugs_smells.interpretacion_isi if metricas_bugs_smells else ""
-    observacion = metricas_bugs_smells.observacion if metricas_bugs_smells else ""
-    
-    escribir_o_actualizar_fila(
-        hoja_resumen,
+    valores_resumen = [
         proyecto.codigo,
+        proyecto.nombre_proyecto,
+        proyecto.herramienta_ia,
+        proyecto.modelo_ia,
+        proyecto.lenguaje,
+        metricas_cc.ccn_promedio,
+        metricas_cc.nivel_cc,
+        metricas_mi.mi,
+        metricas_mi.nivel_mi,
+        issues_kloc,
+        isi,
+        interpretacion_isi,
+    ]
+
+    valores_resumen.extend(
         [
-            proyecto.codigo,
-            proyecto.nombre_proyecto,
-            proyecto.herramienta_ia,
-            proyecto.modelo_ia,
-            proyecto.lenguaje,
-            metricas.ccn_promedio,
-            metricas.nivel_cc,
-            metricas_mi.mi,
-            metricas_mi.nivel_mi,
-            issues_kloc,
-            isi,
-            interpretacion_isi
-            
+            metricas_concurrencia.promedio if metricas_concurrencia else "",
+            metricas_concurrencia.interpretacion if metricas_concurrencia else "",
+        ]
+    )
+
+    escribir_o_actualizar_fila(hoja, proyecto.codigo, valores_resumen)
+
+def escribir_hoja_complejidad(hoja, codigo, metricas_cc):
+    """Escribe las métricas de complejidad en la hoja correspondiente.
+
+    Args:
+        hoja: Hoja de Excel donde se escriben los datos.
+        codigo: Código del proyecto.
+        metricas_cc: Métricas de complejidad.
+    """
+    escribir_o_actualizar_fila(
+        hoja,
+        codigo,
+        [
+            codigo,
+            metricas_cc.cantidad_funciones,
+            metricas_cc.ccn_total,
+            metricas_cc.ccn_promedio,
+            metricas_cc.nloc_total,
+            metricas_cc.nivel_cc,
+            metricas_cc.interpretacion_cc,
+            metricas_cc.nloc_promedio,
         ],
     )
 
-    escribir_o_actualizar_fila(
-        hoja_complejidad,
-        proyecto.codigo,
-        [
-            proyecto.codigo,
-            metricas.cantidad_funciones,
-            metricas.ccn_total,
-            metricas.ccn_promedio,
-            metricas.nloc_total,
-            metricas.nivel_cc,
-            metricas.interpretacion_cc,
-            metricas.nloc_promedio,
-        ],
-    )
+def escribir_hoja_mantenibilidad(hoja, codigo, metricas_mi):
+    """Escribe las métricas de mantenibilidad en la hoja correspondiente.
 
+    Args:
+        hoja: Hoja de Excel donde se escriben los datos.
+        codigo: Código del proyecto.
+        metricas_mi: Métricas de mantenibilidad.
+    """
     escribir_o_actualizar_fila(
-        hoja_mantenibilidad,
-        proyecto.codigo,
+        hoja,
+        codigo,
         [
-            proyecto.codigo,
+            codigo,
             metricas_mi.nloc_mi,
             metricas_mi.cantidad_funciones_mi,
             metricas_mi.tokens_codigo,
@@ -279,9 +396,19 @@ def guardar_resultado_excel(archivo_excel, proyecto, metricas, metricas_mi, metr
         ],
     )
 
-    if metricas_bugs_smells is not None:
+def escribir_hoja_bugs_smells(hoja, proyecto, metricas_bugs_smells):
+    """Escribe las métricas de bugs y smells en la hoja correspondiente.
+
+    Args:
+        hoja: Hoja de Excel donde se escriben los datos.
+        proyecto: Proyecto analizado.
+        metricas_bugs_smells: Métricas de bugs y smells.
+    """
+    if metricas_bugs_smells is None:
+        escribir_o_actualizar_fila(hoja, proyecto.codigo, [proyecto.codigo] + [""] * 11)
+    else:
         escribir_o_actualizar_fila(
-            hoja_bugs_smells,
+            hoja,
             proyecto.codigo,
             [
                 proyecto.codigo,
@@ -299,185 +426,65 @@ def guardar_resultado_excel(archivo_excel, proyecto, metricas, metricas_mi, metr
             ],
         )
 
-    fila = buscar_fila_por_codigo(hoja_bugs_smells,proyecto.codigo)
+        
+    fila = buscar_fila_por_codigo(hoja, proyecto.codigo)
 
     if fila:
-        celda_top_reglas = hoja_bugs_smells.cell(row=fila,column=13)
+        columna_reglas = obtener_mapa_encabezados(hoja)["Reglas incumplidas"]
+        celda_top_reglas = hoja.cell(row=fila, column=columna_reglas)
 
-        celda_top_reglas.alignment = Alignment(wrap_text=True,vertical="top")
+        celda_top_reglas.alignment = Alignment(wrap_text=True, vertical="top")
 
-        hoja_bugs_smells.column_dimensions["M"].width = 45
+        hoja.column_dimensions[celda_top_reglas.column_letter].width = 45
 
-    aplicar_estilos_basicos(libro)
-    generar_graficos(libro)
-    libro.save(archivo_excel)
+
+def escribir_hoja_concurrencia(hoja, codigo, metricas_concurrencia):
+    """Escribe las métricas de concurrencia en la hoja correspondiente.
+
+    Args:
+        hoja: Hoja de Excel donde se escriben los datos.
+        codigo: Código del proyecto.
+        metricas_concurrencia: Métricas de concurrencia.
+    """
+    if metricas_concurrencia is None:
+        escribir_o_actualizar_fila(hoja, codigo, [codigo] + [""] * 6)
+    else:
+        escribir_o_actualizar_fila(
+            hoja,
+            codigo,
+            [
+                codigo,
+                metricas_concurrencia.sincronizacion_correcta,
+                metricas_concurrencia.ausencia_de_deadlocks,
+                metricas_concurrencia.ausencia_de_condicion_de_carrera,
+                metricas_concurrencia.uso_correcto_de_exclusion_mutua,
+                metricas_concurrencia.promedio,
+                metricas_concurrencia.interpretacion,
+            ],
+        )
 
 def formatear_top_reglas(top_reglas):
-    return "; ".join(f"{regla}: {cantidad}"for regla, cantidad in top_reglas)
+    """Convierte el ranking de reglas en texto legible.
+
+    Args:
+        top_reglas: Pares formados por regla y cantidad.
+
+    Returns:
+        Las reglas y cantidades separadas por punto y coma.
+    """
+    return "; ".join(f"{regla}: {cantidad}" for regla, cantidad in top_reglas)
 
 
 
-def valores_concurrencia(metricas_concurrencia):
-    return [
-        metricas_concurrencia.codigo,
-        metricas_concurrencia.sincronizacion_correcta,
-        metricas_concurrencia.ausencia_de_deadlocks,
-        metricas_concurrencia.ausencia_de_condicion_de_carrera,
-        metricas_concurrencia.uso_correcto_de_exclusion_mutua,
-        metricas_concurrencia.promedio,
-        metricas_concurrencia.interpretacion,
-    ]
+def guardar_error_excel(libro, proyecto, mensaje_error):
+    """Registra en el libro un error asociado con un proyecto.
 
-
-def guardar_concurrencia_excel(archivo_excel, metricas_concurrencia):
-    libro = crear_o_abrir_excel(archivo_excel)
-    hoja = libro[HOJA_CONCURRENCIA]
-    valores = valores_concurrencia(metricas_concurrencia)
-    escribir_o_actualizar_fila(hoja, metricas_concurrencia.codigo, valores)
-    actualizar_resumen_concurrencia(libro, metricas_concurrencia)
-    aplicar_estilos_basicos(libro)
-    generar_graficos(libro)
-    libro.save(archivo_excel)
-
-def agregar_grafico_concurrencia(hoja_graficos, hoja_resumen):
-    if hoja_resumen.max_row < 2:
-        return
-    grafico = BarChart()
-    grafico.title = "Promedio de concurrencia por proyecto"
-    grafico.y_axis.title = "Promedio concurrencia"
-    grafico.x_axis.title = "Código"
-    datos = Reference(hoja_resumen, min_col=13, min_row=1, max_row=hoja_resumen.max_row)
-    categorias = Reference(hoja_resumen, min_col=1, min_row=2, max_row=hoja_resumen.max_row)
-    grafico.add_data(datos, titles_from_data=True)
-    grafico.set_categories(categorias)
-    hoja_graficos.add_chart(grafico, "A69")
-
-
-def guardar_error_excel(archivo_excel, proyecto, mensaje_error):
-    libro = crear_o_abrir_excel(archivo_excel)
+    Args:
+        libro: Libro de Excel en el que se registra el error.
+        proyecto: Proyecto cuyo análisis falló.
+        mensaje_error: Descripción del error producido.
+    """
     hoja = libro[HOJA_ERRORES]
-
-    escribir_o_actualizar_fila(
-        hoja,
-        proyecto.codigo,
-        [
-            proyecto.codigo,
-            proyecto.nombre_proyecto,
-            mensaje_error,
-        ],
-    )
-
-    aplicar_estilos_basicos(libro)
-    libro.save(archivo_excel)
+    hoja.append([proyecto.codigo, proyecto.nombre_proyecto, mensaje_error])
 
 
-def generar_graficos(libro):
-    nombre_hoja = "Graficos"
-
-    if nombre_hoja in libro.sheetnames:
-        del libro[nombre_hoja]
-
-    hoja_graficos = libro.create_sheet(nombre_hoja)
-    hoja_resumen = libro[HOJA_RESUMEN]
-    hoja_complejidad = libro[HOJA_COMPLEJIDAD]
-    hoja_mantenibilidad = libro[HOJA_MANTENIBILIDAD]
-
-    if hoja_resumen.max_row < 2:
-        return
-
-    grafico_cc = BarChart()
-    grafico_cc.title = "CCN promedio por proyecto"
-    grafico_cc.y_axis.title = "CCN promedio"
-    grafico_cc.x_axis.title = "Proyecto"
-
-    datos_cc = Reference(
-        hoja_resumen,
-        min_col=6,
-        min_row=1,
-        max_row=hoja_resumen.max_row,
-    )
-
-    categorias = Reference(
-        hoja_resumen,
-        min_col=1,
-        min_row=2,
-        max_row=hoja_resumen.max_row,
-    )
-
-    grafico_cc.add_data(datos_cc, titles_from_data=True)
-    grafico_cc.set_categories(categorias)
-    hoja_graficos.add_chart(grafico_cc, "A1")
-
-    grafico_nloc = BarChart()
-    grafico_nloc.title = "NLOC total por proyecto"
-    grafico_nloc.y_axis.title = "NLOC total"
-    grafico_nloc.x_axis.title = "Proyecto"
-
-    datos_nloc = Reference(
-        hoja_complejidad,
-        min_col=5,
-        min_row=1,
-        max_row=hoja_complejidad.max_row,
-    )
-
-    categorias_nloc = Reference(
-        hoja_complejidad,
-        min_col=1,
-        min_row=2,
-        max_row=hoja_complejidad.max_row,
-    )
-
-    grafico_nloc.add_data(datos_nloc, titles_from_data=True)
-    grafico_nloc.set_categories(categorias_nloc)
-    hoja_graficos.add_chart(grafico_nloc, "A18")
-
-    if hoja_mantenibilidad.max_row >= 2:
-        grafico_mi = BarChart()
-        grafico_mi.title = "MI por proyecto"
-        grafico_mi.y_axis.title = "Índice de mantenibilidad"
-        grafico_mi.x_axis.title = "Proyecto"
-
-        datos_mi = Reference(
-            hoja_mantenibilidad,
-            min_col=5,
-            min_row=1,
-            max_row=hoja_mantenibilidad.max_row,
-        )
-
-        categorias_mi = Reference(
-            hoja_mantenibilidad,
-            min_col=1,
-            min_row=2,
-            max_row=hoja_mantenibilidad.max_row,
-        )
-
-        grafico_mi.add_data(datos_mi, titles_from_data=True)
-        grafico_mi.set_categories(categorias_mi)
-        hoja_graficos.add_chart(grafico_mi, "A35")
-
-    hoja_bugs_smells = libro[HOJA_BUGS_SMELLS]
-    if hoja_bugs_smells.max_row >= 2:
-        grafico_isi = BarChart()
-        grafico_isi.title = "ISI por proyecto"
-        grafico_isi.y_axis.title = "Índice de severidad de issues"
-        grafico_isi.x_axis.title = "Proyecto"
-
-        datos_isi = Reference(
-            hoja_bugs_smells,
-            min_col=5,
-            min_row=1,
-            max_row=hoja_bugs_smells.max_row,
-        )
-
-        categorias_isi = Reference(
-            hoja_bugs_smells,
-            min_col=1,
-            min_row=2,
-            max_row=hoja_bugs_smells.max_row,
-        )
-
-        grafico_isi.add_data(datos_isi, titles_from_data=True)
-        grafico_isi.set_categories(categorias_isi)
-        hoja_graficos.add_chart(grafico_isi, "A52")
-
-    agregar_grafico_concurrencia(hoja_graficos, hoja_resumen)

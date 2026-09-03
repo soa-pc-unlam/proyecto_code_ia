@@ -13,6 +13,14 @@ from metricas.mantenibilidad import parse_lizard_csv_mi
 
 
 def build_report(metrics_by_file):
+    """Construye un reporte de mantenibilidad en texto plano.
+
+    Args:
+        metrics_by_file: Mapeo entre nombres de archivo y sus métricas.
+
+    Returns:
+        El reporte tabular listo para escribirse en un archivo.
+    """
     files = sorted(metrics_by_file.items(), key=lambda item: item[1].mi)
     total_nloc = sum(m.nloc for _, m in files)
     total_functions = sum(m.functions for _, m in files)
@@ -46,6 +54,11 @@ def build_report(metrics_by_file):
 
 
 def main():
+    """Procesa los argumentos de línea de comandos y genera el reporte.
+
+    Returns:
+        Código de salida: cero si finaliza correctamente y uno ante errores.
+    """
     if len(sys.argv) not in {2, 3}:
         print("Uso: python calculate_mi.py lizard-report.csv [mi-report.txt]")
         return 1

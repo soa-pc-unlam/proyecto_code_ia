@@ -62,7 +62,7 @@
       "interpretacion": "Baja densidad de problemas"
     },
     {
-      "min": 20.1,
+      "min": 20.01,
       "max": 50,
       "nivel": "Moderado",
       "interpretacion": "Densidad aceptable"

@@ -1,3 +1,5 @@
+"""Configuración del registro de eventos de la aplicación."""
+
 from datetime import datetime
 from pathlib import Path
 import logging
@@ -6,6 +8,14 @@ from util.archivos import crear_directorio
 
 
 def configurar_logger(carpeta_logs):
+    """Configura el logger para escribir en consola y en un archivo fechado.
+
+    Args:
+        carpeta_logs: Directorio donde se almacenará el archivo de registro.
+
+    Returns:
+        El logger configurado para la ejecución actual.
+    """
     crear_directorio(carpeta_logs)
 
     fecha = datetime.now().strftime("%Y%m%d_%H%M%S")

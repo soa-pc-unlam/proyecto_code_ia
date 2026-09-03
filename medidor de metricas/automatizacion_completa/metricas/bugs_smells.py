@@ -1,3 +1,5 @@
+"""Detección y clasificación de bugs y code smells por lenguaje."""
+
 import csv
 import os
 import re
@@ -9,12 +11,25 @@ from collections import Counter
 from pathlib import Path, PureWindowsPath
 
 from util.archivos import crear_directorio, validar_ruta_proyecto
-from util.configuracion import clasificar_issues, clasificar_isi
+from configuracion.configuracion import clasificar_issues, clasificar_isi
 from util.lenguajes import normalizar_lenguaje
 from util.modelos import MetricaBugsSmells
 
 
 def analizar_bugs_smells(proyecto, carpeta_resultados, umbrales_issues, umbrales_isi, logger, loc_codigo=None):
+    """Ejecuta el analizador adecuado y genera las métricas de incidencias.
+
+    Args:
+        proyecto: Proyecto que debe analizarse.
+        carpeta_resultados: Directorio para los reportes generados.
+        umbrales_issues: Umbrales de incidencias por KLOC.
+        umbrales_isi: Umbrales del índice de severidad.
+        logger: Logger utilizado para registrar la ejecución.
+        loc_codigo: Líneas de código conocidas, si están disponibles.
+
+    Returns:
+        Las métricas agregadas de bugs y code smells.
+    """
     ruta_proyecto = validar_ruta_proyecto(proyecto.ruta_codigo)
     crear_directorio(carpeta_resultados)
 
@@ -42,6 +57,17 @@ def analizar_bugs_smells(proyecto, carpeta_resultados, umbrales_issues, umbrales
 
 
 def buscar_ejecutable(candidatos):
+    """Busca el primer ejecutable disponible entre varios candidatos.
+
+    Args:
+        candidatos: Nombres de ejecutables aceptados.
+
+    Returns:
+        La ruta o el nombre del ejecutable encontrado.
+
+    Raises:
+        FileNotFoundError: Si ningún candidato está disponible.
+    """
     for candidato in candidatos:
         ejecutable = shutil.which(candidato)
         if ejecutable:
@@ -51,6 +77,15 @@ def buscar_ejecutable(candidatos):
 
 
 def ejecutar_pmd(ruta_proyecto, logger):
+    """Ejecuta PMD sobre un proyecto y devuelve sus incidencias.
+
+    Args:
+        ruta_proyecto: Ruta del código fuente.
+        logger: Logger utilizado para registrar la ejecución.
+
+    Returns:
+        Lista de incidencias normalizadas.
+    """
     ejecutable = buscar_ejecutable(["pmd", "pmd.bat", "pmd.cmd"])
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as temporal:
@@ -70,21 +105,33 @@ def ejecutar_pmd(ruta_proyecto, logger):
     ]
 
     logger.info(f"Ejecutando PMD: {' '.join(comando)}")
-    resultado = subprocess.run(comando, capture_output=True, text=True, encoding="utf-8", errors="replace")
-
-    if not archivo_csv.exists() or (resultado.returncode != 0 and archivo_csv.stat().st_size == 0):
-        raise RuntimeError(f"PMD no genero el archivo CSV. {resultado.stderr}")
-
-    issues = parsear_csv_pmd(archivo_csv)
     try:
-        archivo_csv.unlink()
-    except OSError:
-        pass
-
-    return issues
+        resultado = subprocess.run(
+            comando,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=300,
+        )
+        if not archivo_csv.exists() or (
+            resultado.returncode != 0 and archivo_csv.stat().st_size == 0
+        ):
+            raise RuntimeError(f"PMD no generó el archivo CSV. {resultado.stderr}")
+        return parsear_csv_pmd(archivo_csv)
+    finally:
+        archivo_csv.unlink(missing_ok=True)
 
 
 def parsear_csv_pmd(archivo_csv):
+    """Convierte un reporte CSV de PMD en incidencias normalizadas.
+
+    Args:
+        archivo_csv: Ruta del reporte de PMD.
+
+    Returns:
+        Lista de incidencias detectadas.
+    """
     issues = []
 
     with open(archivo_csv, "r", encoding="utf-8", errors="ignore", newline="") as archivo:
@@ -111,6 +158,15 @@ def parsear_csv_pmd(archivo_csv):
 
 
 def obtener_campo(row, posibles_nombres):
+    """Obtiene el primer campo disponible de una fila.
+
+    Args:
+        row: Fila representada como diccionario.
+        posibles_nombres: Nombres alternativos del campo.
+
+    Returns:
+        El valor encontrado o una cadena vacía.
+    """
     for nombre in posibles_nombres:
         if nombre in row:
             return row[nombre]
@@ -118,6 +174,14 @@ def obtener_campo(row, posibles_nombres):
 
 
 def clasificar_severidad_pmd(prioridad):
+    """Traduce una prioridad de PMD a una severidad normalizada.
+
+    Args:
+        prioridad: Prioridad informada por PMD.
+
+    Returns:
+        Severidad alta, media o baja.
+    """
     try:
         prioridad = int(prioridad)
     except (TypeError, ValueError):
@@ -131,16 +195,41 @@ def clasificar_severidad_pmd(prioridad):
 
 
 def ejecutar_pylint(ruta_proyecto, logger):
+    """Ejecuta Pylint y devuelve sus mensajes normalizados.
+
+    Args:
+        ruta_proyecto: Ruta del código fuente.
+        logger: Logger utilizado para registrar la ejecución.
+
+    Returns:
+        Lista de incidencias detectadas.
+    """
     ejecutable = buscar_ejecutable(["pylint"])
     comando = [ejecutable, str(ruta_proyecto), "--output-format=text"]
 
     logger.info(f"Ejecutando Pylint: {' '.join(comando)}")
-    resultado = subprocess.run(comando, capture_output=True, text=True, encoding="utf-8", errors="replace")
-
+    resultado = subprocess.run(
+        comando,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=300,
+    )
+    if resultado.returncode >= 32:
+        raise RuntimeError(f"Pylint no pudo ejecutar el análisis: {resultado.stderr}")
     return parsear_salida_pylint(resultado.stdout + "\n" + resultado.stderr)
 
 
 def parsear_salida_pylint(salida):
+    """Convierte la salida textual de Pylint en incidencias.
+
+    Args:
+        salida: Texto producido por Pylint.
+
+    Returns:
+        Lista de incidencias normalizadas.
+    """
     patron = re.compile(r"^(.*?):(\d+):(\d+): ([CRWEF])(\d+): (.*?) \((.*?)\)")
     tipos = {
         "C": "convention",
@@ -176,6 +265,14 @@ def parsear_salida_pylint(salida):
 
 
 def clasificar_severidad_pylint(tipo):
+    """Asigna una severidad a una categoría de Pylint.
+
+    Args:
+        tipo: Categoría textual de Pylint.
+
+    Returns:
+        Severidad alta, media o baja.
+    """
     if tipo in {"fatal", "error"}:
         return "Alta"
     if tipo in {"warning", "refactor"}:
@@ -184,6 +281,14 @@ def clasificar_severidad_pylint(tipo):
 
 
 def clasificar_categoria_pylint(tipo):
+    """Asigna una categoría funcional a un tipo de Pylint.
+
+    Args:
+        tipo: Categoría textual de Pylint.
+
+    Returns:
+        Categoría normalizada de la incidencia.
+    """
     if tipo == "convention":
         return "Estilo"
     if tipo == "refactor":
@@ -194,6 +299,18 @@ def clasificar_categoria_pylint(tipo):
 
 
 def ejecutar_detekt(ruta_proyecto, logger):
+    """Ejecuta Detekt y devuelve sus incidencias normalizadas.
+
+    Args:
+        ruta_proyecto: Ruta del código fuente.
+        logger: Logger utilizado para registrar la ejecución.
+
+    Returns:
+        Lista de incidencias detectadas.
+
+    Raises:
+        RuntimeError: Si Detekt no genera un reporte XML válido.
+    """
     ejecutable = buscar_ejecutable(["detekt-cli", "detekt-cli.bat", "detekt"])
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".detekt.xml") as temporal:
@@ -208,21 +325,31 @@ def ejecutar_detekt(ruta_proyecto, logger):
     ]
 
     logger.info(f"Ejecutando Detekt: {' '.join(comando)}")
-    resultado = subprocess.run(comando, capture_output=True, text=True, encoding="utf-8", errors="replace")
-
-    if not archivo_xml.exists() or archivo_xml.stat().st_size == 0:
-        raise RuntimeError(f"Detekt no genero el archivo XML. {resultado.stderr}")
-
-    issues = parsear_xml_detekt(archivo_xml)
     try:
-        archivo_xml.unlink()
-    except OSError:
-        pass
-
-    return issues
+        resultado = subprocess.run(
+            comando,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=300,
+        )
+        if not archivo_xml.exists() or archivo_xml.stat().st_size == 0:
+            raise RuntimeError(f"Detekt no generó el archivo XML. {resultado.stderr}")
+        return parsear_xml_detekt(archivo_xml)
+    finally:
+        archivo_xml.unlink(missing_ok=True)
 
 
 def parsear_xml_detekt(archivo_xml):
+    """Convierte un reporte XML de Detekt en incidencias.
+
+    Args:
+        archivo_xml: Ruta del reporte XML.
+
+    Returns:
+        Lista de incidencias normalizadas.
+    """
     tree = ET.parse(archivo_xml)
     root = tree.getroot()
     issues = []
@@ -248,6 +375,14 @@ def parsear_xml_detekt(archivo_xml):
 
 
 def clasificar_severidad_detekt(regla):
+    """Asigna una severidad a una regla de Detekt.
+
+    Args:
+        regla: Identificador de la regla.
+
+    Returns:
+        Severidad alta, media o baja.
+    """
     regla = regla.lower()
     alta = [
         "complexmethod",
@@ -278,6 +413,14 @@ def clasificar_severidad_detekt(regla):
 
 
 def clasificar_categoria_detekt(regla):
+    """Asigna una categoría funcional a una regla de Detekt.
+
+    Args:
+        regla: Identificador de la regla.
+
+    Returns:
+        Categoría normalizada de la incidencia.
+    """
     regla = regla.lower()
 
     if any(valor in regla for valor in ["style", "naming", "spacing", "format"]):
@@ -292,6 +435,18 @@ def clasificar_categoria_detekt(regla):
 
 
 def calcular_metricas_bugs_smells(analizador, issues, loc, umbrales_issues, umbrales_isi):
+    """Agrega incidencias en métricas comparables de calidad.
+
+    Args:
+        analizador: Nombre del analizador utilizado.
+        issues: Incidencias detectadas.
+        loc: Cantidad de líneas de código analizadas.
+        umbrales_issues: Umbrales de incidencias por KLOC.
+        umbrales_isi: Umbrales del índice de severidad.
+
+    Returns:
+        Las métricas agregadas de bugs y code smells.
+    """
     total_issues = len(issues)
     issues_kloc = round((total_issues / loc) * 1000, 2) if loc > 0 else 0.0
     
@@ -329,6 +484,17 @@ def calcular_metricas_bugs_smells(analizador, issues, loc, umbrales_issues, umbr
 
 
 def calcular_isi(cantidad_alta, cantidad_media, cantidad_baja, total_issues):
+    """Calcula el índice de severidad de incidencias.
+
+    Args:
+        cantidad_alta: Cantidad de incidencias de severidad alta.
+        cantidad_media: Cantidad de incidencias de severidad media.
+        cantidad_baja: Cantidad de incidencias de severidad baja.
+        total_issues: Cantidad total de incidencias.
+
+    Returns:
+        El índice ponderado, o cero cuando no hay incidencias.
+    """
     if total_issues <= 0:
         return 0.0
 
@@ -336,6 +502,15 @@ def calcular_isi(cantidad_alta, cantidad_media, cantidad_baja, total_issues):
     return round(puntaje / total_issues, 2)
 
 def generar_resumen_bugs_smells_txt(proyecto, metricas, loc, issues, archivo_txt):
+    """Escribe el reporte detallado de bugs y code smells.
+
+    Args:
+        proyecto: Proyecto al que corresponde el reporte.
+        metricas: Métricas agregadas de incidencias.
+        loc: Cantidad de líneas analizadas.
+        issues: Detalle de incidencias detectadas.
+        archivo_txt: Ruta del archivo de salida.
+    """
     severidades = Counter(issue["severidad"] for issue in issues)
     categorias = Counter(issue["categoria"] for issue in issues)
 
@@ -392,6 +567,14 @@ def generar_resumen_bugs_smells_txt(proyecto, metricas, loc, issues, archivo_txt
 
 
 def normalizar_ruta_salida(ruta):
+    """Reduce una ruta a un nombre de archivo portable.
+
+    Args:
+        ruta: Ruta producida por una herramienta de análisis.
+
+    Returns:
+        El nombre del archivo o la ruta original si no puede reducirse.
+    """
     nombre = os.path.basename(ruta)
     if nombre == ruta:
         nombre = PureWindowsPath(ruta).name

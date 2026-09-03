@@ -1,3 +1,5 @@
+"""Cálculo de complejidad ciclomática mediante Lizard."""
+
 import csv
 import subprocess
 from pathlib import Path
@@ -8,17 +10,39 @@ from util.modelos import FuncionCompleja, MetricaComplejidad
 
 
 def ejecutar_lizard(proyecto, carpeta_resultados, logger):
+    """Ejecuta Lizard y genera las métricas y el resumen de un proyecto.
+
+    Args:
+        proyecto: Proyecto que debe analizarse.
+        carpeta_resultados: Directorio para los archivos generados.
+        logger: Logger utilizado para registrar la ejecución.
+
+    Returns:
+        Las métricas de complejidad calculadas.
+    """
     archivo_csv = ejecutar_lizard_csv(proyecto, carpeta_resultados, logger)
     archivo_txt = Path(carpeta_resultados) / f"{proyecto.codigo}_resumen_lizard.txt"
 
     metricas = procesar_csv_lizard(archivo_csv)
     generar_resumen_txt(proyecto, metricas, archivo_txt)
 
-    return metricas
+    return metricas, archivo_csv
 
 
 def ejecutar_lizard_csv(proyecto, carpeta_resultados, logger):
-    """Ejecuta Lizard y devuelve la ruta del CSV generado."""
+    """Ejecuta Lizard y guarda su salida en formato CSV.
+
+    Args:
+        proyecto: Proyecto que debe analizarse.
+        carpeta_resultados: Directorio para el CSV generado.
+        logger: Logger utilizado para registrar la ejecución.
+
+    Returns:
+        Ruta del archivo CSV generado.
+
+    Raises:
+        RuntimeError: Si Lizard finaliza con un código de error.
+    """
     validar_ruta_proyecto(proyecto.ruta_codigo)
     crear_directorio(carpeta_resultados)
 
@@ -41,6 +65,7 @@ def ejecutar_lizard_csv(proyecto, carpeta_resultados, logger):
         text=True,
         encoding="utf-8",
         errors="replace",
+        timeout=300,
     )
 
     if resultado.returncode != 0:
@@ -51,6 +76,15 @@ def ejecutar_lizard_csv(proyecto, carpeta_resultados, logger):
 
 
 def procesar_csv_lizard(archivo_csv, cantidad_funciones_complejas=10):
+    """Calcula métricas de complejidad a partir de un CSV de Lizard.
+
+    Args:
+        archivo_csv: Ruta del archivo CSV de entrada.
+        cantidad_funciones_complejas: Máximo de funciones destacadas.
+
+    Returns:
+        Las métricas de complejidad agregadas.
+    """
     cantidad_funciones = 0
     ccn_total = 0
     nloc_total = 0
@@ -104,6 +138,14 @@ def procesar_csv_lizard(archivo_csv, cantidad_funciones_complejas=10):
 
 
 def obtener_nombre_funcion(fila):
+    """Obtiene el nombre de una función desde una fila de Lizard.
+
+    Args:
+        fila: Columnas de una fila del CSV.
+
+    Returns:
+        El nombre detectado o un texto sustituto.
+    """
     if len(fila) > 7 and fila[7].strip():
         return fila[7].strip()
 
@@ -115,6 +157,13 @@ def obtener_nombre_funcion(fila):
 
 
 def generar_resumen_txt(proyecto, metricas, archivo_txt):
+    """Escribe un resumen de complejidad en texto plano.
+
+    Args:
+        proyecto: Proyecto al que pertenecen las métricas.
+        metricas: Métricas de complejidad calculadas.
+        archivo_txt: Ruta del archivo de salida.
+    """
     with open(archivo_txt, "w", encoding="utf-8") as archivo:
         archivo.write("RESUMEN DE COMPLEJIDAD CICLOMÁTICA\n")
         archivo.write("=" * 45 + "\n\n")
