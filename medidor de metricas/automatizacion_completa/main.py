@@ -16,6 +16,7 @@ from reportes.excel import (
 )
 from util.archivos import crear_directorio
 from util.logging_config import configurar_logger
+from util.modelos import ContextoAnalisis
 
 
 def main():
@@ -60,30 +61,32 @@ def procesar_proyecto(proyecto, configuracion, logger, libro):
         logger: Registrador de eventos de la ejecución.
         libro: Libro de Excel en el que se guardan los resultados.
     """
+    contexto = ContextoAnalisis()
+
     try:
         logger.info(
             f"Analizando proyecto {proyecto.codigo} - "
             f"{proyecto.nombre_proyecto}"
         )
 
-        metricas_cc, archivo_csv_lizard = analizar_complejidad(
-            proyecto, configuracion, logger, libro
+        metricas_cc = analizar_complejidad(
+            proyecto, configuracion, logger, contexto
         )
         metricas_mi = analizar_mi(
-            proyecto, configuracion, logger, libro, archivo_csv_lizard
+            proyecto, configuracion, logger, contexto
         )
         metricas_bugs_smells = analizar_bugs_smells_seguro(
             proyecto=proyecto,
             configuracion=configuracion,
             logger=logger,
             metricas_mi=metricas_mi,
-            libro=libro,
+            contexto=contexto,
         )
         metricas_concurrencia = analizar_concurrencia_seguro(
             proyecto=proyecto,
             configuracion=configuracion,
             logger=logger,
-            libro=libro,
+            contexto=contexto,
         )
 
         if metricas_cc is None or metricas_mi is None:
@@ -91,28 +94,30 @@ def procesar_proyecto(proyecto, configuracion, logger, libro):
                 f"Se omite el reporte completo de {proyecto.codigo}: "
                 "faltan métricas esenciales"
             )
-            return
+        else:
+            guardar_resultado_excel(
+                libro=libro,
+                proyecto=proyecto,
+                metricas_cc=metricas_cc,
+                metricas_mi=metricas_mi,
+                metricas_bugs_smells=metricas_bugs_smells,
+                metricas_concurrencia=metricas_concurrencia,
+            )
 
-        guardar_resultado_excel(
-            libro=libro,
-            proyecto=proyecto,
-            metricas_cc=metricas_cc,
-            metricas_mi=metricas_mi,
-            metricas_bugs_smells=metricas_bugs_smells,
-            metricas_concurrencia=metricas_concurrencia,
-        )
-
-        registrar_fin_proyecto(
-            logger=logger,
-            proyecto=proyecto,
-            metricas_cc=metricas_cc,
-            metricas_mi=metricas_mi,
-            metricas_bugs_smells=metricas_bugs_smells,
-            metricas_concurrencia=metricas_concurrencia,
-        )
+            registrar_fin_proyecto(
+                logger=logger,
+                proyecto=proyecto,
+                metricas_cc=metricas_cc,
+                metricas_mi=metricas_mi,
+                metricas_bugs_smells=metricas_bugs_smells,
+                metricas_concurrencia=metricas_concurrencia,
+            )
     except Exception as error:
-        mensaje_error = str(error)
-        logger.error(f"Error procesando {proyecto.codigo}: {mensaje_error}")
+        mensaje_error = f"Error procesando proyecto: {error}"
+        logger.error(f"{proyecto.codigo}: {mensaje_error}")
+        contexto.errores.append(mensaje_error)
+
+    for mensaje_error in contexto.errores:
         guardar_error_excel(
             libro=libro,
             proyecto=proyecto,

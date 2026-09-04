@@ -5,38 +5,19 @@ from metricas.bugs_smells import analizar_bugs_smells
 from metricas.complejidad import ejecutar_lizard
 from metricas.concurrencia import analizar_concurrencia
 from metricas.mantenibilidad import analizar_mantenibilidad
-from reportes.excel import guardar_error_excel
 
 
-def guardar_error_analisis(proyecto, logger, libro, mensaje_error):
-    """Registra en el log y en Excel un error producido durante un análisis.
-
-    Args:
-        proyecto: Proyecto cuyo análisis produjo el error.
-        logger: Registrador de eventos de la ejecución.
-        libro: Libro de Excel en el que se registra el error.
-        mensaje_error: Descripción del error producido.
-    """
-    logger.error(f"{proyecto.codigo}: {mensaje_error}")
-    guardar_error_excel(
-        libro=libro,
-        proyecto=proyecto,
-        mensaje_error=mensaje_error,
-    )
-
-
-def analizar_complejidad(proyecto, configuracion, logger, libro):
+def analizar_complejidad(proyecto, configuracion, logger, contexto):
     """Analiza y clasifica la complejidad de un proyecto de forma segura.
 
     Args:
         proyecto: Proyecto que se desea analizar.
         configuracion: Configuración de rutas y umbrales.
         logger: Registrador de eventos de la ejecución.
-        libro: Libro de Excel usado para registrar errores.
+        contexto: Datos auxiliares compartidos durante el análisis.
 
     Returns:
-        Una tupla con las métricas y la ruta del CSV generado. Si el análisis
-        falla, ambos elementos son ``None``.
+        Las métricas de complejidad o ``None`` si el análisis falla.
     """
     try:
         metricas, archivo_csv = ejecutar_lizard(
@@ -45,50 +26,53 @@ def analizar_complejidad(proyecto, configuracion, logger, libro):
             logger=logger,
         )
 
+        contexto.archivo_csv_lizard = archivo_csv
+
         nivel_cc, interpretacion_cc = clasificar_ccn(
             metricas.ccn_promedio,
             configuracion["umbrales_cc"],
         )
         metricas.nivel_cc = nivel_cc
         metricas.interpretacion_cc = interpretacion_cc
-        return metricas, archivo_csv
+        return metricas
     except Exception as error:
         mensaje_error = f"Error en análisis de complejidad: {error}"
-        guardar_error_analisis(proyecto, logger, libro, mensaje_error)
-        return None, None
+        logger.error(f"{proyecto.codigo}: {mensaje_error}")
+        contexto.errores.append(mensaje_error)
+        return None
 
 
-def analizar_mi(proyecto, configuracion, logger, libro, archivo_csv_lizard):
+def analizar_mi(proyecto, configuracion, logger, contexto):
     """Calcula el índice de mantenibilidad de un proyecto de forma segura.
 
     Args:
         proyecto: Proyecto que se desea analizar.
         configuracion: Configuración de rutas y umbrales.
         logger: Registrador de eventos de la ejecución.
-        libro: Libro de Excel usado para registrar errores.
-        archivo_csv_lizard: Ruta del CSV con las métricas de Lizard.
+        contexto: Datos auxiliares compartidos durante el análisis.
 
     Returns:
         Las métricas de mantenibilidad o ``None`` si el análisis falla.
     """
     try:
-        if archivo_csv_lizard is None:
+        if contexto.archivo_csv_lizard is None:
             raise ValueError("No se generó el CSV de Lizard en esta ejecución")
 
         return analizar_mantenibilidad(
             proyecto=proyecto,
-            archivo_csv_lizard=archivo_csv_lizard,
+            archivo_csv_lizard=contexto.archivo_csv_lizard,
             carpeta_resultados=configuracion["carpeta_resultados"],
             umbrales_mi=configuracion["umbrales_mi"],
             logger=logger,
         )
     except Exception as error:
         mensaje_error = f"Error en análisis de mantenibilidad: {error}"
-        guardar_error_analisis(proyecto, logger, libro, mensaje_error)
+        logger.error(f"{proyecto.codigo}: {mensaje_error}")
+        contexto.errores.append(mensaje_error)
         return None
 
 
-def analizar_bugs_smells_seguro(proyecto, configuracion, logger, metricas_mi, libro):
+def analizar_bugs_smells_seguro(proyecto, configuracion, logger, metricas_mi, contexto):
     """Analiza bugs y code smells, registrando los errores producidos.
 
     Args:
@@ -96,7 +80,7 @@ def analizar_bugs_smells_seguro(proyecto, configuracion, logger, metricas_mi, li
         configuracion: Configuración de rutas y umbrales.
         logger: Registrador de eventos de la ejecución.
         metricas_mi: Métricas de mantenibilidad usadas para obtener NLOC.
-        libro: Libro de Excel usado para registrar errores.
+        contexto: Datos auxiliares compartidos durante el análisis.
 
     Returns:
         Las métricas de incidencias o ``None`` si faltan datos o el análisis
@@ -116,18 +100,19 @@ def analizar_bugs_smells_seguro(proyecto, configuracion, logger, metricas_mi, li
         )
     except Exception as error:
         mensaje_error = f"Error en análisis de bugs/smells: {error}"
-        guardar_error_analisis(proyecto, logger, libro, mensaje_error)
+        logger.error(f"{proyecto.codigo}: {mensaje_error}")
+        contexto.errores.append(mensaje_error)
         return None
 
 
-def analizar_concurrencia_seguro(proyecto, configuracion, logger, libro):
+def analizar_concurrencia_seguro(proyecto, configuracion, logger, contexto):
     """Analiza las métricas de concurrencia y registra posibles errores.
 
     Args:
         proyecto: Proyecto que se desea analizar.
         configuracion: Configuración de la rúbrica y sus umbrales.
         logger: Registrador de eventos de la ejecución.
-        libro: Libro de Excel usado para registrar errores.
+        contexto: Datos auxiliares compartidos durante el análisis.
 
     Returns:
         Las métricas de concurrencia o ``None`` si el análisis falla.
@@ -142,5 +127,6 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, libro):
         )
     except Exception as error:
         mensaje_error = f"Error en análisis de concurrencia: {error}"
-        guardar_error_analisis(proyecto, logger, libro, mensaje_error)
+        logger.error(f"{proyecto.codigo}: {mensaje_error}")
+        contexto.errores.append(mensaje_error)
         return None

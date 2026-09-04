@@ -24,6 +24,19 @@ class Proyecto:
 
 
 @dataclass
+class ContextoAnalisis:
+    """Agrupa datos auxiliares compartidos durante el análisis de un proyecto.
+
+    Attributes:
+        errores: Mensajes de error generados por los distintos análisis.
+        archivo_csv_lizard: Ruta del archivo CSV generado por Lizard.
+    """
+
+    errores: list[str] = field(default_factory=list)
+    archivo_csv_lizard: str | None = None
+
+
+@dataclass
 class FuncionCompleja:
     """Representa una función destacada por su complejidad.
 
