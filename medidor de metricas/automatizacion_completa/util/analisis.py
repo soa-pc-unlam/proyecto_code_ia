@@ -7,6 +7,7 @@ from metricas.concurrencia import analizar_concurrencia
 from metricas.mantenibilidad import analizar_mantenibilidad
 
 
+
 def analizar_complejidad(proyecto, configuracion, logger, contexto):
     """Analiza y clasifica la complejidad de un proyecto de forma segura.
 
@@ -14,7 +15,7 @@ def analizar_complejidad(proyecto, configuracion, logger, contexto):
         proyecto: Proyecto que se desea analizar.
         configuracion: Configuración de rutas y umbrales.
         logger: Registrador de eventos de la ejecución.
-        contexto: Datos auxiliares compartidos durante el análisis.
+        contexto: Contexto exclusivo del proyecto analizado.
 
     Returns:
         Las métricas de complejidad o ``None`` si el análisis falla.
@@ -42,6 +43,7 @@ def analizar_complejidad(proyecto, configuracion, logger, contexto):
         return None
 
 
+
 def analizar_mi(proyecto, configuracion, logger, contexto):
     """Calcula el índice de mantenibilidad de un proyecto de forma segura.
 
@@ -49,7 +51,7 @@ def analizar_mi(proyecto, configuracion, logger, contexto):
         proyecto: Proyecto que se desea analizar.
         configuracion: Configuración de rutas y umbrales.
         logger: Registrador de eventos de la ejecución.
-        contexto: Datos auxiliares compartidos durante el análisis.
+        contexto: Contexto exclusivo del proyecto analizado.
 
     Returns:
         Las métricas de mantenibilidad o ``None`` si el análisis falla.
@@ -72,7 +74,14 @@ def analizar_mi(proyecto, configuracion, logger, contexto):
         return None
 
 
-def analizar_bugs_smells_seguro(proyecto, configuracion, logger, metricas_mi, contexto):
+
+def analizar_bugs_smells_seguro(
+    proyecto,
+    configuracion,
+    logger,
+    metricas_mi,
+    contexto,
+):
     """Analiza bugs y code smells, registrando los errores producidos.
 
     Args:
@@ -80,7 +89,7 @@ def analizar_bugs_smells_seguro(proyecto, configuracion, logger, metricas_mi, co
         configuracion: Configuración de rutas y umbrales.
         logger: Registrador de eventos de la ejecución.
         metricas_mi: Métricas de mantenibilidad usadas para obtener NLOC.
-        contexto: Datos auxiliares compartidos durante el análisis.
+        contexto: Contexto exclusivo del proyecto analizado.
 
     Returns:
         Las métricas de incidencias o ``None`` si faltan datos o el análisis
@@ -105,6 +114,7 @@ def analizar_bugs_smells_seguro(proyecto, configuracion, logger, metricas_mi, co
         return None
 
 
+
 def analizar_concurrencia_seguro(proyecto, configuracion, logger, contexto):
     """Analiza las métricas de concurrencia y registra posibles errores.
 
@@ -112,7 +122,7 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, contexto):
         proyecto: Proyecto que se desea analizar.
         configuracion: Configuración de la rúbrica y sus umbrales.
         logger: Registrador de eventos de la ejecución.
-        contexto: Datos auxiliares compartidos durante el análisis.
+        contexto: Contexto exclusivo del proyecto analizado.
 
     Returns:
         Las métricas de concurrencia o ``None`` si el análisis falla.

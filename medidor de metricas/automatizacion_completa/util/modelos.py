@@ -148,3 +148,16 @@ class MetricaConcurrencia:
     uso_correcto_de_exclusion_mutua: str
     promedio: float
     interpretacion: str
+
+
+
+@dataclass
+class ResultadoProyecto:
+    """Agrupa los resultados obtenidos al analizar un proyecto."""
+
+    proyecto: object
+    metricas_cc: object = None
+    metricas_mi: object = None
+    metricas_bugs_smells: object = None
+    metricas_concurrencia: object = None
+    errores: list = None
