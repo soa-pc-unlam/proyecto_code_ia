@@ -42,9 +42,9 @@ def inicializar_directorios(configuracion):
 def informar_resultados_finales(logger, configuracion):
     """Informa la finalización del proceso y la ubicación del reporte."""
     logger.info("")
-    logger.info("=" * 40)
+    logger.info("=" * 24)
     logger.info("== Proceso finalizado ==")
-    logger.info("=" * 40)
+    logger.info("=" * 24)
     logger.info(
         "Informe creado en el archivo Excel: "
         + str(configuracion["archivo_excel"])

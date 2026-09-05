@@ -234,12 +234,15 @@ def analizar_concurrencia(proyecto, archivo_datos_entrada, ponderacion, umbrales
     Raises:
         ValueError: Si el proyecto no aparece en la rúbrica.
     """
-    logger.info(f"Leyendo rúbrica de concurrencia para {proyecto.codigo}")
+    logger.debug(f"[{proyecto.codigo}] Leyendo rúbrica de concurrencia")
+
     hoja = cargar_hoja_concurrencia(archivo_datos_entrada)
     encabezados = mapear_encabezados(hoja)
     columna_codigo = obtener_columna(encabezados, "Código")
     fila = buscar_fila_rubrica(hoja, columna_codigo, proyecto.codigo)
+
     if fila is None:
         raise ValueError(f"No se encontró el código '{proyecto.codigo}' en Concurrencia")
     valores = leer_valores_rubrica(hoja, fila, encabezados)
+
     return crear_metrica_concurrencia(proyecto.codigo, valores, ponderacion, umbrales)

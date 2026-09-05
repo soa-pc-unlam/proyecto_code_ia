@@ -3,7 +3,7 @@
 from datetime import datetime
 from pathlib import Path
 import logging
-
+from constantes import definiciones as constantes
 from util.archivos import crear_directorio
 
 
@@ -22,10 +22,11 @@ def configurar_logger(carpeta_logs):
     archivo_log = Path(carpeta_logs) / f"ejecucion_{fecha}.log"
 
     logger = logging.getLogger("evaluador_metricas")
-    logger.setLevel(logging.INFO)
+    logger.setLevel(constantes.MODO_LOGGING)
     logger.handlers.clear()
 
-    formato = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
+    formato = logging.Formatter("%(asctime)s | %(levelname)-5s | %(message)s",
+              datefmt="%Y-%m-%d %H:%M:%S")
 
     manejador_archivo = logging.FileHandler(archivo_log, encoding="utf-8")
     manejador_archivo.setFormatter(formato)

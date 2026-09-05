@@ -38,13 +38,13 @@ def analizar_bugs_smells(proyecto, carpeta_resultados, umbrales_issues, umbrales
 
     if lenguaje == "java":
         analizador = "PMD"
-        issues = ejecutar_pmd(ruta_proyecto, logger)
+        issues = ejecutar_pmd(ruta_proyecto, proyecto.codigo, logger)
     elif lenguaje == "python":
         analizador = "Pylint"
-        issues = ejecutar_pylint(ruta_proyecto, logger)
+        issues = ejecutar_pylint(ruta_proyecto, proyecto.codigo, logger)
     elif lenguaje == "kotlin":
         analizador = "Detekt"
-        issues = ejecutar_detekt(ruta_proyecto, logger)
+        issues = ejecutar_detekt(ruta_proyecto, proyecto.codigo, logger)
     else:
         raise ValueError(f"No hay analizador de bugs/smells para el lenguaje: {proyecto.lenguaje}")
 
@@ -76,7 +76,7 @@ def buscar_ejecutable(candidatos):
     raise RuntimeError(f"No se encontro ninguno de estos ejecutables en PATH: {', '.join(candidatos)}")
 
 
-def ejecutar_pmd(ruta_proyecto, logger):
+def ejecutar_pmd(ruta_proyecto, proyecto_codigo, logger):
     """Ejecuta PMD sobre un proyecto y devuelve sus incidencias.
 
     Args:
@@ -104,7 +104,7 @@ def ejecutar_pmd(ruta_proyecto, logger):
         str(archivo_csv),
     ]
 
-    logger.info(f"Ejecutando PMD: {' '.join(comando)}")
+    logger.debug(f"[{proyecto_codigo}] PMD: {' '.join(comando)}")
     try:
         resultado = subprocess.run(
             comando,
@@ -194,7 +194,7 @@ def clasificar_severidad_pmd(prioridad):
     return "Baja"
 
 
-def ejecutar_pylint(ruta_proyecto, logger):
+def ejecutar_pylint(ruta_proyecto, proyecto_codigo, logger):
     """Ejecuta Pylint y devuelve sus mensajes normalizados.
 
     Args:
@@ -207,7 +207,7 @@ def ejecutar_pylint(ruta_proyecto, logger):
     ejecutable = buscar_ejecutable(["pylint"])
     comando = [ejecutable, str(ruta_proyecto), "--output-format=text"]
 
-    logger.info(f"Ejecutando Pylint: {' '.join(comando)}")
+    logger.debug(f"[{proyecto_codigo}] Pylint: {' '.join(comando)}")
     resultado = subprocess.run(
         comando,
         capture_output=True,
@@ -298,7 +298,7 @@ def clasificar_categoria_pylint(tipo):
     return "Documentacion"
 
 
-def ejecutar_detekt(ruta_proyecto, logger):
+def ejecutar_detekt(ruta_proyecto, proyecto_codigo, logger):
     """Ejecuta Detekt y devuelve sus incidencias normalizadas.
 
     Args:
@@ -324,7 +324,7 @@ def ejecutar_detekt(ruta_proyecto, logger):
         f"xml:{archivo_xml}",
     ]
 
-    logger.info(f"Ejecutando Detekt: {' '.join(comando)}")
+    logger.debug(f"[{proyecto_codigo}] Detekt: {' '.join(comando)}")
     try:
         resultado = subprocess.run(
             comando,

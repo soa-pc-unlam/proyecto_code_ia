@@ -57,7 +57,7 @@ def ejecutar_lizard_csv(proyecto, carpeta_resultados, logger):
         "--csv",
     ]
 
-    logger.info(f"Ejecutando Lizard para {proyecto.codigo}: {' '.join(comando)}")
+    logger.debug(f"[{proyecto.codigo}] Lizard: {' '.join(comando)}")
 
     resultado = subprocess.run(
         comando,

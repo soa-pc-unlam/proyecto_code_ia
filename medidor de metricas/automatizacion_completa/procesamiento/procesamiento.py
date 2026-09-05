@@ -1,5 +1,7 @@
 """Gestiona el procesamiento concurrente de los proyectos."""
 
+from asyncio.log import logger
+from asyncio.log import logger
 from concurrent.futures import ThreadPoolExecutor
 from threading import Semaphore
 
@@ -33,7 +35,7 @@ def gestionar_procesamiento_proyectos(proyectos, configuracion, libro, logger):
                 guardar_resultado_proyecto(libro, resultado, logger)
             except Exception as error:
                 mensaje_error = f"Error en el procesamiento del proyecto: {error}"
-                logger.exception(f"{proyecto.codigo}: {mensaje_error}")
+                logger.exception(f"[{proyecto.codigo}] {mensaje_error}")
                 guardar_error_excel(
                     libro=libro,
                     proyecto=proyecto,
@@ -70,10 +72,7 @@ def procesar_proyecto(proyecto, configuracion, logger, semaforo_analizadores):
     metricas_concurrencia = None
 
     try:
-        logger.info(
-            f"Analizando proyecto {proyecto.codigo} - "
-            f"{proyecto.nombre_proyecto}"
-        )
+        logger.info(f"[{proyecto.codigo}] Inicio - {proyecto.nombre_proyecto}")
 
         # Lizard consume bastante CPU y memoria, por eso se limita su ejecución.
         with semaforo_analizadores:
@@ -110,8 +109,14 @@ def procesar_proyecto(proyecto, configuracion, logger, semaforo_analizadores):
 
     except Exception as error:
         mensaje_error = f"Error procesando proyecto: {error}"
-        logger.exception(f"{proyecto.codigo}: {mensaje_error}")
+        logger.exception(f"[{proyecto.codigo}] {mensaje_error}")
         contexto.errores.append(mensaje_error)
+
+    informar_fin_procesamiento(errores=contexto.errores,
+                                logger=logger,
+                                proyecto_codigo=proyecto.codigo,
+                                proyecto_nombre=proyecto.nombre_proyecto
+                            )
 
     return ResultadoProyecto(
         proyecto=proyecto,
@@ -122,6 +127,11 @@ def procesar_proyecto(proyecto, configuracion, logger, semaforo_analizadores):
         errores=list(contexto.errores),
     )
 
+def informar_fin_procesamiento(errores, logger, proyecto_codigo=None, proyecto_nombre=None):
+    if errores:
+        logger.warning(f"[{proyecto_codigo}] Finalizado con {len(errores)} error(es)")
+    else:
+        logger.info(f"[{proyecto_codigo}] Finalizado correctamente")
 
 def guardar_resultado_proyecto(libro, resultado, logger):
     """Guarda en Excel las métricas y errores de un proyecto."""

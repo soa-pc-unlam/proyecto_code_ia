@@ -213,7 +213,7 @@ def analizar_mantenibilidad(proyecto, archivo_csv_lizard, carpeta_resultados, um
     """
     archivo_txt = Path(carpeta_resultados) / f"{proyecto.codigo}_resumen_mi.txt"
 
-    logger.info(f"Calculando índice de mantenibilidad para {proyecto.codigo}")
+    logger.debug(f"[{proyecto.codigo}] Calculando índice de mantenibilidad")
 
     metrics_by_file = parse_lizard_csv_mi(archivo_csv_lizard)
     if not metrics_by_file:

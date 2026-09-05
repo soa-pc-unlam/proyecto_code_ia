@@ -37,8 +37,8 @@ def analizar_complejidad(proyecto, configuracion, logger, contexto):
         metricas.interpretacion_cc = interpretacion_cc
         return metricas
     except Exception as error:
-        mensaje_error = f"Error en análisis de complejidad: {error}"
-        logger.error(f"{proyecto.codigo}: {mensaje_error}")
+        mensaje_error = f"Análisis complejidad: {error}"
+        logger.error(f"[{proyecto.codigo}] {mensaje_error}")
         contexto.errores.append(mensaje_error)
         return None
 
@@ -68,8 +68,8 @@ def analizar_mi(proyecto, configuracion, logger, contexto):
             logger=logger,
         )
     except Exception as error:
-        mensaje_error = f"Error en análisis de mantenibilidad: {error}"
-        logger.error(f"{proyecto.codigo}: {mensaje_error}")
+        mensaje_error = f"Análisis mantenibilidad: {error}"
+        logger.error(f"[{proyecto.codigo}] {mensaje_error}")
         contexto.errores.append(mensaje_error)
         return None
 
@@ -108,8 +108,8 @@ def analizar_bugs_smells_seguro(
             loc_codigo=metricas_mi.nloc_mi,
         )
     except Exception as error:
-        mensaje_error = f"Error en análisis de bugs/smells: {error}"
-        logger.error(f"{proyecto.codigo}: {mensaje_error}")
+        mensaje_error = f"Análisis bugs/smells: {error}"
+        logger.error(f"[{proyecto.codigo}] {mensaje_error}")
         contexto.errores.append(mensaje_error)
         return None
 
@@ -136,7 +136,7 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, contexto):
             logger=logger,
         )
     except Exception as error:
-        mensaje_error = f"Error en análisis de concurrencia: {error}"
-        logger.error(f"{proyecto.codigo}: {mensaje_error}")
+        mensaje_error = f"Análisis concurrencia: {error}"
+        logger.error(f"[{proyecto.codigo}] {mensaje_error}")
         contexto.errores.append(mensaje_error)
         return None
