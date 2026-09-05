@@ -8,7 +8,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path, PureWindowsPath
 
 from configuracion.configuracion import clasificar_por_umbrales
-from util.modelos import MetricaMantenibilidad
+from modelos.modelos import MetricaMantenibilidad
 
 
 @dataclass

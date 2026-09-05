@@ -5,7 +5,7 @@ import unittest
 from openpyxl import Workbook
 
 from reportes.excel import crear_hojas_si_no_existen, guardar_error_excel
-from util.modelos import Proyecto
+from modelos.modelos import Proyecto
 
 
 class ReportesTest(unittest.TestCase):

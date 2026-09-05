@@ -13,7 +13,7 @@ from pathlib import Path, PureWindowsPath
 from util.archivos import crear_directorio, validar_ruta_proyecto
 from configuracion.configuracion import clasificar_issues, clasificar_isi
 from util.lenguajes import normalizar_lenguaje
-from util.modelos import MetricaBugsSmells
+from modelos.modelos import MetricaBugsSmells
 
 
 def analizar_bugs_smells(proyecto, carpeta_resultados, umbrales_issues, umbrales_isi, logger, loc_codigo=None):

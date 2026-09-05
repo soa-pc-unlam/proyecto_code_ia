@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from util.modelos import Proyecto
+from modelos.modelos import Proyecto
 
 
 def cargar_json(ruta_archivo):

@@ -6,7 +6,7 @@ from pathlib import Path
 
 from util.archivos import crear_directorio, validar_ruta_proyecto
 from util.lenguajes import normalizar_lenguaje
-from util.modelos import FuncionCompleja, MetricaComplejidad
+from modelos.modelos import FuncionCompleja, MetricaComplejidad
 
 
 def ejecutar_lizard(proyecto, carpeta_resultados, logger):

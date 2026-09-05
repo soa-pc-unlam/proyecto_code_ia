@@ -7,7 +7,7 @@ un libro Excel consolidado.
 ## Estructura
 
 ```text
-automatizacion_metricas_refactorizada/
+automatizacion_metricas/
 ├── main.py
 ├── clean_file.py
 ├── requirements.txt

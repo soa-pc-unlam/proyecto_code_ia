@@ -5,7 +5,7 @@ from pathlib import Path
 
 from openpyxl import load_workbook
 
-from util.modelos import MetricaConcurrencia
+from modelos.modelos import MetricaConcurrencia
 
 HOJA_CONCURRENCIA = "Concurrencia"
 CAMPOS_RUBRICA = [
