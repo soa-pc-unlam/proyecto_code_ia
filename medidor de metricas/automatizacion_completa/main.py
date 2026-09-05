@@ -11,26 +11,33 @@ from util.recursos import limitar_cpu
 
 def main():
     """Ejecuta concurrentemente el análisis de los proyectos configurados."""
-    configuracion = cargar_configuracion(definiciones.CONFIGURACION_JSON)
-    inicializar_directorios(configuracion)
+    try:
+        configuracion = cargar_configuracion(definiciones.CONFIGURACION_JSON)
+        inicializar_directorios(configuracion)
 
-    logger = configurar_logger(configuracion["carpeta_logs"])
-    logger.info("Inicio del análisis de métricas")
+        logger = configurar_logger(configuracion["carpeta_logs"])
+        logger.info("Inicio del análisis de métricas")
 
-    limitar_cpu(definiciones.PORCENTAJE_MAX_CPU, logger)
+        limitar_cpu(definiciones.PORCENTAJE_MAX_CPU, logger)
 
-    proyectos = cargar_proyectos(definiciones.DATOS_PROYECTOS_JSON)
-    libro = crear_o_abrir_excel(configuracion["archivo_excel"])
+        proyectos = cargar_proyectos(definiciones.DATOS_PROYECTOS_JSON)
+        libro = crear_o_abrir_excel(configuracion["archivo_excel"])
 
-    gestionar_procesamiento_proyectos(proyectos, configuracion, libro, logger)
+        gestionar_procesamiento_proyectos(proyectos, configuracion, libro, logger)
 
-    finalizar_libro(
-        libro,
-        configuracion["archivo_excel"],
-        incluir_graficos=True,
-    )
+        finalizar_libro(
+            libro,
+            configuracion["archivo_excel"],
+            incluir_graficos=True,
+        )
+        informar_resultados_finales(logger, configuracion)
 
-    informar_resultados_finales(logger, configuracion)
+    except PermissionError:
+        logger.error("No se pudo guardar el informe."
+                     " Cierre el archivo Excel si está abierto.")
+        
+    except Exception as error:
+        logger.error(f"Error en la ejecución: {error}")
 
 
 def inicializar_directorios(configuracion):
