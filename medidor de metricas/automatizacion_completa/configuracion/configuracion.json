@@ -1,5 +1,6 @@
 {
-  "archivo_excel": "metricas_calidad.xlsx",
+  "archivo_excel_entrada": "datos_entrada/datos_entrada.xlsx",
+  "archivo_excel_salida": "metricas_calidad_resultados.xlsx",
   "carpeta_resultados": "resultados",
   "carpeta_logs": "logs",
   "umbrales_cc": [
@@ -112,7 +113,6 @@
       "interpretacion": "Predominan issues altos"
     }
   ],
-  "archivo_datos_entrada": "datos_entrada/datos_entrada.xlsx",
   "ponderacion_concurrencia": {
     "Alta": 3,
     "Media": 2,

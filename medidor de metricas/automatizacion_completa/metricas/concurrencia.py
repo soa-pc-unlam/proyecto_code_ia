@@ -1,127 +1,11 @@
-"""Evaluación de concurrencia a partir de una rúbrica en Excel."""
-
-import unicodedata
-from pathlib import Path
-
-from openpyxl import load_workbook
+"""Cálculo de métricas a partir de la rúbrica de concurrencia."""
 
 from modelos.modelos import MetricaConcurrencia
-
-HOJA_CONCURRENCIA = "Concurrencia"
-CAMPOS_RUBRICA = [
-    "Sincronización correcta",
-    "Ausencia de deadlocks",
-    "Ausencia de condición de carrera",
-    "Uso correcto de exclusión mutua",
-]
-
-
-def normalizar_texto(texto):
-    """Normaliza un valor para realizar comparaciones sin acentos.
-
-    Args:
-        texto: Valor que se desea normalizar.
-
-    Returns:
-        Texto en minúsculas, sin espacios externos ni diacríticos.
-    """
-    texto = "" if texto is None else str(texto).strip().lower()
-    texto = unicodedata.normalize("NFKD", texto)
-    return "".join(c for c in texto if not unicodedata.combining(c))
-
-
-def cargar_hoja_concurrencia(archivo_datos_entrada):
-    """Carga la hoja que contiene la rúbrica de concurrencia.
-
-    Args:
-        archivo_datos_entrada: Ruta del libro Excel de entrada.
-
-    Returns:
-        La hoja de concurrencia del libro.
-
-    Raises:
-        FileNotFoundError: Si el libro no existe.
-        ValueError: Si el libro no contiene la hoja esperada.
-    """
-    ruta = Path(archivo_datos_entrada)
-    if not ruta.exists():
-        raise FileNotFoundError(f"No se encontró el archivo: {ruta}")
-    libro = load_workbook(ruta, data_only=True)
-    if HOJA_CONCURRENCIA not in libro.sheetnames:
-        raise ValueError(f"No existe la solapa '{HOJA_CONCURRENCIA}' en {ruta}")
-    return libro[HOJA_CONCURRENCIA]
-
-
-def mapear_encabezados(hoja):
-    """Crea un mapa normalizado de encabezados a columnas.
-
-    Args:
-        hoja: Hoja de cálculo que se desea inspeccionar.
-
-    Returns:
-        Diccionario de encabezados normalizados y números de columna.
-    """
-    encabezados = {}
-    for columna in range(1, hoja.max_column + 1):
-        valor = hoja.cell(row=1, column=columna).value
-        encabezados[normalizar_texto(valor)] = columna
-    return encabezados
-
-
-def obtener_columna(encabezados, nombre):
-    """Obtiene la columna asociada con un encabezado obligatorio.
-
-    Args:
-        encabezados: Mapa de encabezados a columnas.
-        nombre: Nombre del encabezado buscado.
-
-    Returns:
-        El número de columna encontrado.
-
-    Raises:
-        ValueError: Si el encabezado no existe.
-    """
-    columna = encabezados.get(normalizar_texto(nombre))
-    if columna is None:
-        raise ValueError(f"Falta la columna '{nombre}' en la solapa Concurrencia")
-    return columna
-
-
-def buscar_fila_rubrica(hoja, columna_codigo, codigo):
-    """Busca la fila de la rúbrica correspondiente a un proyecto.
-
-    Args:
-        hoja: Hoja que contiene la rúbrica.
-        columna_codigo: Columna con los códigos de proyecto.
-        codigo: Código que se desea localizar.
-
-    Returns:
-        El número de fila encontrado o ``None``.
-    """
-    for fila in range(2, hoja.max_row + 1):
-        valor = hoja.cell(row=fila, column=columna_codigo).value
-        if normalizar_texto(valor) == normalizar_texto(codigo):
-            return fila
-    return None
-
-
-def leer_valores_rubrica(hoja, fila, encabezados):
-    """Lee los criterios de concurrencia de una fila.
-
-    Args:
-        hoja: Hoja que contiene la rúbrica.
-        fila: Número de fila que se desea leer.
-        encabezados: Mapa de encabezados a columnas.
-
-    Returns:
-        Diccionario con los valores de cada criterio.
-    """
-    valores = {}
-    for campo in CAMPOS_RUBRICA:
-        columna = obtener_columna(encabezados, campo)
-        valores[campo] = hoja.cell(row=fila, column=columna).value
-    return valores
-
+from reportes.excel import leer_fila_por_codigo
+from constantes.definiciones import (
+    HOJA_CONCURRENCIA_ENTRADA,
+    ENCABEZADOS_CONCURRENCIA_ENTRADA,
+)
 
 def obtener_puntaje(valor, ponderacion):
     """Convierte un nivel textual en su puntaje configurado.
@@ -136,7 +20,7 @@ def obtener_puntaje(valor, ponderacion):
     Raises:
         ValueError: Si el nivel no está contemplado.
     """
-    nivel = normalizar_texto(valor).capitalize()
+    nivel = "" if valor is None else str(valor).strip().capitalize()
     if nivel not in ponderacion:
         raise ValueError(f"Nivel de concurrencia inválido: {valor}")
     return ponderacion[nivel]
@@ -218,12 +102,11 @@ def crear_metrica_concurrencia(codigo, valores, ponderacion, umbrales):
     )
 
 
-def analizar_concurrencia(proyecto, archivo_datos_entrada, ponderacion, umbrales, logger):
+def analizar_concurrencia(proyecto, libro_entrada, ponderacion, umbrales, logger):
     """Analiza la rúbrica de concurrencia de un proyecto.
 
     Args:
         proyecto: Proyecto que se desea evaluar.
-        archivo_datos_entrada: Ruta del libro con la rúbrica.
         ponderacion: Mapa de niveles a puntajes.
         umbrales: Intervalos de interpretación.
         logger: Logger de la aplicación.
@@ -236,13 +119,11 @@ def analizar_concurrencia(proyecto, archivo_datos_entrada, ponderacion, umbrales
     """
     logger.debug(f"[{proyecto.codigo}] Leyendo rúbrica de concurrencia")
 
-    hoja = cargar_hoja_concurrencia(archivo_datos_entrada)
-    encabezados = mapear_encabezados(hoja)
-    columna_codigo = obtener_columna(encabezados, "Código")
-    fila = buscar_fila_rubrica(hoja, columna_codigo, proyecto.codigo)
-
-    if fila is None:
-        raise ValueError(f"No se encontró el código '{proyecto.codigo}' en Concurrencia")
-    valores = leer_valores_rubrica(hoja, fila, encabezados)
+    valores = leer_fila_por_codigo(
+        libro_entrada=libro_entrada,
+        nombre_hoja=HOJA_CONCURRENCIA_ENTRADA,
+        codigo=proyecto.codigo,
+        campos=ENCABEZADOS_CONCURRENCIA_ENTRADA,
+    )
 
     return crear_metrica_concurrencia(proyecto.codigo, valores, ponderacion, umbrales)

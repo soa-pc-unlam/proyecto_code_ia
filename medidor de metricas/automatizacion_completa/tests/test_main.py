@@ -1,37 +1,54 @@
-"""Pruebas de la orquestacion concurrente."""
+"""Pruebas de la orquestación concurrente."""
 
 import threading
 import time
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
-from main import procesar_todos_proyectos
+from procesamiento.procesamiento import (
+    gestionar_procesamiento_proyectos,
+)
 
 
 class ProcesamientoConcurrenteTest(unittest.TestCase):
-    """Verifica el paralelismo y la finalizacion segura del reporte."""
+    """Verifica el procesamiento concurrente de los proyectos."""
 
-    def test_proyectos_se_procesan_concurrentemente_antes_de_guardar(self):
+    @patch(
+        "procesamiento.procesamiento.guardar_resultado_proyecto"
+    )
+    @patch(
+        "procesamiento.procesamiento.procesar_proyecto"
+    )
+    def test_proyectos_se_procesan_concurrentemente(
+        self,
+        procesar_proyecto,
+        guardar_resultado,
+    ):
         barrera = threading.Barrier(2)
-        terminados = []
 
-        def procesar(proyecto, configuracion, logger, libro, bloqueo_libro):
-            barrera.wait(timeout=1)
+        proyecto_1 = Mock(codigo="M1")
+        proyecto_2 = Mock(codigo="M2")
+
+        def procesar(*args):
+            proyecto = args[0]
+            barrera.wait(timeout=2)
             time.sleep(0.01)
-            terminados.append(proyecto)
+            resultado = Mock()
+            resultado.proyecto = proyecto
+            return resultado
 
-        with patch("main.procesar_proyecto", side_effect=procesar), patch(
-            "main.finalizar_libro"
-        ) as finalizar:
-            procesar_todos_proyectos(
-                ["M1", "M2"],
-                {"max_workers": 2, "archivo_excel": "reporte.xlsx"},
-                logger=None,
-                libro=object(),
-            )
+        procesar_proyecto.side_effect = procesar
 
-        self.assertCountEqual(terminados, ["M1", "M2"])
-        finalizar.assert_called_once()
+        gestionar_procesamiento_proyectos(
+            proyectos=[proyecto_1, proyecto_2],
+            configuracion={},
+            libro_salida=Mock(),
+            libro_entrada=Mock(),
+            logger=Mock(),
+        )
+
+        self.assertEqual(procesar_proyecto.call_count, 2)
+        self.assertEqual(guardar_resultado.call_count, 2)
 
 
 if __name__ == "__main__":

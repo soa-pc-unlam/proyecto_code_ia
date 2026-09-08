@@ -43,14 +43,14 @@ def cargar_configuracion(ruta_archivo="configuracion.json"):
     configuracion = cargar_json(ruta_archivo)
 
     campos_obligatorios = [
-        "archivo_excel",
+        "archivo_excel_entrada",
+        "archivo_excel_salida",
         "carpeta_resultados",
         "carpeta_logs",
         "umbrales_cc",
         "umbrales_mi",
         "umbrales_issues",
         "umbrales_isi",
-        "archivo_datos_entrada",
         "ponderacion_concurrencia",
         "umbrales_concurrencia",
     ]

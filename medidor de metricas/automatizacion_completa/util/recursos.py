@@ -16,9 +16,12 @@ def limitar_cpu(porcentaje, logger):
     Returns:
         Lista de CPUs lógicas habilitadas.
     """
-    proceso = psutil.Process()
-
-    nucleos_disponibles = proceso.cpu_affinity()
+    try:
+        proceso = psutil.Process()
+        nucleos_disponibles = proceso.cpu_affinity()
+    except (psutil.Error, AttributeError):
+        logger.warning("No se pudo limitar la afinidad de CPU en este sistema")
+        return []
 
     cantidad = max(1,int(len(nucleos_disponibles) * porcentaje))
 

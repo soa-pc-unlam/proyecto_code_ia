@@ -2,6 +2,9 @@
 
 from pathlib import Path
 
+from configuracion.configuracion import cargar_configuracion
+from constantes import definiciones
+
 
 def borrar_archivos_directorios():
     """Elimina los archivos contenidos en los directorios de salida y logs."""
@@ -23,7 +26,9 @@ def borrar_archivos_directorios():
 
 def borrar_archivo_excel():
     """Elimina el libro Excel de métricas si existe."""
-    archivo_excel = Path("metricas_calidad.xlsx")
+    configuracion = cargar_configuracion(definiciones.CONFIGURACION_JSON)
+
+    archivo_excel = Path(configuracion["archivo_excel_salida"])
 
     if archivo_excel.exists():
         try:

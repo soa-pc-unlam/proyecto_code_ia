@@ -1,107 +1,28 @@
-"""Creación y actualización del libro Excel de resultados."""
+"""Lectura, creación y actualización de archivos Excel."""
 
 from pathlib import Path
+import unicodedata
+
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, PatternFill, Alignment
 
 from reportes.graficos import generar_graficos
+from constantes.definiciones import (
+    CANTIDAD_CAMPOS_COMPLEJIDAD,
+    CANTIDAD_CAMPOS_CONCURRENCIA,
+    CANTIDAD_CAMPOS_MANTENIBILIDAD,
+    CANTIDAD_CAMPOS_BUGS_SMELLS,
+    HOJAS_REPORTE,
+    HOJA_RESUMEN,
+    HOJA_COMPLEJIDAD,
+    HOJA_MANTENIBILIDAD,
+    HOJA_BUGS_SMELLS,
+    HOJA_CONCURRENCIA_SALIDA,
+    CONFIGURACION_GRAFICOS,
+    HOJA_ERRORES,
+)
 
-
-HOJA_RESUMEN = "Resumen"
-HOJA_COMPLEJIDAD = "Complejidad"
-HOJA_MANTENIBILIDAD = "Mantenibilidad"
-HOJA_BUGS_SMELLS = "Bugs_Smells"
-HOJA_ERRORES = "Errores"
-HOJA_CONCURRENCIA = "Concurrencia"
-
-ENCABEZADOS_RESUMEN = [
-    "Código",
-    "Nombre del proyecto",
-    "Herramienta IA",
-    "Modelo IA",
-    "Lenguaje",
-    "CCN promedio",
-    "Nivel de CC",
-    "MI",
-    "Nivel de MI",
-    "Issues/KLOC",
-    "ISI",
-    "Interpretación de Issue",
-    "Promedio concurrencia",
-    "Interpretación concurrencia",
-]
-
-ENCABEZADOS_COMPLEJIDAD = [
-    "Código",
-    "Cantidad de funciones",
-    "CCN Total",
-    "CCN promedio",
-    "NLOC total",
-    "Nivel de CC",
-    "Interpretación CC",
-    "NLOC promedio",
-]
-
-ENCABEZADOS_MANTENIBILIDAD = [
-    "Código",
-    "NLOC MI",
-    "Cantidad de funciones MI",
-    "Tokens código",
-    "MI",
-    "Nivel de MI",
-    "Interpretación MI",
-]
-
-ENCABEZADOS_BUGS_SMELLS = [
-    "Código",
-    "Analizador",
-    "Total de issues",
-    "Issues/KLOC",
-    "ISI",
-    "Nivel de ISI",
-    "Interpretación de ISI",
-    "Observacion",
-    "Cant. severidad alta",
-    "Cant. severidad media",
-    "Cant. severidad baja",
-    "Reglas incumplidas",
-]
-
-ENCABEZADOS_ERRORES = [
-    "Código",
-    "Nombre del proyecto",
-    "Error",
-]
-
-ENCABEZADOS_CONCURRENCIA = [
-    "Código",
-    "Sincronización correcta",
-    "Ausencia de deadlocks",
-    "Ausencia de condición de carrera",
-    "Uso correcto de exclusión mutua",
-    "Promedio concurrencia",
-    "Interpretación concurrencia",
-]
-
-HOJAS_REPORTE = {
-    HOJA_RESUMEN: ENCABEZADOS_RESUMEN,
-    HOJA_COMPLEJIDAD: ENCABEZADOS_COMPLEJIDAD,
-    HOJA_MANTENIBILIDAD: ENCABEZADOS_MANTENIBILIDAD,
-    HOJA_BUGS_SMELLS: ENCABEZADOS_BUGS_SMELLS,
-    HOJA_ERRORES: ENCABEZADOS_ERRORES,
-    HOJA_CONCURRENCIA: ENCABEZADOS_CONCURRENCIA,
-}
-
-CONFIGURACION_GRAFICOS = [
-    (HOJA_RESUMEN, 6, "CCN promedio por proyecto", "CCN promedio", "A1"),
-    (HOJA_COMPLEJIDAD, 5, "NLOC total por proyecto", "NLOC total", "A18"),
-    (HOJA_MANTENIBILIDAD, 5, "MI por proyecto", "Índice de mantenibilidad", "A35"),
-    (HOJA_BUGS_SMELLS, 5, "ISI por proyecto", "Índice de severidad de issues", "A52"),
-    (HOJA_RESUMEN, 13, "Promedio de concurrencia por proyecto", "Promedio concurrencia", "A69"),
-]
-
-
-def crear_o_abrir_excel(archivo_excel):
+def crear_o_abrir_excel_salida(archivo_excel):
     """Abre un libro existente o crea uno con las hojas requeridas.
 
     Args:
@@ -119,6 +40,19 @@ def crear_o_abrir_excel(archivo_excel):
     crear_hojas_si_no_existen(libro)
     return libro
 
+def abrir_excel_entrada(archivo_excel):
+    """Abre un libro existente para lectura de datos.
+
+    Args:
+        archivo_excel: Ruta del libro de entrada.
+
+    Returns:
+        El libro abierto en modo lectura.
+    """
+    if not Path(archivo_excel).exists():
+        raise FileNotFoundError(f"No se encontró el archivo de entrada: {archivo_excel}")
+
+    return load_workbook(archivo_excel, data_only=True, read_only=True)
 
 def asegurar_encabezados(hoja, encabezados):
     """Crea o actualiza encabezados sin borrar datos existentes.
@@ -196,18 +130,35 @@ def aplicar_estilos_basicos(libro):
             hoja.column_dimensions[letra].width = min(max_largo + 3, 45)
 
 
-def buscar_fila_por_codigo(hoja, codigo):
+def normalizar_texto(texto):
+    """Normaliza un valor para comparaciones sin acentos ni mayúsculas."""
+    texto = "" if texto is None else str(texto).strip().lower()
+    texto = unicodedata.normalize("NFKD", texto)
+    return "".join(
+        caracter for caracter in texto
+        if not unicodedata.combining(caracter)
+    )
+
+
+def buscar_num_fila_por_codigo(hoja, codigo, columna_codigo=1, normalizar=True):
     """Busca una fila por el código almacenado en la primera columna.
 
     Args:
         hoja: Hoja donde se realiza la búsqueda.
         codigo: Código de proyecto buscado.
+        columna_codigo: Columna donde se encuentran los códigos.
+        normalizar: Indica si la comparación ignora espacios, acentos y mayúsculas.
 
     Returns:
         El número de fila encontrado o ``None``.
     """
+    valor_buscado = normalizar_texto(codigo) if normalizar else codigo
+
     for fila in range(2, hoja.max_row + 1):
-        if hoja.cell(row=fila, column=1).value == codigo:
+        valor_celda = hoja.cell(row=fila, column=columna_codigo).value
+        if normalizar:
+            valor_celda = normalizar_texto(valor_celda)
+        if valor_celda == valor_buscado:
             return fila
 
     return None
@@ -221,7 +172,7 @@ def escribir_o_actualizar_fila(hoja, codigo, valores):
         codigo: Código usado como clave de la fila.
         valores: Valores que deben escribirse.
     """
-    fila_existente = buscar_fila_por_codigo(hoja, codigo)
+    fila_existente = buscar_num_fila_por_codigo(hoja, codigo)
 
     if fila_existente is None:
         hoja.append(valores)
@@ -246,7 +197,7 @@ def escribir_valores_por_encabezado(hoja, fila, valores):
             hoja.cell(row=fila, column=columna).value = valor
 
 
-def obtener_mapa_encabezados(hoja):
+def obtener_mapa_encabezados(hoja, normalizar=False):
     """Crea un mapa entre encabezados y números de columna.
 
     Args:
@@ -256,12 +207,64 @@ def obtener_mapa_encabezados(hoja):
         Diccionario de encabezados a columnas.
     """
     return {
-        hoja.cell(row=1, column=columna).value: columna
+        (
+            normalizar_texto(hoja.cell(row=1, column=columna).value)
+            if normalizar
+            else hoja.cell(row=1, column=columna).value
+        ): columna
         for columna in range(1, hoja.max_column + 1)
     }
 
 
-def finalizar_libro(libro, archivo_excel, incluir_graficos=False):
+def obtener_columna_encabezado(encabezados, nombre, nombre_hoja):
+    """Obtiene la columna de un encabezado obligatorio."""
+    columna = encabezados.get(normalizar_texto(nombre))
+    if columna is None:
+        raise ValueError(
+            f"Falta la columna '{nombre}' en la solapa {nombre_hoja}"
+        )
+    return columna
+
+
+def leer_fila_por_codigo(
+    libro_entrada,
+    nombre_hoja,
+    codigo,
+    campos,
+):
+    """Lee campos de una fila identificada por código en un archivo Excel.
+
+    La comparación de encabezados y códigos ignora espacios externos,
+    mayúsculas y acentos.
+    """
+
+    if nombre_hoja not in libro_entrada.sheetnames:
+        raise ValueError(f"No existe la solapa '{nombre_hoja}' "
+                         f"en el archivo excel con los datos de entrada.")
+
+    hoja = libro_entrada[nombre_hoja]
+    encabezados = obtener_mapa_encabezados(hoja, normalizar=True)
+    fila = buscar_num_fila_por_codigo(
+        hoja,
+        codigo
+    )
+
+    if fila is None:
+        raise ValueError(
+            f"No se encontró el código '{codigo}' en {nombre_hoja}"
+        )
+
+    return {
+        campo: hoja.cell(
+            row=fila,
+            column=obtener_columna_encabezado(
+                encabezados, campo, nombre_hoja
+            ),
+        ).value
+        for campo in campos
+    }
+
+def finalizar_libro(libro_salida, archivo_excel, incluir_graficos=False):
     """Aplica las tareas finales y guarda el libro una sola vez.
 
     Args:
@@ -269,15 +272,15 @@ def finalizar_libro(libro, archivo_excel, incluir_graficos=False):
         archivo_excel: Ruta en la que se guarda el libro.
         incluir_graficos: Indica si deben regenerarse los gráficos.
     """
-    aplicar_estilos_basicos(libro)
+    aplicar_estilos_basicos(libro_salida)
 
     if incluir_graficos:
-        generar_graficos(libro, CONFIGURACION_GRAFICOS)
+        generar_graficos(libro_salida, CONFIGURACION_GRAFICOS)
 
     ruta_salida = Path(archivo_excel)
     ruta_salida.parent.mkdir(parents=True, exist_ok=True)
     ruta_temporal = ruta_salida.with_name(f".{ruta_salida.stem}.tmp{ruta_salida.suffix}")
-    libro.save(ruta_temporal)
+    libro_salida.save(ruta_temporal)
     ruta_temporal.replace(ruta_salida)
 
 
@@ -303,17 +306,23 @@ def guardar_resultado_excel(
     hoja_complejidad = libro[HOJA_COMPLEJIDAD]
     hoja_mantenibilidad = libro[HOJA_MANTENIBILIDAD]
     hoja_bugs_smells = libro[HOJA_BUGS_SMELLS]
-    hoja_concurrencia = libro[HOJA_CONCURRENCIA]
+    hoja_concurrencia = libro[HOJA_CONCURRENCIA_SALIDA]
 
     escribir_hoja_resumen(hoja_resumen, proyecto, metricas_cc, metricas_mi, metricas_bugs_smells, metricas_concurrencia)
-    
+
     escribir_hoja_complejidad(hoja_complejidad, proyecto.codigo, metricas_cc)
     escribir_hoja_mantenibilidad(hoja_mantenibilidad, proyecto.codigo, metricas_mi)
     escribir_hoja_bugs_smells(hoja_bugs_smells, proyecto, metricas_bugs_smells)
-
     escribir_hoja_concurrencia(hoja_concurrencia, proyecto.codigo, metricas_concurrencia)
 
-def escribir_hoja_resumen(hoja, proyecto, metricas_cc, metricas_mi, metricas_bugs_smells=None, metricas_concurrencia=None):
+def escribir_hoja_resumen(
+    hoja,
+    proyecto,
+    metricas_cc,
+    metricas_mi,
+    metricas_bugs_smells=None,
+    metricas_concurrencia=None,
+):
     """Escribe las métricas de un proyecto en la hoja de resumen.
 
     Args:
@@ -324,32 +333,57 @@ def escribir_hoja_resumen(hoja, proyecto, metricas_cc, metricas_mi, metricas_bug
         metricas_bugs_smells: Métricas de incidencias, si existen.
         metricas_concurrencia: Métricas de concurrencia, si existen.
     """
-    issues_kloc = metricas_bugs_smells.issues_kloc if metricas_bugs_smells else ""
+    ccn_promedio = metricas_cc.ccn_promedio if metricas_cc else ""
+    nivel_cc = metricas_cc.nivel_cc if metricas_cc else ""
+
+    mi = metricas_mi.mi if metricas_mi else ""
+    nivel_mi = metricas_mi.nivel_mi if metricas_mi else ""
+
+    issues_kloc = (
+        metricas_bugs_smells.issues_kloc
+        if metricas_bugs_smells
+        else ""
+    )
     isi = metricas_bugs_smells.isi if metricas_bugs_smells else ""
-    interpretacion_isi = metricas_bugs_smells.interpretacion_isi if metricas_bugs_smells else ""
+    interpretacion_isi = (
+        metricas_bugs_smells.interpretacion_isi
+        if metricas_bugs_smells
+        else ""
+    )
+
+    promedio_concurrencia = (
+        metricas_concurrencia.promedio
+        if metricas_concurrencia
+        else ""
+    )
+    interpretacion_concurrencia = (
+        metricas_concurrencia.interpretacion
+        if metricas_concurrencia
+        else ""
+    )
+
     valores_resumen = [
         proyecto.codigo,
         proyecto.nombre_proyecto,
         proyecto.herramienta_ia,
         proyecto.modelo_ia,
         proyecto.lenguaje,
-        metricas_cc.ccn_promedio,
-        metricas_cc.nivel_cc,
-        metricas_mi.mi,
-        metricas_mi.nivel_mi,
+        ccn_promedio,
+        nivel_cc,
+        mi,
+        nivel_mi,
         issues_kloc,
         isi,
         interpretacion_isi,
+        promedio_concurrencia,
+        interpretacion_concurrencia,
     ]
 
-    valores_resumen.extend(
-        [
-            metricas_concurrencia.promedio if metricas_concurrencia else "",
-            metricas_concurrencia.interpretacion if metricas_concurrencia else "",
-        ]
+    escribir_o_actualizar_fila(
+        hoja,
+        proyecto.codigo,
+        valores_resumen,
     )
-
-    escribir_o_actualizar_fila(hoja, proyecto.codigo, valores_resumen)
 
 def escribir_hoja_complejidad(hoja, codigo, metricas_cc):
     """Escribe las métricas de complejidad en la hoja correspondiente.
@@ -359,22 +393,28 @@ def escribir_hoja_complejidad(hoja, codigo, metricas_cc):
         codigo: Código del proyecto.
         metricas_cc: Métricas de complejidad.
     """
-    escribir_o_actualizar_fila(
-        hoja,
-        codigo,
-        [
-            codigo,
-            metricas_cc.cantidad_funciones,
-            metricas_cc.ccn_total,
-            metricas_cc.ccn_promedio,
-            metricas_cc.nloc_total,
-            metricas_cc.nivel_cc,
-            metricas_cc.interpretacion_cc,
-            metricas_cc.nloc_promedio,
-        ],
-    )
+    fila_complejidad_vacia = [codigo] + [""] * CANTIDAD_CAMPOS_COMPLEJIDAD
 
-def escribir_hoja_mantenibilidad(hoja, codigo, metricas_mi):
+    if metricas_cc is None:
+        escribir_o_actualizar_fila(hoja, codigo, fila_complejidad_vacia)
+        return
+    else:
+        escribir_o_actualizar_fila(
+            hoja,
+            codigo,
+            [
+                codigo,
+                metricas_cc.cantidad_funciones,
+                metricas_cc.ccn_total,
+                metricas_cc.ccn_promedio,
+                metricas_cc.nloc_total,
+                metricas_cc.nivel_cc,
+                metricas_cc.interpretacion_cc,
+                metricas_cc.nloc_promedio,
+            ],
+        )
+
+def escribir_hoja_mantenibilidad(hoja, proyecto_codigo, metricas_mi):
     """Escribe las métricas de mantenibilidad en la hoja correspondiente.
 
     Args:
@@ -382,11 +422,16 @@ def escribir_hoja_mantenibilidad(hoja, codigo, metricas_mi):
         codigo: Código del proyecto.
         metricas_mi: Métricas de mantenibilidad.
     """
+    fila_mantenibilidad_vacia = [proyecto_codigo] + [""] * CANTIDAD_CAMPOS_MANTENIBILIDAD
+
+    if metricas_mi is None:
+        escribir_o_actualizar_fila(hoja, proyecto_codigo, fila_mantenibilidad_vacia)
+        return
     escribir_o_actualizar_fila(
         hoja,
-        codigo,
+        proyecto_codigo,
         [
-            codigo,
+            proyecto_codigo,
             metricas_mi.nloc_mi,
             metricas_mi.cantidad_funciones_mi,
             metricas_mi.tokens_codigo,
@@ -404,8 +449,10 @@ def escribir_hoja_bugs_smells(hoja, proyecto, metricas_bugs_smells):
         proyecto: Proyecto analizado.
         metricas_bugs_smells: Métricas de bugs y smells.
     """
+    fila_bugs_smells_vacia = [proyecto.codigo] + [""] * CANTIDAD_CAMPOS_BUGS_SMELLS   
+
     if metricas_bugs_smells is None:
-        escribir_o_actualizar_fila(hoja, proyecto.codigo, [proyecto.codigo] + [""] * 11)
+        escribir_o_actualizar_fila(hoja, proyecto.codigo, fila_bugs_smells_vacia)
     else:
         escribir_o_actualizar_fila(
             hoja,
@@ -427,7 +474,7 @@ def escribir_hoja_bugs_smells(hoja, proyecto, metricas_bugs_smells):
         )
 
         
-    fila = buscar_fila_por_codigo(hoja, proyecto.codigo)
+    fila = buscar_num_fila_por_codigo(hoja, proyecto.codigo)
 
     if fila:
         columna_reglas = obtener_mapa_encabezados(hoja)["Reglas incumplidas"]
@@ -446,8 +493,10 @@ def escribir_hoja_concurrencia(hoja, codigo, metricas_concurrencia):
         codigo: Código del proyecto.
         metricas_concurrencia: Métricas de concurrencia.
     """
+    fila_concurrencia_vacia = [codigo] + [""] * CANTIDAD_CAMPOS_CONCURRENCIA
+
     if metricas_concurrencia is None:
-        escribir_o_actualizar_fila(hoja, codigo, [codigo] + [""] * 6)
+        escribir_o_actualizar_fila(hoja, codigo, fila_concurrencia_vacia)
     else:
         escribir_o_actualizar_fila(
             hoja,

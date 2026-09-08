@@ -115,7 +115,7 @@ def analizar_bugs_smells_seguro(
 
 
 
-def analizar_concurrencia_seguro(proyecto, configuracion, logger, contexto):
+def analizar_concurrencia_seguro(proyecto, configuracion, logger, libro_entrada, contexto):
     """Analiza las métricas de concurrencia y registra posibles errores.
 
     Args:
@@ -130,10 +130,10 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, contexto):
     try:
         return analizar_concurrencia(
             proyecto=proyecto,
-            archivo_datos_entrada=configuracion["archivo_datos_entrada"],
             ponderacion=configuracion["ponderacion_concurrencia"],
             umbrales=configuracion["umbrales_concurrencia"],
             logger=logger,
+            libro_entrada=libro_entrada
         )
     except Exception as error:
         mensaje_error = f"Análisis concurrencia: {error}"

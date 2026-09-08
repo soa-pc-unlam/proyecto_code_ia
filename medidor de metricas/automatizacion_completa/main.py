@@ -1,8 +1,10 @@
 """Orquesta el análisis concurrente de métricas y la generación de reportes."""
 
+import logging
+
 from configuracion.configuracion import cargar_configuracion, cargar_proyectos
 from constantes import definiciones
-from reportes.excel import crear_o_abrir_excel, finalizar_libro
+from reportes.excel import abrir_excel_entrada, crear_o_abrir_excel_salida, finalizar_libro
 from util.archivos import crear_directorio
 from util.logging_config import configurar_logger
 from procesamiento.procesamiento import gestionar_procesamiento_proyectos
@@ -11,6 +13,10 @@ from util.recursos import limitar_cpu
 
 def main():
     """Ejecuta concurrentemente el análisis de los proyectos configurados."""
+    logger = logging.getLogger(__name__)
+    libro_salida = None
+    libro_entrada = None
+    
     try:
         configuracion = cargar_configuracion(definiciones.CONFIGURACION_JSON)
         inicializar_directorios(configuracion)
@@ -21,13 +27,15 @@ def main():
         limitar_cpu(definiciones.PORCENTAJE_MAX_CPU, logger)
 
         proyectos = cargar_proyectos(definiciones.DATOS_PROYECTOS_JSON)
-        libro = crear_o_abrir_excel(configuracion["archivo_excel"])
+        libro_salida = crear_o_abrir_excel_salida(configuracion["archivo_excel_salida"])
 
-        gestionar_procesamiento_proyectos(proyectos, configuracion, libro, logger)
+        libro_entrada = abrir_excel_entrada(configuracion["archivo_excel_entrada"])
+
+        gestionar_procesamiento_proyectos(proyectos, configuracion, libro_salida,libro_entrada, logger)
 
         finalizar_libro(
-            libro,
-            configuracion["archivo_excel"],
+            libro_salida,
+            configuracion["archivo_excel_salida"],
             incluir_graficos=True,
         )
         informar_resultados_finales(logger, configuracion)
@@ -38,6 +46,12 @@ def main():
         
     except Exception as error:
         logger.error(f"Error en la ejecución: {error}")
+    finally:
+        if libro_salida is not None:
+            libro_salida.close()
+
+        if libro_entrada is not None:
+            libro_entrada.close()
 
 
 def inicializar_directorios(configuracion):
@@ -54,7 +68,7 @@ def informar_resultados_finales(logger, configuracion):
     logger.info("=" * 24)
     logger.info(
         "Informe creado en el archivo Excel: "
-        + str(configuracion["archivo_excel"])
+        + str(configuracion["archivo_excel_salida"])
     )
 
 
