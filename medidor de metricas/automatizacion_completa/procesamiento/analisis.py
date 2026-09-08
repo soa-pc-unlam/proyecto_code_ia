@@ -119,6 +119,7 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, libro_entrada,
     """Analiza las métricas de concurrencia y registra posibles errores.
 
     Args:
+        libro_entrada: Libro abierto que contiene la rúbrica de concurrencia.
         proyecto: Proyecto que se desea analizar.
         configuracion: Configuración de la rúbrica y sus umbrales.
         logger: Registrador de eventos de la ejecución.

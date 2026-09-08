@@ -106,6 +106,7 @@ def analizar_concurrencia(proyecto, libro_entrada, ponderacion, umbrales, logger
     """Analiza la rúbrica de concurrencia de un proyecto.
 
     Args:
+        libro_entrada: Libro abierto que contiene la rúbrica de concurrencia.
         proyecto: Proyecto que se desea evaluar.
         ponderacion: Mapa de niveles a puntajes.
         umbrales: Intervalos de interpretación.
@@ -115,7 +116,8 @@ def analizar_concurrencia(proyecto, libro_entrada, ponderacion, umbrales, logger
         La métrica de concurrencia calculada.
 
     Raises:
-        ValueError: Si el proyecto no aparece en la rúbrica.
+        ValueError: Si falta la hoja, el proyecto o un encabezado de la rúbrica,
+            o si un nivel no está contemplado en la ponderación.
     """
     logger.debug(f"[{proyecto.codigo}] Leyendo rúbrica de concurrencia")
 

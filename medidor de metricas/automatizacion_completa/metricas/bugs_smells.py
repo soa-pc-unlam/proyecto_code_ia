@@ -66,7 +66,7 @@ def buscar_ejecutable(candidatos):
         La ruta o el nombre del ejecutable encontrado.
 
     Raises:
-        FileNotFoundError: Si ningún candidato está disponible.
+        RuntimeError: Si ningún candidato está disponible.
     """
     for candidato in candidatos:
         ejecutable = shutil.which(candidato)
@@ -81,10 +81,15 @@ def ejecutar_pmd(ruta_proyecto, proyecto_codigo, logger):
 
     Args:
         ruta_proyecto: Ruta del código fuente.
+        proyecto_codigo: Código del proyecto usado en los registros.
         logger: Logger utilizado para registrar la ejecución.
 
     Returns:
         Lista de incidencias normalizadas.
+
+    Raises:
+        RuntimeError: Si falta el ejecutable o el analizador no puede generar el reporte.
+        subprocess.TimeoutExpired: Si el análisis supera los 300 segundos.
     """
     ejecutable = buscar_ejecutable(["pmd", "pmd.bat", "pmd.cmd"])
 
@@ -199,10 +204,15 @@ def ejecutar_pylint(ruta_proyecto, proyecto_codigo, logger):
 
     Args:
         ruta_proyecto: Ruta del código fuente.
+        proyecto_codigo: Código del proyecto usado en los registros.
         logger: Logger utilizado para registrar la ejecución.
 
     Returns:
         Lista de incidencias detectadas.
+
+    Raises:
+        RuntimeError: Si falta el ejecutable o el analizador no puede generar el reporte.
+        subprocess.TimeoutExpired: Si el análisis supera los 300 segundos.
     """
     ejecutable = buscar_ejecutable(["pylint"])
     comando = [ejecutable, str(ruta_proyecto), "--output-format=text"]
@@ -303,13 +313,16 @@ def ejecutar_detekt(ruta_proyecto, proyecto_codigo, logger):
 
     Args:
         ruta_proyecto: Ruta del código fuente.
+        proyecto_codigo: Código del proyecto usado en los registros.
         logger: Logger utilizado para registrar la ejecución.
 
     Returns:
         Lista de incidencias detectadas.
 
     Raises:
-        RuntimeError: Si Detekt no genera un reporte XML válido.
+        RuntimeError: Si falta el ejecutable o Detekt no genera un XML no vacío.
+        ET.ParseError: Si el reporte generado no es un XML válido.
+        subprocess.TimeoutExpired: Si el análisis supera los 300 segundos.
     """
     ejecutable = buscar_ejecutable(["detekt-cli", "detekt-cli.bat", "detekt"])
 

@@ -24,12 +24,29 @@ class ProcesamientoConcurrenteTest(unittest.TestCase):
         procesar_proyecto,
         guardar_resultado,
     ):
+        """Verifica que dos proyectos se procesan simultáneamente y se guardan.
+
+        Args:
+            procesar_proyecto: Mock del analizador inyectado por patch.
+            guardar_resultado: Mock de la escritura de resultados inyectado por patch.
+        """
         barrera = threading.Barrier(2)
 
         proyecto_1 = Mock(codigo="M1")
         proyecto_2 = Mock(codigo="M2")
 
         def procesar(*args):
+            """Simula un análisis que espera a que otro proyecto alcance la barrera.
+
+            Args:
+                *args: Argumentos del analizador; el primero es el proyecto.
+
+            Returns:
+                Mock: Resultado asociado con el proyecto recibido.
+
+            Raises:
+                threading.BrokenBarrierError: Si el segundo proyecto no llega a tiempo.
+            """
             proyecto = args[0]
             barrera.wait(timeout=2)
             time.sleep(0.01)

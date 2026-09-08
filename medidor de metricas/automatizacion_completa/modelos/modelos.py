@@ -153,7 +153,16 @@ class MetricaConcurrencia:
 
 @dataclass
 class ResultadoProyecto:
-    """Agrupa los resultados obtenidos al analizar un proyecto."""
+    """Agrupa los resultados obtenidos al analizar un proyecto.
+
+    Attributes:
+        proyecto: Proyecto al que corresponden los resultados.
+        metricas_cc: Métricas de complejidad o None si no están disponibles.
+        metricas_mi: Métricas de mantenibilidad o None si no están disponibles.
+        metricas_bugs_smells: Métricas de incidencias o None si no están disponibles.
+        metricas_concurrencia: Evaluación de concurrencia o None si no está disponible.
+        errores: Lista de mensajes de error o None si no se proporcionó.
+    """
 
     proyecto: object
     metricas_cc: object = None

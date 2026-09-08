@@ -15,7 +15,15 @@ from modelos.modelos import ContextoAnalisis, ResultadoProyecto
 
 
 def gestionar_procesamiento_proyectos(proyectos, configuracion, libro_salida, libro_entrada, logger):
-    """Gestiona la ejecución concurrente de los análisis de los proyectos."""
+    """Analiza proyectos en paralelo y escribe sus resultados en el hilo llamador.
+
+    Args:
+        proyectos: Colección de proyectos que se desean analizar.
+        configuracion: Configuración de rutas, ponderaciones y umbrales.
+        libro_salida: Libro abierto que recibe las métricas y los errores en memoria.
+        libro_entrada: Libro abierto que contiene la rúbrica de concurrencia.
+        logger: Registrador de eventos de la ejecución.
+    """
     semaforo_analizadores = Semaphore(definiciones.MAX_ANALIZADORES_PESADOS)
 
     with ThreadPoolExecutor(max_workers=definiciones.MAX_WORKERS) as executor:
@@ -45,7 +53,19 @@ def gestionar_procesamiento_proyectos(proyectos, configuracion, libro_salida, li
 def ejecutar_procesamiento_proyectos(
     executor, proyectos, configuracion, logger, libro_entrada, semaforo_analizadores
 ):
-    """Envía cada proyecto al pool de workers y devuelve sus Future asociados."""
+    """Envía cada proyecto al ejecutor para su procesamiento concurrente.
+
+    Args:
+        executor: ThreadPoolExecutor al que se envían las tareas.
+        proyectos: Colección de proyectos que se desean analizar.
+        configuracion: Configuración de rutas, ponderaciones y umbrales.
+        logger: Registrador de eventos de la ejecución.
+        libro_entrada: Libro abierto que contiene la rúbrica de concurrencia.
+        semaforo_analizadores: Semáforo compartido que limita los analizadores pesados.
+
+    Returns:
+        dict: Mapa de cada Future enviado al proyecto que le corresponde.
+    """
     futuros = {}
 
     for proyecto in proyectos:
@@ -63,7 +83,19 @@ def ejecutar_procesamiento_proyectos(
 
 
 def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_analizadores):
-    """Ejecuta todos los análisis de un proyecto y devuelve sus resultados."""
+    """Ejecuta los análisis de un proyecto y acumula los errores detectados.
+
+    Args:
+        proyecto: Proyecto cuyo código y rúbrica se desean analizar.
+        configuracion: Configuración de rutas, ponderaciones y umbrales.
+        logger: Registrador de eventos de la ejecución.
+        libro_entrada: Libro abierto que contiene la rúbrica de concurrencia.
+        semaforo_analizadores: Semáforo compartido que limita los analizadores pesados.
+
+    Returns:
+        ResultadoProyecto: Métricas calculadas y errores; los análisis fallidos
+            se representan con None.
+    """
     contexto = ContextoAnalisis()
 
     metricas_cc = None
@@ -128,13 +160,26 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
     )
 
 def informar_fin_procesamiento(errores, logger, proyecto_codigo=None):
+    """Registra si el proyecto terminó correctamente o con errores.
+
+    Args:
+        errores: Colección de mensajes de error del proyecto.
+        logger: Registrador de eventos de la ejecución.
+        proyecto_codigo: Código del proyecto para identificar sus mensajes; puede ser None.
+    """
     if errores:
         logger.warning(f"[{proyecto_codigo}] Finalizado con {len(errores)} error(es)")
     else:
         logger.info(f"[{proyecto_codigo}] Finalizado correctamente")
 
 def guardar_resultado_proyecto(libro_salida, resultado, logger):
-    """Guarda en Excel las métricas disponibles y los errores del proyecto."""
+    """Escribe las métricas y los errores del proyecto en el libro en memoria.
+
+    Args:
+        libro_salida: Libro abierto que recibe las métricas y los errores en memoria.
+        resultado: ResultadoProyecto con las métricas disponibles y los errores.
+        logger: Registrador de eventos de la ejecución.
+    """
     proyecto = resultado.proyecto
 
     guardar_resultado_excel(

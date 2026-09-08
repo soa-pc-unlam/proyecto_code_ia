@@ -18,7 +18,8 @@ def ejecutar_lizard(proyecto, carpeta_resultados, logger):
         logger: Logger utilizado para registrar la ejecución.
 
     Returns:
-        Las métricas de complejidad calculadas.
+        tuple[MetricaComplejidad, Path]: Métricas de complejidad y ruta del CSV
+            generado, en ese orden.
     """
     archivo_csv = ejecutar_lizard_csv(proyecto, carpeta_resultados, logger)
     archivo_txt = Path(carpeta_resultados) / f"{proyecto.codigo}_resumen_lizard.txt"

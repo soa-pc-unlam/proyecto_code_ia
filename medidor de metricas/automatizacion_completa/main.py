@@ -55,13 +55,25 @@ def main():
 
 
 def inicializar_directorios(configuracion):
-    """Crea los directorios requeridos por la aplicación."""
+    """Crea los directorios de resultados y registros, incluidos sus padres.
+
+    Args:
+        configuracion (dict): Configuración con carpeta_resultados y carpeta_logs.
+
+    Raises:
+        OSError: Si no es posible crear alguno de los directorios.
+    """
     crear_directorio(configuracion["carpeta_resultados"])
     crear_directorio(configuracion["carpeta_logs"])
 
 
 def informar_resultados_finales(logger, configuracion):
-    """Informa la finalización del proceso y la ubicación del reporte."""
+    """Registra la finalización del proceso y la ubicación del reporte.
+
+    Args:
+        logger (logging.Logger): Registrador de eventos de la ejecución.
+        configuracion (dict): Configuración que contiene archivo_excel_salida.
+    """
     logger.info("")
     logger.info("=" * 24)
     logger.info("== Proceso finalizado ==")

@@ -48,6 +48,9 @@ def abrir_excel_entrada(archivo_excel):
 
     Returns:
         El libro abierto en modo lectura.
+
+    Raises:
+        FileNotFoundError: Si el archivo de entrada no existe.
     """
     if not Path(archivo_excel).exists():
         raise FileNotFoundError(f"No se encontró el archivo de entrada: {archivo_excel}")
@@ -131,7 +134,14 @@ def aplicar_estilos_basicos(libro):
 
 
 def normalizar_texto(texto):
-    """Normaliza un valor para comparaciones sin acentos ni mayúsculas."""
+    """Convierte un valor a texto sin acentos, mayúsculas ni espacios externos.
+
+    Args:
+        texto: Valor que se desea normalizar; None se trata como una cadena vacía.
+
+    Returns:
+        str: Texto normalizado; conserva los espacios internos.
+    """
     texto = "" if texto is None else str(texto).strip().lower()
     texto = unicodedata.normalize("NFKD", texto)
     return "".join(
@@ -141,13 +151,13 @@ def normalizar_texto(texto):
 
 
 def buscar_num_fila_por_codigo(hoja, codigo, columna_codigo=1, normalizar=True):
-    """Busca una fila por el código almacenado en la primera columna.
+    """Busca una fila por el código almacenado en la columna indicada.
 
     Args:
         hoja: Hoja donde se realiza la búsqueda.
         codigo: Código de proyecto buscado.
         columna_codigo: Columna donde se encuentran los códigos.
-        normalizar: Indica si la comparación ignora espacios, acentos y mayúsculas.
+        normalizar: Indica si la comparación ignora espacios externos, acentos y mayúsculas.
 
     Returns:
         El número de fila encontrado o ``None``.
@@ -202,6 +212,8 @@ def obtener_mapa_encabezados(hoja, normalizar=False):
 
     Args:
         hoja: Hoja que se desea inspeccionar.
+        normalizar: Si es True, normaliza el texto de los encabezados.
+        normalizar: Si es True, normaliza el texto de los encabezados.
 
     Returns:
         Diccionario de encabezados a columnas.
@@ -217,7 +229,19 @@ def obtener_mapa_encabezados(hoja, normalizar=False):
 
 
 def obtener_columna_encabezado(encabezados, nombre, nombre_hoja):
-    """Obtiene la columna de un encabezado obligatorio."""
+    """Obtiene la columna de un encabezado obligatorio.
+
+    Args:
+        encabezados (dict): Mapa de encabezados normalizados a números de columna.
+        nombre (str): Encabezado buscado, que se normaliza antes de consultar.
+        nombre_hoja (str): Nombre de la hoja usado en el mensaje de error.
+
+    Returns:
+        int: Número de columna, contado desde uno.
+
+    Raises:
+        ValueError: Si el encabezado no está presente en el mapa.
+    """
     columna = encabezados.get(normalizar_texto(nombre))
     if columna is None:
         raise ValueError(
@@ -232,10 +256,22 @@ def leer_fila_por_codigo(
     codigo,
     campos,
 ):
-    """Lee campos de una fila identificada por código en un archivo Excel.
+    """Lee los campos de la primera fila que coincide con un código de proyecto.
 
     La comparación de encabezados y códigos ignora espacios externos,
-    mayúsculas y acentos.
+    mayúsculas y acentos. El código se busca en la columna indicada.
+
+    Args:
+        libro_entrada: Libro Excel abierto que contiene los datos.
+        nombre_hoja (str): Nombre de la hoja que se desea consultar.
+        codigo: Código del proyecto buscado.
+        campos: Nombres de los encabezados cuyos valores se desean leer.
+
+    Returns:
+        dict: Mapa de cada nombre solicitado al valor de su celda.
+
+    Raises:
+        ValueError: Si falta la hoja, el código o alguno de los encabezados.
     """
 
     if nombre_hoja not in libro_entrada.sheetnames:
@@ -268,9 +304,12 @@ def finalizar_libro(libro_salida, archivo_excel, incluir_graficos=False):
     """Aplica las tareas finales y guarda el libro una sola vez.
 
     Args:
-        libro: Libro de Excel que se desea finalizar.
+        libro_salida: Libro de Excel que se desea finalizar.
         archivo_excel: Ruta en la que se guarda el libro.
         incluir_graficos: Indica si deben regenerarse los gráficos.
+
+    Raises:
+        OSError: Si no se puede guardar el temporal o reemplazar el archivo final.
     """
     aplicar_estilos_basicos(libro_salida)
 
@@ -419,7 +458,7 @@ def escribir_hoja_mantenibilidad(hoja, proyecto_codigo, metricas_mi):
 
     Args:
         hoja: Hoja de Excel donde se escriben los datos.
-        codigo: Código del proyecto.
+        proyecto_codigo: Código del proyecto.
         metricas_mi: Métricas de mantenibilidad.
     """
     fila_mantenibilidad_vacia = [proyecto_codigo] + [""] * CANTIDAD_CAMPOS_MANTENIBILIDAD

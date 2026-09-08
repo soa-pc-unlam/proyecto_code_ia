@@ -63,3 +63,36 @@ python -m unittest discover -s tests -v
 
 Las pruebas cubren umbrales, proyectos duplicados, concurrencia y acumulación
 de errores en Excel.
+
+## Documentación del código
+
+Los módulos, clases y funciones se documentan en español con docstrings de
+Google. La primera línea resume su propósito. Las secciones se incluyen cuando
+corresponden y conservan sus nombres en inglés:
+
+- `Args:` describe cada parámetro con el nombre exacto de la firma, incluidos
+  los opcionales y el significado de sus valores predeterminados. Se omite `self`.
+- `Returns:` describe el valor devuelto, sus componentes y los casos sin datos.
+  Se omite en funciones que solo devuelven `None`.
+- `Raises:` identifica las excepciones que se propagan al llamador y sus causas.
+- `Attributes:` describe los campos de las clases de datos.
+
+Los tipos pueden expresarse en las anotaciones de la firma o entre paréntesis
+junto al parámetro. Los efectos sobre archivos, libros y registros se explican
+en la descripción. Una función sencilla sin parámetros ni retorno puede usar
+un docstring de una sola línea.
+
+```python
+def calcular_promedio(puntajes):
+    """Calcula el promedio de una colección de puntajes.
+
+    Args:
+        puntajes (list[float]): Puntajes que se desean promediar.
+
+    Returns:
+        float: Promedio redondeado a dos decimales, o cero sin datos.
+    """
+```
+
+La documentación se puede consultar con `help()` desde Python; por ejemplo,
+`help(metricas.concurrencia.calcular_promedio)` tras importar el módulo.
