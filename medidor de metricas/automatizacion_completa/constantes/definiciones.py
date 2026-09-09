@@ -135,12 +135,28 @@ HOJAS_REPORTE = {
     HOJA_TOKENS_SALIDA: ENCABEZADOS_TOKENS_SALIDA,
 }
 
+COLUMNA_CCN_PROMEDIO = 6
+COLUMNA_NLOC_TOTAL = 5
+COLUMNA_MI = 8
+COLUMNA_ISI = 11
+COLUMNA_PROMEDIO_CONCURRENCIA = 13
+COLUMNA_EFICIENCIA_TOKENS = 15
+
+FILA_GRAFICO_CCN = 1
+FILA_GRAFICO_NLOC = FILA_GRAFICO_CCN+18
+FILA_GRAFICO_MI = FILA_GRAFICO_NLOC*2
+FILA_GRAFICO_ISI = FILA_GRAFICO_NLOC*3
+FILA_GRAFICO_CONCURRENCIA = FILA_GRAFICO_NLOC*4
+FILA_GRAFICO_TOKENS = FILA_GRAFICO_NLOC*5
+
 CONFIGURACION_GRAFICOS = [
-    (HOJA_RESUMEN, 6, "CCN promedio por proyecto", "CCN promedio", "A1"),
-    (HOJA_COMPLEJIDAD, 5, "NLOC total por proyecto", "NLOC total", "A18"),
-    (HOJA_MANTENIBILIDAD, 5, "MI por proyecto", "Índice de mantenibilidad", "A35"),
-    (HOJA_BUGS_SMELLS, 5, "ISI por proyecto", "Índice de severidad de issues", "A52"),
-    (HOJA_RESUMEN, 13, "Promedio de concurrencia por proyecto", "Promedio concurrencia", "A69"),
+    #hoja, columna_datos, titulo, etiqueta, posicion_del_grafico
+    (HOJA_RESUMEN, COLUMNA_CCN_PROMEDIO, "CCN promedio por proyecto", "CCN promedio", f"A{FILA_GRAFICO_CCN}"),
+    (HOJA_COMPLEJIDAD, COLUMNA_NLOC_TOTAL, "NLOC total por proyecto", "NLOC total", f"A{FILA_GRAFICO_NLOC}"),
+    (HOJA_RESUMEN, COLUMNA_MI, "MI por proyecto", "Índice de mantenibilidad", f"A{FILA_GRAFICO_MI}"),
+    (HOJA_RESUMEN, COLUMNA_ISI, "ISI por proyecto", "Índice de severidad de issues", f"A{FILA_GRAFICO_ISI}"),
+    (HOJA_RESUMEN, COLUMNA_PROMEDIO_CONCURRENCIA, "Promedio de concurrencia por proyecto", "Promedio concurrencia", f"A{FILA_GRAFICO_CONCURRENCIA}"),
+    (HOJA_RESUMEN, COLUMNA_EFICIENCIA_TOKENS, "Eficiencia de generación por proyecto", "Eficiencia de generación", f"A{FILA_GRAFICO_TOKENS}"),
 ]
 
 CANTIDAD_CAMPOS_COMPLEJIDAD = len(ENCABEZADOS_COMPLEJIDAD) - 1
