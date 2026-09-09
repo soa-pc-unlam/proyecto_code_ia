@@ -150,6 +150,21 @@ class MetricaConcurrencia:
     interpretacion: str
 
 
+@dataclass
+class MetricaTokens:
+    """Agrupa el análisis de eficiencia de generación en tokens."""
+
+    codigo: str
+    metodo_utilizado: str
+    nloc_total: float
+    refinamientos: int
+    tokens_registrados: float
+    eficiencia_generacion: float
+    eficiencia_ponderada: float
+    nivel_eficiencia: str
+    interpretacion: str
+
+
 
 @dataclass
 class ResultadoProyecto:
@@ -169,4 +184,5 @@ class ResultadoProyecto:
     metricas_mi: object = None
     metricas_bugs_smells: object = None
     metricas_concurrencia: object = None
+    metricas_tokens: object = None
     errores: list = None

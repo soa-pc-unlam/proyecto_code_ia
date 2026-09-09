@@ -24,8 +24,10 @@ HOJA_MANTENIBILIDAD = "Mantenibilidad"
 HOJA_BUGS_SMELLS = "Bugs_Smells"
 HOJA_ERRORES = "Errores"
 HOJA_CONCURRENCIA_SALIDA = "Concurrencia"
+HOJA_TOKENS_SALIDA = "Tokens"
 
 HOJA_CONCURRENCIA_ENTRADA = "Concurrencia"
+HOJA_TOKENS_ENTRADA = "Datos Tokens"
 
 ENCABEZADOS_RESUMEN = [
     "Código",
@@ -42,6 +44,8 @@ ENCABEZADOS_RESUMEN = [
     "Interpretación de Issue",
     "Promedio concurrencia",
     "Interpretación concurrencia",
+    "Eficiencia de generación",
+    "Interpretación tokens",    
 ]
 
 ENCABEZADOS_COMPLEJIDAD = [
@@ -103,6 +107,24 @@ ENCABEZADOS_CONCURRENCIA_ENTRADA = [
     "Uso correcto de exclusión mutua",
 ]
 
+ENCABEZADOS_TOKENS_ENTRADA = [
+    "Método utilizado",
+    "Refinamientos",
+    "Tokens registrados",
+]
+
+ENCABEZADOS_TOKENS_SALIDA = [
+    "Código",
+    "Método utilizado",
+    "NlocTotal",
+    "Refinamientos",
+    "Tokens registrados",
+    "Eficiencia de generación (NLOC/1000 tokens)",
+    "Eficiencia ponderada",
+    "Nivel de eficiencia",
+    "Interpretación",
+]
+
 HOJAS_REPORTE = {
     HOJA_RESUMEN: ENCABEZADOS_RESUMEN,
     HOJA_COMPLEJIDAD: ENCABEZADOS_COMPLEJIDAD,
@@ -110,6 +132,7 @@ HOJAS_REPORTE = {
     HOJA_BUGS_SMELLS: ENCABEZADOS_BUGS_SMELLS,
     HOJA_ERRORES: ENCABEZADOS_ERRORES,
     HOJA_CONCURRENCIA_SALIDA: ENCABEZADOS_CONCURRENCIA_SALIDA,
+    HOJA_TOKENS_SALIDA: ENCABEZADOS_TOKENS_SALIDA,
 }
 
 CONFIGURACION_GRAFICOS = [
@@ -124,3 +147,4 @@ CANTIDAD_CAMPOS_COMPLEJIDAD = len(ENCABEZADOS_COMPLEJIDAD) - 1
 CANTIDAD_CAMPOS_MANTENIBILIDAD = len(ENCABEZADOS_MANTENIBILIDAD) - 1
 CANTIDAD_CAMPOS_CONCURRENCIA = len(ENCABEZADOS_CONCURRENCIA_SALIDA) - 1
 CANTIDAD_CAMPOS_BUGS_SMELLS = len(ENCABEZADOS_BUGS_SMELLS) - 1
+CANTIDAD_CAMPOS_TOKENS = len(ENCABEZADOS_TOKENS_SALIDA) - 1

@@ -18,8 +18,10 @@ from constantes.definiciones import (
     HOJA_MANTENIBILIDAD,
     HOJA_BUGS_SMELLS,
     HOJA_CONCURRENCIA_SALIDA,
+    HOJA_TOKENS_SALIDA,
     CONFIGURACION_GRAFICOS,
     HOJA_ERRORES,
+    CANTIDAD_CAMPOS_TOKENS,
 )
 
 def crear_o_abrir_excel_salida(archivo_excel):
@@ -174,6 +176,20 @@ def buscar_num_fila_por_codigo(hoja, codigo, columna_codigo=1, normalizar=True):
     return None
 
 
+def buscar_filas_por_codigo(hoja, codigo, columna_codigo=1):
+    """Devuelve todas las filas cuyo código coincide con el solicitado."""
+    valor_buscado = normalizar_texto(codigo)
+    filas = []
+    for numero_fila, valores in enumerate(
+        hoja.iter_rows(min_row=2, values_only=True), start=2
+    ):
+        if len(valores) < columna_codigo:
+            continue
+        if normalizar_texto(valores[columna_codigo - 1]) == valor_buscado:
+            filas.append(numero_fila)
+    return filas
+
+
 def escribir_o_actualizar_fila(hoja, codigo, valores):
     """Agrega una fila o actualiza la que corresponde a un código.
 
@@ -218,13 +234,11 @@ def obtener_mapa_encabezados(hoja, normalizar=False):
     Returns:
         Diccionario de encabezados a columnas.
     """
+    primera_fila = next(hoja.iter_rows(min_row=1, max_row=1,
+                                       values_only=True), ())
     return {
-        (
-            normalizar_texto(hoja.cell(row=1, column=columna).value)
-            if normalizar
-            else hoja.cell(row=1, column=columna).value
-        ): columna
-        for columna in range(1, hoja.max_column + 1)
+        (normalizar_texto(valor) if normalizar else valor): columna
+        for columna, valor in enumerate(primera_fila, start=1)
     }
 
 
@@ -256,7 +270,7 @@ def leer_fila_por_codigo(
     codigo,
     campos,
 ):
-    """Lee los campos de la primera fila que coincide con un código de proyecto.
+    """Lee los campos de la única fila que coincide con un código de proyecto.
 
     La comparación de encabezados y códigos ignora espacios externos,
     mayúsculas y acentos. El código se busca en la columna indicada.
@@ -271,7 +285,8 @@ def leer_fila_por_codigo(
         dict: Mapa de cada nombre solicitado al valor de su celda.
 
     Raises:
-        ValueError: Si falta la hoja, el código o alguno de los encabezados.
+        ValueError: Si falta la hoja, un encabezado, el código es inexistente
+            o está duplicado.
     """
 
     if nombre_hoja not in libro_entrada.sheetnames:
@@ -280,19 +295,22 @@ def leer_fila_por_codigo(
 
     hoja = libro_entrada[nombre_hoja]
     encabezados = obtener_mapa_encabezados(hoja, normalizar=True)
-    fila = buscar_num_fila_por_codigo(
-        hoja,
-        codigo
+    columna_codigo = obtener_columna_encabezado(
+        encabezados, "Código", nombre_hoja
     )
-
-    if fila is None:
+    filas = buscar_filas_por_codigo(hoja, codigo, columna_codigo)
+    if not filas:
         raise ValueError(
             f"No se encontró el código '{codigo}' en {nombre_hoja}"
+        )
+    if len(filas) > 1:
+        raise ValueError(
+            f"Código duplicado '{codigo}' en {nombre_hoja}"
         )
 
     return {
         campo: hoja.cell(
-            row=fila,
+            row=filas[0],
             column=obtener_columna_encabezado(
                 encabezados, campo, nombre_hoja
             ),
@@ -330,6 +348,7 @@ def guardar_resultado_excel(
     metricas_mi,
     metricas_bugs_smells=None,
     metricas_concurrencia=None,
+    metricas_tokens=None,
 ):
     """Guarda todas las métricas de un proyecto en Excel.
 
@@ -346,13 +365,15 @@ def guardar_resultado_excel(
     hoja_mantenibilidad = libro[HOJA_MANTENIBILIDAD]
     hoja_bugs_smells = libro[HOJA_BUGS_SMELLS]
     hoja_concurrencia = libro[HOJA_CONCURRENCIA_SALIDA]
+    hoja_tokens = libro[HOJA_TOKENS_SALIDA]
 
-    escribir_hoja_resumen(hoja_resumen, proyecto, metricas_cc, metricas_mi, metricas_bugs_smells, metricas_concurrencia)
+    escribir_hoja_resumen(hoja_resumen, proyecto, metricas_cc, metricas_mi, metricas_bugs_smells, metricas_concurrencia,metricas_tokens)
 
     escribir_hoja_complejidad(hoja_complejidad, proyecto.codigo, metricas_cc)
     escribir_hoja_mantenibilidad(hoja_mantenibilidad, proyecto.codigo, metricas_mi)
     escribir_hoja_bugs_smells(hoja_bugs_smells, proyecto, metricas_bugs_smells)
     escribir_hoja_concurrencia(hoja_concurrencia, proyecto.codigo, metricas_concurrencia)
+    escribir_hoja_tokens(hoja_tokens,proyecto.codigo,metricas_tokens)
 
 def escribir_hoja_resumen(
     hoja,
@@ -361,6 +382,7 @@ def escribir_hoja_resumen(
     metricas_mi,
     metricas_bugs_smells=None,
     metricas_concurrencia=None,
+    metricas_tokens=None,
 ):
     """Escribe las métricas de un proyecto en la hoja de resumen.
 
@@ -401,6 +423,19 @@ def escribir_hoja_resumen(
         else ""
     )
 
+    eficiencia_ponderada = (
+        metricas_tokens.eficiencia_ponderada
+        if metricas_tokens
+        else ""
+    )
+
+    interpretacion_tokens = (
+        metricas_tokens.interpretacion
+        if metricas_tokens
+        else ""
+    )
+
+
     valores_resumen = [
         proyecto.codigo,
         proyecto.nombre_proyecto,
@@ -416,6 +451,8 @@ def escribir_hoja_resumen(
         interpretacion_isi,
         promedio_concurrencia,
         interpretacion_concurrencia,
+        eficiencia_ponderada,
+        interpretacion_tokens,
     ]
 
     escribir_o_actualizar_fila(
@@ -550,6 +587,27 @@ def escribir_hoja_concurrencia(hoja, codigo, metricas_concurrencia):
                 metricas_concurrencia.interpretacion,
             ],
         )
+
+def escribir_hoja_tokens(hoja,proyecto_codigo, metricas_tokens):
+    """Agrega o actualiza un resultado válido de eficiencia en tokens."""
+    fila_tokens_vacia = [proyecto_codigo] + [""] * CANTIDAD_CAMPOS_TOKENS
+
+    if metricas_tokens is None:
+        valores = fila_tokens_vacia   
+    else:
+        valores = [
+            metricas_tokens.codigo,
+            metricas_tokens.metodo_utilizado,
+            metricas_tokens.nloc_total,
+            metricas_tokens.refinamientos,
+            metricas_tokens.tokens_registrados,
+            metricas_tokens.eficiencia_generacion,
+            metricas_tokens.eficiencia_ponderada,
+            metricas_tokens.nivel_eficiencia,
+            metricas_tokens.interpretacion,
+        ]
+    escribir_o_actualizar_fila(hoja, proyecto_codigo, valores)
+
 
 def formatear_top_reglas(top_reglas):
     """Convierte el ranking de reglas en texto legible.

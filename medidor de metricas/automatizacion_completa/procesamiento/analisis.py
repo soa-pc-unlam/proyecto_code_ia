@@ -5,6 +5,7 @@ from metricas.bugs_smells import analizar_bugs_smells
 from metricas.complejidad import ejecutar_lizard
 from metricas.concurrencia import analizar_concurrencia
 from metricas.mantenibilidad import analizar_mantenibilidad
+from metricas.tokens import analizar_tokens
 
 
 
@@ -138,6 +139,27 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, libro_entrada,
         )
     except Exception as error:
         mensaje_error = f"Análisis concurrencia: {error}"
+        logger.error(f"[{proyecto.codigo}] {mensaje_error}")
+        contexto.errores.append(mensaje_error)
+        return None
+
+
+def analizar_tokens_seguro(
+    proyecto, configuracion, logger, libro_entrada, metricas_cc, contexto
+):
+    """Analiza tokens y registra el error sin interrumpir el proyecto."""
+    try:
+        if metricas_cc is None:
+            raise ValueError("No se obtuvo NlocTotal del análisis de Lizard")
+        return analizar_tokens(
+            proyecto=proyecto,
+            libro_entrada=libro_entrada,
+            nloc_total=metricas_cc.nloc_total,
+            coeficiente=configuracion["coeficiente_penalizacion_tokens"],
+            logger=logger,
+        )
+    except Exception as error:
+        mensaje_error = f"Análisis tokens: {error}"
         logger.error(f"[{proyecto.codigo}] {mensaje_error}")
         contexto.errores.append(mensaje_error)
         return None

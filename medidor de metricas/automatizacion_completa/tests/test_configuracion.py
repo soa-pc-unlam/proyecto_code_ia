@@ -5,7 +5,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from configuracion.configuracion import cargar_proyectos, clasificar_por_umbrales, validar_umbrales
+from configuracion.configuracion import (
+    cargar_proyectos,
+    clasificar_por_umbrales,
+    validar_coeficiente_penalizacion,
+    validar_umbrales,
+)
 
 
 class ConfiguracionTest(unittest.TestCase):
@@ -33,6 +38,14 @@ class ConfiguracionTest(unittest.TestCase):
             ruta.write_text(json.dumps([proyecto, proyecto]), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "duplicado"):
                 cargar_proyectos(ruta)
+
+    def test_validar_coeficiente_penalizacion(self):
+        """Acepta cero y positivos, pero rechaza valores inválidos."""
+        validar_coeficiente_penalizacion(0)
+        validar_coeficiente_penalizacion(0.1)
+        for valor in (-0.1, "0.1", True, float("inf")):
+            with self.assertRaises(ValueError):
+                validar_coeficiente_penalizacion(valor)
 
 
 if __name__ == "__main__":

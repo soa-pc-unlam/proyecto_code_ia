@@ -10,6 +10,7 @@ from procesamiento.analisis import (
     analizar_complejidad,
     analizar_concurrencia_seguro,
     analizar_mi,
+    analizar_tokens_seguro,
 )
 from modelos.modelos import ContextoAnalisis, ResultadoProyecto
 
@@ -102,6 +103,7 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
     metricas_mi = None
     metricas_bugs_smells = None
     metricas_concurrencia = None
+    metricas_tokens = None
 
     try:
         logger.info(f"[{proyecto.codigo}] Inicio - {proyecto.nombre_proyecto}")
@@ -122,6 +124,7 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
             contexto,
         )
 
+   
         # PMD, Pylint y Detekt también pueden consumir muchos recursos.
         with semaforo_analizadores:
             metricas_bugs_smells = analizar_bugs_smells_seguro(
@@ -140,6 +143,15 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
             contexto=contexto,
         )
 
+        metricas_tokens = analizar_tokens_seguro(
+                proyecto=proyecto,
+                configuracion=configuracion,
+                logger=logger,
+                libro_entrada=libro_entrada,
+                metricas_cc=metricas_cc,
+                contexto=contexto,
+            )
+        
     except Exception as error:
         mensaje_error = f"Error procesando proyecto: {error}"
         logger.exception(f"[{proyecto.codigo}] {mensaje_error}")
@@ -156,6 +168,7 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
         metricas_mi=metricas_mi,
         metricas_bugs_smells=metricas_bugs_smells,
         metricas_concurrencia=metricas_concurrencia,
+        metricas_tokens=metricas_tokens,
         errores=list(contexto.errores),
     )
 
@@ -189,6 +202,7 @@ def guardar_resultado_proyecto(libro_salida, resultado, logger):
         metricas_mi=resultado.metricas_mi,
         metricas_bugs_smells=resultado.metricas_bugs_smells,
         metricas_concurrencia=resultado.metricas_concurrencia,
+        metricas_tokens=resultado.metricas_tokens,
     )
 
     for mensaje_error in resultado.errores or []:

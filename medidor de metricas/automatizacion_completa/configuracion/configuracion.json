@@ -3,6 +3,7 @@
   "archivo_excel_salida": "metricas_calidad_resultados.xlsx",
   "carpeta_resultados": "resultados",
   "carpeta_logs": "logs",
+  "coeficiente_penalizacion_tokens": 0.1,
   "umbrales_cc": [
     {
       "min": 1,

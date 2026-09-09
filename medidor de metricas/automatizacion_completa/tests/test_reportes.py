@@ -4,8 +4,12 @@ import unittest
 
 from openpyxl import Workbook
 
-from reportes.excel import crear_hojas_si_no_existen, guardar_error_excel
-from modelos.modelos import Proyecto
+from reportes.excel import (
+    crear_hojas_si_no_existen,
+    escribir_hoja_tokens,
+    guardar_error_excel,
+)
+from modelos.modelos import MetricaTokens, Proyecto
 
 
 class ReportesTest(unittest.TestCase):
@@ -23,6 +27,28 @@ class ReportesTest(unittest.TestCase):
         self.assertEqual(hoja.max_row, 3)
         self.assertEqual(hoja.cell(2, 3).value, "Primer error")
         self.assertEqual(hoja.cell(3, 3).value, "Segundo error")
+
+    def test_tokens_actualiza_sin_duplicar(self):
+        """Actualiza la fila de tokens correspondiente al mismo código."""
+        libro = Workbook()
+        libro.remove(libro.active)
+        crear_hojas_si_no_existen(libro)
+        metrica = MetricaTokens("M1", "Chat", 100, 1, 2000, 50, 45.45,
+                                "Alto", "Interpretación")
+        escribir_hoja_tokens(libro["Tokens"], metrica)
+        metrica.refinamientos = 2
+        escribir_hoja_tokens(libro["Tokens"], metrica)
+        hoja = libro["Tokens"]
+        self.assertEqual(hoja.max_row, 2)
+        self.assertEqual(hoja.cell(2, 4).value, 2)
+
+    def test_tokens_no_escribe_resultado_parcial(self):
+        """No crea filas de datos cuando la métrica no está disponible."""
+        libro = Workbook()
+        libro.remove(libro.active)
+        crear_hojas_si_no_existen(libro)
+        escribir_hoja_tokens(libro["Tokens"], None)
+        self.assertEqual(libro["Tokens"].max_row, 1)
 
 
 if __name__ == "__main__":

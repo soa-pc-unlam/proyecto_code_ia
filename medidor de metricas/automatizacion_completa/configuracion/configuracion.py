@@ -1,6 +1,8 @@
 """Carga y validación de la configuración y los proyectos del análisis."""
 
 import json
+import math
+from numbers import Real
 from pathlib import Path
 
 from modelos.modelos import Proyecto
@@ -53,6 +55,7 @@ def cargar_configuracion(ruta_archivo="configuracion.json"):
         "umbrales_isi",
         "ponderacion_concurrencia",
         "umbrales_concurrencia",
+        "coeficiente_penalizacion_tokens",
     ]
 
     for campo in campos_obligatorios:
@@ -62,7 +65,21 @@ def cargar_configuracion(ruta_archivo="configuracion.json"):
     for nombre in ("umbrales_cc", "umbrales_mi", "umbrales_issues", "umbrales_isi", "umbrales_concurrencia"):
         validar_umbrales(configuracion[nombre], nombre)
 
+    validar_coeficiente_penalizacion(
+        configuracion["coeficiente_penalizacion_tokens"]
+    )
+
     return configuracion
+
+
+def validar_coeficiente_penalizacion(valor):
+    """Valida el coeficiente usado para penalizar refinamientos."""
+    if isinstance(valor, bool) or not isinstance(valor, Real):
+        raise ValueError("'coeficiente_penalizacion_tokens' debe ser numérico")
+    if not math.isfinite(valor) or valor < 0:
+        raise ValueError(
+            "'coeficiente_penalizacion_tokens' debe ser mayor o igual que cero"
+        )
 
 
 def validar_umbrales(umbrales, nombre):
