@@ -133,7 +133,7 @@ def obtener_memoria(valores):
     return memoria_1, memoria_2, total
 
 
-def crear_metrica_cpu_memoria(proyecto, valores, formatos, configuracion):
+def crear_metrica_cpu_memoria(proyecto, valores, formatos, configuracion_cpu, configuracion_memoria):
     """Valida los datos y construye las métricas de CPU y memoria."""
 
     cpu_1, cpu_2, modo, cpus = obtener_cpu(valores, formatos)
@@ -146,21 +146,29 @@ def crear_metrica_cpu_memoria(proyecto, valores, formatos, configuracion):
     memoria_maxima = calcular_maximo([memoria_1, memoria_2])
     memoria_norm = memoria_promedio / memoria_total if memoria_promedio is not None and memoria_total and memoria_total > 0 else None
 
-    return construir_resultado(proyecto, valores, configuracion, cpu_1, cpu_2, modo, cpus, norm_1, norm_2, cpu_promedio, cpu_maxima, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima)
+    return construir_resultado(proyecto, valores, configuracion_cpu, configuracion_memoria, cpu_1, cpu_2, modo, cpus, norm_1, norm_2, cpu_promedio, cpu_maxima, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima)
 
 
-def construir_resultado(proyecto, valores, configuracion, cpu_1, cpu_2, modo, cpus, norm_1, norm_2, cpu_promedio, cpu_maxima, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima):
+def construir_resultado(proyecto, valores, configuracioncpu, configuracionmemoria, cpu_1, cpu_2, modo, cpus, norm_1, norm_2, cpu_promedio, cpu_maxima, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima):
     """Construye el objeto final conservando valores sin redondear."""
 
-    bajo = configuracion["umbral_bajo"]
-    medio = configuracion["umbral_medio"]
-    nivel_cpu, int_cpu = clasificar_consumo(cpu_promedio, bajo, medio, "CPU")
-    nivel_mem, int_mem = clasificar_consumo(None if memoria_norm is None else memoria_norm * 100, bajo, medio, "memoria")
+    # Clasificación de CPU
+    bajo_cpu = configuracioncpu["umbral_bajo"]
+    medio_cpu = configuracioncpu["umbral_medio"]
+
+    nivel_cpu, int_cpu = clasificar_consumo(cpu_promedio, bajo_cpu, medio_cpu, "CPU")
+
+    # Clasificación de memoria
+    bajo_mem = configuracionmemoria["umbral_bajo"]
+    medio_mem = configuracionmemoria["umbral_medio"]
+    valor_memoria = memoria_norm * 100 if memoria_norm is not None else None
+
+    nivel_mem, int_mem = clasificar_consumo(valor_memoria, bajo_mem, medio_mem, "memoria")
 
     return MetricaCpuMemoria(proyecto.codigo, proyecto.lenguaje, str(valores["Método medición"] or "").strip(), modo, cpus, str(valores["Acción 1"] or "").strip(), cpu_1, str(valores["Acción 2"] or "").strip(), cpu_2, norm_1, norm_2, cpu_promedio, cpu_maxima, nivel_cpu, int_cpu, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima, nivel_mem, int_mem)
 
 
-def analizar_cpu_memoria(proyecto, libro_entrada, configuracion, logger):
+def analizar_cpu_memoria(proyecto, libro_entrada, configuracion_cpu, configuracion_memoria, logger):
     """Lee y analiza los datos de CPU y memoria de un proyecto."""
 
     logger.debug(f"[{proyecto.codigo}] Leyendo datos de CPU y memoria")
@@ -173,4 +181,4 @@ def analizar_cpu_memoria(proyecto, libro_entrada, configuracion, logger):
         incluir_formato=True
     )
 
-    return crear_metrica_cpu_memoria(proyecto, valores, formatos, configuracion)
+    return crear_metrica_cpu_memoria(proyecto, valores, formatos, configuracion_cpu, configuracion_memoria)

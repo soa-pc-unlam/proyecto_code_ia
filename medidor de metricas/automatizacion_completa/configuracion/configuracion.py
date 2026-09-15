@@ -5,6 +5,7 @@ import math
 from numbers import Real
 from pathlib import Path
 
+from constantes import definiciones
 from modelos.modelos import Proyecto
 
 
@@ -44,22 +45,8 @@ def cargar_configuracion(ruta_archivo="configuracion.json"):
     """
     configuracion = cargar_json(ruta_archivo)
 
-    campos_obligatorios = [
-        "archivo_excel_entrada",
-        "archivo_excel_salida",
-        "carpeta_resultados",
-        "carpeta_logs",
-        "umbrales_cc",
-        "umbrales_mi",
-        "umbrales_issues",
-        "umbrales_isi",
-        "ponderacion_concurrencia",
-        "umbrales_concurrencia",
-        "coeficiente_penalizacion_tokens",
-        "cpu_memoria",
-    ]
 
-    for campo in campos_obligatorios:
+    for campo in definiciones.CAMPOS_OBLIGATORIOS_CONFIGURACION_JSON:
         if campo not in configuracion:
             raise ValueError(f"Falta el campo obligatorio en configuracion.json: {campo}")
 
@@ -69,28 +56,32 @@ def cargar_configuracion(ruta_archivo="configuracion.json"):
     validar_coeficiente_penalizacion(
         configuracion["coeficiente_penalizacion_tokens"]
     )
-    validar_configuracion_cpu_memoria(configuracion["cpu_memoria"])
+    validar_configuracion_umbrales(configuracion["uso_cpu"], "uso_cpu")
+    validar_configuracion_umbrales(configuracion["uso_memoria"], "uso_memoria")
 
     return configuracion
 
+def validar_configuracion_umbrales(configuracion, nombre):
+    """Valida una configuración con umbrales bajo y medio."""
 
-def validar_configuracion_cpu_memoria(configuracion):
-    """Valida los umbrales de clasificación de CPU y memoria."""
     if not isinstance(configuracion, dict):
-        raise ValueError("'cpu_memoria' debe ser un objeto")
+        raise ValueError(f"'{nombre}' debe ser un objeto")
 
     for campo in ("umbral_bajo", "umbral_medio"):
         if campo not in configuracion:
-            raise ValueError(f"Falta '{campo}' en 'cpu_memoria'")
+            raise ValueError(f"Falta '{campo}' en '{nombre}'")
+
         valor = configuracion[campo]
+
         if isinstance(valor, bool) or not isinstance(valor, Real):
-            raise ValueError(f"'{campo}' debe ser numérico")
+            raise ValueError(f"'{campo}' de '{nombre}' debe ser numérico")
+
         if not math.isfinite(valor) or valor < 0 or valor > 100:
-            raise ValueError(f"'{campo}' debe estar entre 0 y 100")
+            raise ValueError(f"'{campo}' de '{nombre}' debe estar entre 0 y 100")
 
     if configuracion["umbral_bajo"] >= configuracion["umbral_medio"]:
-        raise ValueError("'umbral_bajo' debe ser menor que 'umbral_medio'")
-
+        raise ValueError(f"'umbral_bajo' debe ser menor que 'umbral_medio' en '{nombre}'")
+        
 
 
 def validar_coeficiente_penalizacion(valor):

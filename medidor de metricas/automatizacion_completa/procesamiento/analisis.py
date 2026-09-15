@@ -171,7 +171,8 @@ def analizar_cpu_memoria_seguro(proyecto, configuracion, logger, libro_entrada, 
         return analizar_cpu_memoria(
             proyecto=proyecto,
             libro_entrada=libro_entrada,
-            configuracion=configuracion["cpu_memoria"],
+            configuracion_cpu=configuracion["uso_cpu"],
+            configuracion_memoria=configuracion["uso_memoria"],
             logger=logger,
         )
     except Exception as error:

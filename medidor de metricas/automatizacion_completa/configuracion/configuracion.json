@@ -136,8 +136,12 @@
       "interpretacion": "Requiere revisión"
     }
   ],
-  "cpu_memoria": {
+  "uso_cpu": {
     "umbral_bajo": 25,
     "umbral_medio": 60
+  },
+  "uso_memoria": {
+      "umbral_bajo": 25,
+      "umbral_medio": 60
   }
 }

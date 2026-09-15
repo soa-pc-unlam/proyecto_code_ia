@@ -179,6 +179,22 @@ HOJAS_REPORTE = {
     HOJA_CPU_MEMORIA_SALIDA: ENCABEZADOS_CPU_MEMORIA_SALIDA,
 }
 
+CAMPOS_OBLIGATORIOS_CONFIGURACION_JSON = [
+        "archivo_excel_entrada",
+        "archivo_excel_salida",
+        "carpeta_resultados",
+        "carpeta_logs",
+        "umbrales_cc",
+        "umbrales_mi",
+        "umbrales_issues",
+        "umbrales_isi",
+        "ponderacion_concurrencia",
+        "umbrales_concurrencia",
+        "coeficiente_penalizacion_tokens",
+        "uso_cpu",
+        "uso_memoria",
+]
+
 COLUMNA_CCN_PROMEDIO = 6
 COLUMNA_NLOC_TOTAL = 5
 COLUMNA_MI = 8
