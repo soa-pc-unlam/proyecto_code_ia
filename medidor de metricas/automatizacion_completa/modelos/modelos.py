@@ -167,6 +167,35 @@ class MetricaTokens:
 
 
 @dataclass
+class MetricaCpuMemoria:
+    """Agrupa las métricas de uso de CPU y memoria de un proyecto."""
+
+    codigo: str
+    lenguaje: str
+    metodo_medicion: str
+    modo_cpu: str
+    cpus_logicas: int | None
+    accion_1: str
+    cpu_medida_1: float | None
+    accion_2: str
+    cpu_medida_2: float | None
+    cpu_normalizada_1: float | None
+    cpu_normalizada_2: float | None
+    cpu_promedio_normalizada: float | None
+    cpu_maxima_normalizada: float | None
+    nivel_cpu: str
+    interpretacion_cpu: str
+    memoria_acc1: float | None
+    memoria_acc2: float | None
+    memoria_total: float | None
+    memoria_promedio: float | None
+    memoria_normalizada_promedio: float | None
+    memoria_maxima: float | None
+    nivel_memoria: str
+    interpretacion_memoria: str
+
+
+@dataclass
 class ResultadoProyecto:
     """Agrupa los resultados obtenidos al analizar un proyecto.
 
@@ -185,4 +214,5 @@ class ResultadoProyecto:
     metricas_bugs_smells: object = None
     metricas_concurrencia: object = None
     metricas_tokens: object = None
+    metricas_cpu_memoria: object = None
     errores: list = None

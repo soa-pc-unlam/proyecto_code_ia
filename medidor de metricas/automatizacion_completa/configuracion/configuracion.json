@@ -135,5 +135,9 @@
       "max": 2.49,
       "interpretacion": "Requiere revisión"
     }
-  ]
+  ],
+  "cpu_memoria": {
+    "umbral_bajo": 25,
+    "umbral_medio": 60
+  }
 }

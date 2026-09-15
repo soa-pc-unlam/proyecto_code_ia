@@ -16,7 +16,8 @@ PORCENTAJE_MAX_CPU = 0.65
 # Modo de logging
 MODO_LOGGING = "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
 
-
+MODO_CPU_NUCLEO = "100%=1 núcleo"
+MODO_CPU_TOTAL = "100%=capacidad total"
 
 HOJA_RESUMEN = "Resumen"
 HOJA_COMPLEJIDAD = "Complejidad"
@@ -25,9 +26,11 @@ HOJA_BUGS_SMELLS = "Bugs_Smells"
 HOJA_ERRORES = "Errores"
 HOJA_CONCURRENCIA_SALIDA = "Concurrencia"
 HOJA_TOKENS_SALIDA = "Tokens"
+HOJA_CPU_MEMORIA_SALIDA = "CPU-Memoria PC"
 
 HOJA_CONCURRENCIA_ENTRADA = "Concurrencia"
 HOJA_TOKENS_ENTRADA = "Datos Tokens"
+HOJA_CPU_MEMORIA_ENTRADA = "CPU_Memoria"
 
 ENCABEZADOS_RESUMEN = [
     "Código",
@@ -113,6 +116,46 @@ ENCABEZADOS_TOKENS_ENTRADA = [
     "Tokens registrados",
 ]
 
+
+ENCABEZADOS_CPU_MEMORIA_ENTRADA = [
+    "Método medición",
+    "Modo CPU",
+    "CPUs lógicas",
+    "Acción 1",
+    "CPU Acc1",
+    "Acción 2",
+    "CPU Acc2",
+    "Memoria Acc1 (MB)",
+    "Memoria Acc2 (MB)",
+    "MemoriaTotal (MB)",
+]
+
+ENCABEZADOS_CPU_MEMORIA_SALIDA = [
+    "Código",
+    "Lenguaje",
+    "Método medición",
+    "Modo CPU",
+    "CPUs lógicas",
+    "Acción 1",
+    "CPU medida 1",
+    "Acción 2",
+    "CPU medida 2",
+    "CPU normalizada 1",
+    "CPU normalizada 2",
+    "CPU promedio normalizada",
+    "CPU máxima normalizada",
+    "Nivel CPU",
+    "Interpretación CPU",
+    "Memoria Acc1 (MB)",
+    "Memoria Acc2 (MB)",
+    "Memoria de total (MB)",
+    "Memoria promedio (MB)",
+    "Memoria normalizada promedio (%)",
+    "Memoria máxima (MB)",
+    "Nivel memoria",
+    "Interpretación memoria",
+]
+
 ENCABEZADOS_TOKENS_SALIDA = [
     "Código",
     "Método utilizado",
@@ -133,6 +176,7 @@ HOJAS_REPORTE = {
     HOJA_ERRORES: ENCABEZADOS_ERRORES,
     HOJA_CONCURRENCIA_SALIDA: ENCABEZADOS_CONCURRENCIA_SALIDA,
     HOJA_TOKENS_SALIDA: ENCABEZADOS_TOKENS_SALIDA,
+    HOJA_CPU_MEMORIA_SALIDA: ENCABEZADOS_CPU_MEMORIA_SALIDA,
 }
 
 COLUMNA_CCN_PROMEDIO = 6
@@ -164,3 +208,4 @@ CANTIDAD_CAMPOS_MANTENIBILIDAD = len(ENCABEZADOS_MANTENIBILIDAD) - 1
 CANTIDAD_CAMPOS_CONCURRENCIA = len(ENCABEZADOS_CONCURRENCIA_SALIDA) - 1
 CANTIDAD_CAMPOS_BUGS_SMELLS = len(ENCABEZADOS_BUGS_SMELLS) - 1
 CANTIDAD_CAMPOS_TOKENS = len(ENCABEZADOS_TOKENS_SALIDA) - 1
+CANTIDAD_CAMPOS_CPU_MEMORIA = len(ENCABEZADOS_CPU_MEMORIA_SALIDA) - 1

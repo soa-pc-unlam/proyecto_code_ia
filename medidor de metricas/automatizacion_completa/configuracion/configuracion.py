@@ -56,6 +56,7 @@ def cargar_configuracion(ruta_archivo="configuracion.json"):
         "ponderacion_concurrencia",
         "umbrales_concurrencia",
         "coeficiente_penalizacion_tokens",
+        "cpu_memoria",
     ]
 
     for campo in campos_obligatorios:
@@ -68,8 +69,28 @@ def cargar_configuracion(ruta_archivo="configuracion.json"):
     validar_coeficiente_penalizacion(
         configuracion["coeficiente_penalizacion_tokens"]
     )
+    validar_configuracion_cpu_memoria(configuracion["cpu_memoria"])
 
     return configuracion
+
+
+def validar_configuracion_cpu_memoria(configuracion):
+    """Valida los umbrales de clasificación de CPU y memoria."""
+    if not isinstance(configuracion, dict):
+        raise ValueError("'cpu_memoria' debe ser un objeto")
+
+    for campo in ("umbral_bajo", "umbral_medio"):
+        if campo not in configuracion:
+            raise ValueError(f"Falta '{campo}' en 'cpu_memoria'")
+        valor = configuracion[campo]
+        if isinstance(valor, bool) or not isinstance(valor, Real):
+            raise ValueError(f"'{campo}' debe ser numérico")
+        if not math.isfinite(valor) or valor < 0 or valor > 100:
+            raise ValueError(f"'{campo}' debe estar entre 0 y 100")
+
+    if configuracion["umbral_bajo"] >= configuracion["umbral_medio"]:
+        raise ValueError("'umbral_bajo' debe ser menor que 'umbral_medio'")
+
 
 
 def validar_coeficiente_penalizacion(valor):

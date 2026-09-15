@@ -35,9 +35,9 @@ class ReportesTest(unittest.TestCase):
         crear_hojas_si_no_existen(libro)
         metrica = MetricaTokens("M1", "Chat", 100, 1, 2000, 50, 45.45,
                                 "Alto", "Interpretación")
-        escribir_hoja_tokens(libro["Tokens"], metrica)
+        escribir_hoja_tokens(libro["Tokens"], "M1", metrica)
         metrica.refinamientos = 2
-        escribir_hoja_tokens(libro["Tokens"], metrica)
+        escribir_hoja_tokens(libro["Tokens"], "M1", metrica)
         hoja = libro["Tokens"]
         self.assertEqual(hoja.max_row, 2)
         self.assertEqual(hoja.cell(2, 4).value, 2)
@@ -47,8 +47,8 @@ class ReportesTest(unittest.TestCase):
         libro = Workbook()
         libro.remove(libro.active)
         crear_hojas_si_no_existen(libro)
-        escribir_hoja_tokens(libro["Tokens"], None)
-        self.assertEqual(libro["Tokens"].max_row, 1)
+        escribir_hoja_tokens(libro["Tokens"], "M1", None)
+        self.assertEqual(libro["Tokens"].max_row, 2)
 
 
 if __name__ == "__main__":

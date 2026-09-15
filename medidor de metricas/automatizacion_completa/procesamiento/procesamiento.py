@@ -9,6 +9,7 @@ from procesamiento.analisis import (
     analizar_bugs_smells_seguro,
     analizar_complejidad,
     analizar_concurrencia_seguro,
+    analizar_cpu_memoria_seguro,
     analizar_mi,
     analizar_tokens_seguro,
 )
@@ -104,6 +105,7 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
     metricas_bugs_smells = None
     metricas_concurrencia = None
     metricas_tokens = None
+    metricas_cpu_memoria = None
 
     try:
         logger.info(f"[{proyecto.codigo}] Inicio - {proyecto.nombre_proyecto}")
@@ -151,6 +153,14 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
                 metricas_cc=metricas_cc,
                 contexto=contexto,
             )
+
+        metricas_cpu_memoria = analizar_cpu_memoria_seguro(
+            proyecto=proyecto,
+            configuracion=configuracion,
+            logger=logger,
+            libro_entrada=libro_entrada,
+            contexto=contexto,
+        )
         
     except Exception as error:
         mensaje_error = f"Error procesando proyecto: {error}"
@@ -169,6 +179,7 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
         metricas_bugs_smells=metricas_bugs_smells,
         metricas_concurrencia=metricas_concurrencia,
         metricas_tokens=metricas_tokens,
+        metricas_cpu_memoria=metricas_cpu_memoria,
         errores=list(contexto.errores),
     )
 
@@ -203,6 +214,7 @@ def guardar_resultado_proyecto(libro_salida, resultado, logger):
         metricas_bugs_smells=resultado.metricas_bugs_smells,
         metricas_concurrencia=resultado.metricas_concurrencia,
         metricas_tokens=resultado.metricas_tokens,
+        metricas_cpu_memoria=resultado.metricas_cpu_memoria,
     )
 
     for mensaje_error in resultado.errores or []:

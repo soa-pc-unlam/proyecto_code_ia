@@ -22,6 +22,8 @@ from constantes.definiciones import (
     CONFIGURACION_GRAFICOS,
     HOJA_ERRORES,
     CANTIDAD_CAMPOS_TOKENS,
+    CANTIDAD_CAMPOS_CPU_MEMORIA,
+    HOJA_CPU_MEMORIA_SALIDA,
 )
 
 def crear_o_abrir_excel_salida(archivo_excel):
@@ -151,42 +153,45 @@ def normalizar_texto(texto):
         if not unicodedata.combining(caracter)
     )
 
-
-def buscar_num_fila_por_codigo(hoja, codigo, columna_codigo=1, normalizar=True):
-    """Busca una fila por el código almacenado en la columna indicada.
+def formatear_celdas_hoja_bug_smells(hoja, codigo):
+    """Aplica formato a las celdas de la hoja de bugs y smells.
 
     Args:
-        hoja: Hoja donde se realiza la búsqueda.
-        codigo: Código de proyecto buscado.
-        columna_codigo: Columna donde se encuentran los códigos.
-        normalizar: Indica si la comparación ignora espacios externos, acentos y mayúsculas.
-
-    Returns:
-        El número de fila encontrado o ``None``.
+        hoja: Hoja de Excel donde se escriben los datos.
+        codigo: Código del proyecto.
     """
+    filas = buscar_filas_por_codigo(hoja, codigo)
+
+    if len(filas) > 1:
+        raise ValueError(f"Código duplicado '{codigo}' en {hoja.title}")
+
+    if filas:
+        fila = filas[0]
+        columna_reglas = obtener_mapa_encabezados(hoja)["Reglas incumplidas"]
+        celda_top_reglas = hoja.cell(row=fila, column=columna_reglas)
+
+        celda_top_reglas.alignment = Alignment(wrap_text=True,vertical="top")
+
+        hoja.column_dimensions[celda_top_reglas.column_letter].width = 45
+
+def buscar_filas_por_codigo(hoja, codigo, columna_codigo=1, normalizar=True):
+    """Devuelve todas las filas cuyo código coincide con el solicitado."""
+
     valor_buscado = normalizar_texto(codigo) if normalizar else codigo
+    filas = []
 
     for fila in range(2, hoja.max_row + 1):
-        valor_celda = hoja.cell(row=fila, column=columna_codigo).value
+        valor_celda = hoja.cell(
+            row=fila,
+            column=columna_codigo
+        ).value
+
         if normalizar:
             valor_celda = normalizar_texto(valor_celda)
+
         if valor_celda == valor_buscado:
-            return fila
+            filas.append(fila)
 
-    return None
-
-
-def buscar_filas_por_codigo(hoja, codigo, columna_codigo=1):
-    """Devuelve todas las filas cuyo código coincide con el solicitado."""
-    valor_buscado = normalizar_texto(codigo)
-    filas = []
-    for numero_fila, valores in enumerate(
-        hoja.iter_rows(min_row=2, values_only=True), start=2
-    ):
-        if len(valores) < columna_codigo:
-            continue
-        if normalizar_texto(valores[columna_codigo - 1]) == valor_buscado:
-            filas.append(numero_fila)
     return filas
 
 
@@ -198,11 +203,15 @@ def escribir_o_actualizar_fila(hoja, codigo, valores):
         codigo: Código usado como clave de la fila.
         valores: Valores que deben escribirse.
     """
-    fila_existente = buscar_num_fila_por_codigo(hoja, codigo)
+    filas_existentes = buscar_filas_por_codigo(hoja, codigo)
 
-    if fila_existente is None:
+    if len(filas_existentes) > 1:
+        raise ValueError(f"Código duplicado '{codigo}' en {hoja.title}")
+    elif not filas_existentes:
         hoja.append(valores)
     else:
+        fila_existente = filas_existentes[0]
+
         for columna, valor in enumerate(valores, start=1):
             hoja.cell(row=fila_existente, column=columna).value = valor
 
@@ -263,61 +272,6 @@ def obtener_columna_encabezado(encabezados, nombre, nombre_hoja):
         )
     return columna
 
-
-def leer_fila_por_codigo(
-    libro_entrada,
-    nombre_hoja,
-    codigo,
-    campos,
-):
-    """Lee los campos de la única fila que coincide con un código de proyecto.
-
-    La comparación de encabezados y códigos ignora espacios externos,
-    mayúsculas y acentos. El código se busca en la columna indicada.
-
-    Args:
-        libro_entrada: Libro Excel abierto que contiene los datos.
-        nombre_hoja (str): Nombre de la hoja que se desea consultar.
-        codigo: Código del proyecto buscado.
-        campos: Nombres de los encabezados cuyos valores se desean leer.
-
-    Returns:
-        dict: Mapa de cada nombre solicitado al valor de su celda.
-
-    Raises:
-        ValueError: Si falta la hoja, un encabezado, el código es inexistente
-            o está duplicado.
-    """
-
-    if nombre_hoja not in libro_entrada.sheetnames:
-        raise ValueError(f"No existe la solapa '{nombre_hoja}' "
-                         f"en el archivo excel con los datos de entrada.")
-
-    hoja = libro_entrada[nombre_hoja]
-    encabezados = obtener_mapa_encabezados(hoja, normalizar=True)
-    columna_codigo = obtener_columna_encabezado(
-        encabezados, "Código", nombre_hoja
-    )
-    filas = buscar_filas_por_codigo(hoja, codigo, columna_codigo)
-    if not filas:
-        raise ValueError(
-            f"No se encontró el código '{codigo}' en {nombre_hoja}"
-        )
-    if len(filas) > 1:
-        raise ValueError(
-            f"Código duplicado '{codigo}' en {nombre_hoja}"
-        )
-
-    return {
-        campo: hoja.cell(
-            row=filas[0],
-            column=obtener_columna_encabezado(
-                encabezados, campo, nombre_hoja
-            ),
-        ).value
-        for campo in campos
-    }
-
 def finalizar_libro(libro_salida, archivo_excel, incluir_graficos=False):
     """Aplica las tareas finales y guarda el libro una sola vez.
 
@@ -340,6 +294,38 @@ def finalizar_libro(libro_salida, archivo_excel, incluir_graficos=False):
     libro_salida.save(ruta_temporal)
     ruta_temporal.replace(ruta_salida)
 
+def leer_fila_por_codigo(libro_entrada, nombre_hoja, codigo, campos, incluir_formato=False):
+    """Lee los campos de una única fila identificada por código."""
+    if nombre_hoja not in libro_entrada.sheetnames:
+        raise ValueError(
+            f"No existe la solapa '{nombre_hoja}' "
+            f"en el archivo excel con los datos de entrada."
+        )
+
+    hoja = libro_entrada[nombre_hoja]
+    encabezados = obtener_mapa_encabezados(hoja, normalizar=True)
+    columna_codigo = obtener_columna_encabezado(encabezados, "Código", nombre_hoja)
+    filas = buscar_filas_por_codigo(hoja, codigo, columna_codigo)
+
+    if not filas:
+        raise ValueError(f"No se encontró el código '{codigo}' en {nombre_hoja}")
+
+    if len(filas) > 1:
+        raise ValueError(f"Código duplicado '{codigo}' en {nombre_hoja}")
+
+    valores = {}
+    formatos = {}
+
+    for campo in campos:
+        columna = obtener_columna_encabezado(encabezados, campo, nombre_hoja)
+        celda = hoja.cell(row=filas[0], column=columna)
+
+        valores[campo] = celda.value
+
+        if incluir_formato:
+            formatos[campo] = celda.number_format
+
+    return (valores, formatos) if incluir_formato else valores
 
 def guardar_resultado_excel(
     libro,
@@ -349,6 +335,7 @@ def guardar_resultado_excel(
     metricas_bugs_smells=None,
     metricas_concurrencia=None,
     metricas_tokens=None,
+    metricas_cpu_memoria=None,
 ):
     """Guarda todas las métricas de un proyecto en Excel.
 
@@ -366,6 +353,7 @@ def guardar_resultado_excel(
     hoja_bugs_smells = libro[HOJA_BUGS_SMELLS]
     hoja_concurrencia = libro[HOJA_CONCURRENCIA_SALIDA]
     hoja_tokens = libro[HOJA_TOKENS_SALIDA]
+    hoja_cpu_memoria = libro[HOJA_CPU_MEMORIA_SALIDA]
 
     escribir_hoja_resumen(hoja_resumen, proyecto, metricas_cc, metricas_mi, metricas_bugs_smells, metricas_concurrencia,metricas_tokens)
 
@@ -374,6 +362,7 @@ def guardar_resultado_excel(
     escribir_hoja_bugs_smells(hoja_bugs_smells, proyecto, metricas_bugs_smells)
     escribir_hoja_concurrencia(hoja_concurrencia, proyecto.codigo, metricas_concurrencia)
     escribir_hoja_tokens(hoja_tokens,proyecto.codigo,metricas_tokens)
+    escribir_hoja_cpu_memoria(hoja_cpu_memoria, proyecto.codigo, metricas_cpu_memoria)
 
 def escribir_hoja_resumen(
     hoja,
@@ -549,17 +538,8 @@ def escribir_hoja_bugs_smells(hoja, proyecto, metricas_bugs_smells):
             ],
         )
 
-        
-    fila = buscar_num_fila_por_codigo(hoja, proyecto.codigo)
-
-    if fila:
-        columna_reglas = obtener_mapa_encabezados(hoja)["Reglas incumplidas"]
-        celda_top_reglas = hoja.cell(row=fila, column=columna_reglas)
-
-        celda_top_reglas.alignment = Alignment(wrap_text=True, vertical="top")
-
-        hoja.column_dimensions[celda_top_reglas.column_letter].width = 45
-
+    formatear_celdas_hoja_bug_smells(hoja, proyecto.codigo)    
+    
 
 def escribir_hoja_concurrencia(hoja, codigo, metricas_concurrencia):
     """Escribe las métricas de concurrencia en la hoja correspondiente.
@@ -608,6 +588,47 @@ def escribir_hoja_tokens(hoja,proyecto_codigo, metricas_tokens):
         ]
     escribir_o_actualizar_fila(hoja, proyecto_codigo, valores)
 
+
+
+def escribir_hoja_cpu_memoria(hoja, proyecto_codigo, metricas):
+    """Agrega o actualiza las métricas de CPU y memoria de un proyecto."""
+    if metricas is None:
+        valores = [proyecto_codigo] + [""] * CANTIDAD_CAMPOS_CPU_MEMORIA
+    else:
+        valores = obtener_valores_cpu_memoria(metricas)
+    escribir_o_actualizar_fila(hoja, proyecto_codigo, valores)
+    aplicar_formato_cpu_memoria(hoja, proyecto_codigo)
+
+
+def obtener_valores_cpu_memoria(metricas):
+    """Devuelve los valores de CPU/memoria en el orden definido para la salida."""
+    return [
+        metricas.codigo, metricas.lenguaje, metricas.metodo_medicion, metricas.modo_cpu,
+        metricas.cpus_logicas, metricas.accion_1, metricas.cpu_medida_1, metricas.accion_2,
+        metricas.cpu_medida_2, metricas.cpu_normalizada_1, metricas.cpu_normalizada_2,
+        metricas.cpu_promedio_normalizada, metricas.cpu_maxima_normalizada, metricas.nivel_cpu,
+        metricas.interpretacion_cpu, metricas.memoria_acc1, metricas.memoria_acc2,
+        metricas.memoria_total, metricas.memoria_promedio, metricas.memoria_normalizada_promedio,
+        metricas.memoria_maxima, metricas.nivel_memoria, metricas.interpretacion_memoria,
+    ]
+
+
+def aplicar_formato_cpu_memoria(hoja, codigo):
+    """Aplica formatos de visualización a porcentajes y valores decimales."""
+    filas = buscar_filas_por_codigo(hoja, codigo)
+
+    if not filas:
+        raise ValueError(f"No se encontró el código '{codigo}' en {hoja.title}")
+    if len(filas) > 1:
+        raise ValueError(f"Código duplicado '{codigo}' en {hoja.title}")
+
+    fila=filas[0]
+    for columna in (7, 9, 10, 11, 12, 13):
+        hoja.cell(row=fila, column=columna).number_format = r'0.00\%'
+    hoja.cell(row=fila, column=20).number_format = '0.00%'
+
+    for columna in (16, 17, 18, 19, 21):
+        hoja.cell(row=fila, column=columna).number_format = '0.00'
 
 def formatear_top_reglas(top_reglas):
     """Convierte el ranking de reglas en texto legible.

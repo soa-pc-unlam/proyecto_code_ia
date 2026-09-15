@@ -6,6 +6,7 @@ from metricas.complejidad import ejecutar_lizard
 from metricas.concurrencia import analizar_concurrencia
 from metricas.mantenibilidad import analizar_mantenibilidad
 from metricas.tokens import analizar_tokens
+from metricas.cpu_memoria import analizar_cpu_memoria
 
 
 
@@ -163,3 +164,19 @@ def analizar_tokens_seguro(
         logger.error(f"[{proyecto.codigo}] {mensaje_error}")
         contexto.errores.append(mensaje_error)
         return None
+
+def analizar_cpu_memoria_seguro(proyecto, configuracion, logger, libro_entrada, contexto):
+    """Analiza CPU/memoria y registra el error sin interrumpir el proyecto."""
+    try:
+        return analizar_cpu_memoria(
+            proyecto=proyecto,
+            libro_entrada=libro_entrada,
+            configuracion=configuracion["cpu_memoria"],
+            logger=logger,
+        )
+    except Exception as error:
+        mensaje_error = f"Análisis CPU/memoria: {error}"
+        logger.error(f"[{proyecto.codigo}] {mensaje_error}")
+        contexto.errores.append(mensaje_error)
+        return None
+

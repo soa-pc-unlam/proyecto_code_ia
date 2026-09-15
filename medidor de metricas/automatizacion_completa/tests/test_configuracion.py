@@ -9,6 +9,7 @@ from configuracion.configuracion import (
     cargar_proyectos,
     clasificar_por_umbrales,
     validar_coeficiente_penalizacion,
+    validar_configuracion_cpu_memoria,
     validar_umbrales,
 )
 
@@ -46,6 +47,20 @@ class ConfiguracionTest(unittest.TestCase):
         for valor in (-0.1, "0.1", True, float("inf")):
             with self.assertRaises(ValueError):
                 validar_coeficiente_penalizacion(valor)
+
+
+    def test_validar_configuracion_cpu_memoria(self):
+        """Valida rango, tipos y orden de los umbrales de CPU/memoria."""
+        validar_configuracion_cpu_memoria({"umbral_bajo": 25, "umbral_medio": 60})
+        casos_invalidos = [
+            {"umbral_bajo": 60, "umbral_medio": 25},
+            {"umbral_bajo": -1, "umbral_medio": 60},
+            {"umbral_bajo": 25, "umbral_medio": 101},
+            {"umbral_bajo": "25", "umbral_medio": 60},
+        ]
+        for caso in casos_invalidos:
+            with self.assertRaises(ValueError):
+                validar_configuracion_cpu_memoria(caso)
 
 
 if __name__ == "__main__":
