@@ -48,7 +48,11 @@ ENCABEZADOS_RESUMEN = [
     "Promedio concurrencia",
     "Interpretación concurrencia",
     "Eficiencia de generación",
-    "Interpretación tokens",    
+    "Interpretación tokens",  
+    "% CPU promedio",
+    "Interpretación CPU",
+    "% Memoria promedio",
+    "Interpretación memoria",  
 ]
 
 ENCABEZADOS_COMPLEJIDAD = [

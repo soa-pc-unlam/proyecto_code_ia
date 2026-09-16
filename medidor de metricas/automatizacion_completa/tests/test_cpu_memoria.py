@@ -75,14 +75,14 @@ class CpuMemoriaTest(unittest.TestCase):
     def test_memoria_normalizada_se_almacena_como_proporcion(self):
         metrica = self.crear()
         self.assertAlmostEqual(metrica.memoria_promedio, 200)
-        self.assertAlmostEqual(metrica.memoria_normalizada_promedio, 0.20)
+        self.assertAlmostEqual(metrica.memoria_promedio_normalizada, 0.20)
         self.assertAlmostEqual(metrica.memoria_maxima, 300)
         self.assertEqual(metrica.nivel_memoria, "Bajo")
 
     def test_memoria_total_cero_no_calcula_normalizacion(self):
         self.valores["MemoriaTotal (MB)"] = 0
         metrica = self.crear()
-        self.assertIsNone(metrica.memoria_normalizada_promedio)
+        self.assertIsNone(metrica.memoria_promedio_normalizada)
         self.assertEqual(metrica.nivel_memoria, "No evaluable")
 
     def test_clasificacion_respeta_limites_sin_redondear(self):

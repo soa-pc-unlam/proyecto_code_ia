@@ -189,7 +189,7 @@ class MetricaCpuMemoria:
     memoria_acc2: float | None
     memoria_total: float | None
     memoria_promedio: float | None
-    memoria_normalizada_promedio: float | None
+    memoria_promedio_normalizada: float | None
     memoria_maxima: float | None
     nivel_memoria: str
     interpretacion_memoria: str

@@ -141,7 +141,7 @@
     "umbral_medio": 60
   },
   "uso_memoria": {
-      "umbral_bajo": 25,
+      "umbral_bajo": 30,
       "umbral_medio": 60
   }
 }

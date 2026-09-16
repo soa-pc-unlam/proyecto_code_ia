@@ -355,7 +355,7 @@ def guardar_resultado_excel(
     hoja_tokens = libro[HOJA_TOKENS_SALIDA]
     hoja_cpu_memoria = libro[HOJA_CPU_MEMORIA_SALIDA]
 
-    escribir_hoja_resumen(hoja_resumen, proyecto, metricas_cc, metricas_mi, metricas_bugs_smells, metricas_concurrencia,metricas_tokens)
+    escribir_hoja_resumen(hoja_resumen, proyecto, metricas_cc, metricas_mi, metricas_bugs_smells, metricas_concurrencia,metricas_tokens,metricas_cpu_memoria)
 
     escribir_hoja_complejidad(hoja_complejidad, proyecto.codigo, metricas_cc)
     escribir_hoja_mantenibilidad(hoja_mantenibilidad, proyecto.codigo, metricas_mi)
@@ -372,6 +372,7 @@ def escribir_hoja_resumen(
     metricas_bugs_smells=None,
     metricas_concurrencia=None,
     metricas_tokens=None,
+    metricas_cpu_memoria=None
 ):
     """Escribe las métricas de un proyecto en la hoja de resumen.
 
@@ -424,7 +425,31 @@ def escribir_hoja_resumen(
         else ""
     )
 
+    cpu_promedio = (
+        metricas_cpu_memoria.cpu_promedio_normalizada
+        if metricas_cpu_memoria
+        else ""
+    )
 
+    interpretacion_cpu = (
+        metricas_cpu_memoria.interpretacion_cpu
+        if metricas_cpu_memoria
+        else "" 
+    )
+
+    memoria_promedio = (    
+        metricas_cpu_memoria.memoria_promedio_normalizada
+        if metricas_cpu_memoria
+        else ""
+    )
+
+    interpretacion_memoria = (
+        metricas_cpu_memoria.interpretacion_memoria
+        if metricas_cpu_memoria
+        else "" 
+    )
+
+    
     valores_resumen = [
         proyecto.codigo,
         proyecto.nombre_proyecto,
@@ -442,6 +467,10 @@ def escribir_hoja_resumen(
         interpretacion_concurrencia,
         eficiencia_ponderada,
         interpretacion_tokens,
+        cpu_promedio,
+        interpretacion_cpu,
+        memoria_promedio,
+        interpretacion_memoria,
     ]
 
     escribir_o_actualizar_fila(
@@ -449,6 +478,7 @@ def escribir_hoja_resumen(
         proyecto.codigo,
         valores_resumen,
     )
+    formatear_celdas_hoja_resumen(hoja, proyecto.codigo)
 
 def escribir_hoja_complejidad(hoja, codigo, metricas_cc):
     """Escribe las métricas de complejidad en la hoja correspondiente.
@@ -608,10 +638,24 @@ def obtener_valores_cpu_memoria(metricas):
         metricas.cpu_medida_2, metricas.cpu_normalizada_1, metricas.cpu_normalizada_2,
         metricas.cpu_promedio_normalizada, metricas.cpu_maxima_normalizada, metricas.nivel_cpu,
         metricas.interpretacion_cpu, metricas.memoria_acc1, metricas.memoria_acc2,
-        metricas.memoria_total, metricas.memoria_promedio, metricas.memoria_normalizada_promedio,
+        metricas.memoria_total, metricas.memoria_promedio, metricas.memoria_promedio_normalizada,
         metricas.memoria_maxima, metricas.nivel_memoria, metricas.interpretacion_memoria,
     ]
 
+def formatear_celdas_hoja_resumen(hoja, codigo):
+    """Aplica formato a las celdas de la hoja Resumen."""
+
+    filas = buscar_filas_por_codigo(hoja, codigo)
+
+    if len(filas) > 1:
+        raise ValueError(f"Código duplicado '{codigo}' en {hoja.title}")
+
+    if filas:
+        fila = filas[0]
+        columnas = obtener_mapa_encabezados(hoja)
+
+        hoja.cell(row=fila, column=columnas["% CPU promedio"]).number_format = r'0.00\%'
+        hoja.cell(row=fila, column=columnas["% Memoria promedio"]).number_format = r'0.00\%'
 
 def aplicar_formato_cpu_memoria(hoja, codigo):
     """Aplica formatos de visualización a porcentajes y valores decimales."""
@@ -625,7 +669,7 @@ def aplicar_formato_cpu_memoria(hoja, codigo):
     fila=filas[0]
     for columna in (7, 9, 10, 11, 12, 13):
         hoja.cell(row=fila, column=columna).number_format = r'0.00\%'
-    hoja.cell(row=fila, column=20).number_format = '0.00%'
+    hoja.cell(row=fila, column=20).number_format = r'0.00\%'
 
     for columna in (16, 17, 18, 19, 21):
         hoja.cell(row=fila, column=columna).number_format = '0.00'
