@@ -28,6 +28,10 @@ from constantes.definiciones import (
     TEXTO_ENCABEZADO_CPU_PROMEDIO,
     TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN,
     TEXTO_ENCABEZADO_REGLAS_INCUMPLIDAS,
+    COLOR_ENCABEZADO_RESUMEN,
+    COLOR_CODIGO_RESUMEN,
+    COLOR_DATOS_PROYECTO_RESUMEN,
+    COLOR_INTERPRETACION_RESUMEN,
 )
 
 def crear_o_abrir_excel_salida(archivo_excel):
@@ -658,8 +662,42 @@ def formatear_celdas_hoja_resumen(hoja, codigo):
         fila = filas[0]
         columnas = obtener_mapa_encabezados(hoja)
 
-        hoja.cell(row=fila, column=columnas[TEXTO_ENCABEZADO_CPU_PROMEDIO]).number_format = r'0.00\%'
-        hoja.cell(row=fila, column=columnas[TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN]).number_format = r'0.00\%'
+        # Encabezados amarillos
+        for celda in hoja[1]:
+            celda.fill = PatternFill(
+                "solid",
+                fgColor=COLOR_ENCABEZADO_RESUMEN
+            )
+
+        # Código en verde oscuro
+        hoja.cell(row=fila, column=1).fill = PatternFill(
+            "solid",
+            fgColor=COLOR_CODIGO_RESUMEN
+        )
+
+        # Nombre del proyecto hasta Lenguaje en verde claro
+        for columna in range(2, 6):
+            hoja.cell(row=fila, column=columna).fill = PatternFill(
+                "solid",
+                fgColor=COLOR_DATOS_PROYECTO_RESUMEN
+            )
+
+        # Nivel e interpretaciones en azul
+        for columna in (7, 9, 12, 14, 16, 18, 20):
+            hoja.cell(row=fila, column=columna).fill = PatternFill(
+                "solid",
+                fgColor=COLOR_INTERPRETACION_RESUMEN
+            )
+
+        hoja.cell(
+            row=fila,
+            column=columnas[TEXTO_ENCABEZADO_CPU_PROMEDIO]
+        ).number_format = r'0.00\%'
+
+        hoja.cell(
+            row=fila,
+            column=columnas[TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN]
+        ).number_format = r'0.00\%'
 
 def aplicar_formato_cpu_memoria(hoja, codigo):
     """Aplica formatos de visualización a porcentajes y valores decimales."""
