@@ -24,6 +24,10 @@ from constantes.definiciones import (
     CANTIDAD_CAMPOS_TOKENS,
     CANTIDAD_CAMPOS_CPU_MEMORIA,
     HOJA_CPU_MEMORIA_SALIDA,
+    TEXTO_ENCABEZADO_CODIGO,
+    TEXTO_ENCABEZADO_CPU_PROMEDIO,
+    TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN,
+    TEXTO_ENCABEZADO_REGLAS_INCUMPLIDAS,
 )
 
 def crear_o_abrir_excel_salida(archivo_excel):
@@ -167,7 +171,7 @@ def formatear_celdas_hoja_bug_smells(hoja, codigo):
 
     if filas:
         fila = filas[0]
-        columna_reglas = obtener_mapa_encabezados(hoja)["Reglas incumplidas"]
+        columna_reglas = obtener_mapa_encabezados(hoja)[TEXTO_ENCABEZADO_REGLAS_INCUMPLIDAS]
         celda_top_reglas = hoja.cell(row=fila, column=columna_reglas)
 
         celda_top_reglas.alignment = Alignment(wrap_text=True,vertical="top")
@@ -304,7 +308,7 @@ def leer_fila_por_codigo(libro_entrada, nombre_hoja, codigo, campos, incluir_for
 
     hoja = libro_entrada[nombre_hoja]
     encabezados = obtener_mapa_encabezados(hoja, normalizar=True)
-    columna_codigo = obtener_columna_encabezado(encabezados, "Código", nombre_hoja)
+    columna_codigo = obtener_columna_encabezado(encabezados,TEXTO_ENCABEZADO_CODIGO, nombre_hoja)
     filas = buscar_filas_por_codigo(hoja, codigo, columna_codigo)
 
     if not filas:
@@ -654,8 +658,8 @@ def formatear_celdas_hoja_resumen(hoja, codigo):
         fila = filas[0]
         columnas = obtener_mapa_encabezados(hoja)
 
-        hoja.cell(row=fila, column=columnas["% CPU promedio"]).number_format = r'0.00\%'
-        hoja.cell(row=fila, column=columnas["% Memoria promedio"]).number_format = r'0.00\%'
+        hoja.cell(row=fila, column=columnas[TEXTO_ENCABEZADO_CPU_PROMEDIO]).number_format = r'0.00\%'
+        hoja.cell(row=fila, column=columnas[TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN]).number_format = r'0.00\%'
 
 def aplicar_formato_cpu_memoria(hoja, codigo):
     """Aplica formatos de visualización a porcentajes y valores decimales."""

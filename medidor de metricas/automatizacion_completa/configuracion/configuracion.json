@@ -56,61 +56,39 @@
       "interpretacion": "Muy buena mantenibilidad"
     }
   ],
-  "umbrales_issues": [
-    {
-      "min": 0,
-      "max": 20,
-      "nivel": "Bajo",
-      "interpretacion": "Baja densidad de problemas"
-    },
-    {
-      "min": 20.01,
-      "max": 50,
-      "nivel": "Moderado",
-      "interpretacion": "Densidad aceptable"
-    },
-    {
-      "min": 50.01,
-      "max": 100,
-      "nivel": "Alto",
-      "interpretacion": "Alta densidad de problemas"
-    },
-    {
-      "min": 100.01,
-      "max": null,
-      "nivel": "Muy alto",
-      "interpretacion": "Revisar calidad del código"
-    }
-  ],
   "umbrales_isi": [
     {
       "min": 0,
       "max": 0,
       "nivel": "Sin issues",
-      "interpretacion": "No se detectaron issues"
+      "interpretacion": "No se detectaron issues",
+      "observacion":  "Sin issues"
     },
     {
       "min": 1,
       "max": 1.49,
-      "nivel": "Baja",
-      "interpretacion": "Predominan issues bajos"
+      "nivel": "Bajo",
+      "interpretacion": "Predominan issues bajos",
+      "observacion" : "solo issues bajos"
     },
     {
       "min": 1.5,
       "max": 2.49,
-      "nivel": "Moderada",
-      "interpretacion": "Predominan issues medios"
+      "nivel": "Moderado",
+      "interpretacion": "Predominan issues medios",
+      "observacion": "Contiene issues medios"
     },
     {
       "min": 2.5,
       "max": 3.99,
-      "nivel": "Alta",
-      "interpretacion": "Presencia de issues altos"
+      "nivel": "Alto",
+      "interpretacion": "Presencia de issues altos",
+      "observacion": "Contiene issues altos"
     },
     {
       "min": 4,
       "max": null,
-      "nivel": "Muy alta",
+      "nivel": "Muy alto",
       "interpretacion": "Predominan issues altos"
     }
   ],
@@ -136,12 +114,64 @@
       "interpretacion": "Requiere revisión"
     }
   ],
-  "uso_cpu": {
-    "umbral_bajo": 25,
-    "umbral_medio": 60
-  },
-  "uso_memoria": {
-      "umbral_bajo": 30,
-      "umbral_medio": 60
-  }
+  "umbrales_uso_cpu": [
+    {
+      "min": 0,
+      "max": 24.9,
+      "nivel": "Bajo",
+      "interpretacion": "Consumo bajo de CPU"
+    },
+    {
+      "min": 25,
+      "max": 59.9,
+      "nivel": "Medio",
+      "interpretacion": "Consumo medio de CPU"
+    },
+    {
+      "min": 60,
+      "max": 100,
+      "nivel": "Alto",
+      "interpretacion": "Consumo alto de CPU"
+    }
+  ],
+  "umbrales_uso_mem": [
+    {
+      "min": 0,
+      "max": 29.9,
+      "nivel": "Bajo",
+      "interpretacion": "Consumo bajo de CPU"
+    },
+    {
+      "min": 30,
+      "max": 59.9,
+      "nivel": "Medio",
+      "interpretacion": "Consumo medio de CPU"
+    },
+    {
+      "min": 60,
+      "max": 100,
+      "nivel": "Alto",
+      "interpretacion": "Consumo alto de CPU"
+    }
+  ],
+  "umbrales_token": [
+    {
+      "min": 0,
+      "max": 9.9,
+      "nivel": "Bajo",
+      "interpretacion": "Bajo NLOC/token, ajustada por refinamientos."
+    },
+    {
+      "min": 10,
+      "max": 29.9,
+      "nivel": "Medio",
+      "interpretacion": "Medio NLOC/token, ajustada por refinamientos."
+    },
+    {
+      "min": 30,
+      "max": 1000,
+      "nivel": "Alto",
+      "interpretacion": "Alto NLOC/token, ajustada por refinamientos."
+    }
+  ]
 }

@@ -1,10 +1,18 @@
 """Cálculo de métricas a partir de la rúbrica de concurrencia."""
 
+from configuracion.configuracion import clasificar_concurrencia
 from modelos.modelos import MetricaConcurrencia
 from reportes.excel import leer_fila_por_codigo
 from constantes.definiciones import (
     HOJA_CONCURRENCIA_ENTRADA,
     ENCABEZADOS_CONCURRENCIA_ENTRADA,
+    TEXTO_ENCABEZADO_AUSENCIA_CONDICION_CARRERA,
+    TEXTO_ENCABEZADO_AUSENCIA_DEADLOCKS,
+    TEXTO_ENCABEZADO_SINCRONIZACION_CORRECTA,
+    TEXTO_ENCABEZADO_USO_CORRECTO_EXCLUSION_MUTUA,
+    TEXTO_CAMPO_INTERPRETACION,
+    TEXTO_CAMPO_MAX,
+    TEXTO_CAMPO_MIN
 )
 
 def obtener_puntaje(valor, ponderacion):
@@ -67,12 +75,12 @@ def interpretar_concurrencia(promedio, umbrales):
         La interpretación encontrada o un texto sustituto.
     """
     for umbral in umbrales:
-        minimo = umbral["min"]
-        maximo = umbral["max"]
+        minimo = umbral[TEXTO_CAMPO_MIN]
+        maximo = umbral[TEXTO_CAMPO_MAX]
         if maximo is None and promedio >= minimo:
-            return umbral["interpretacion"]
+            return umbral[TEXTO_CAMPO_INTERPRETACION]
         if maximo is not None and minimo <= promedio <= maximo:
-            return umbral["interpretacion"]
+            return umbral[TEXTO_CAMPO_INTERPRETACION]
     return "Sin interpretación"
 
 
@@ -90,13 +98,13 @@ def crear_metrica_concurrencia(codigo, valores, ponderacion, umbrales):
     """
     puntajes = calcular_puntajes(valores, ponderacion)
     promedio = calcular_promedio(puntajes)
-    interpretacion = interpretar_concurrencia(promedio, umbrales)
+    interpretacion = clasificar_concurrencia(promedio,umbrales)
     return MetricaConcurrencia(
         codigo=codigo,
-        sincronizacion_correcta=valores["Sincronización correcta"],
-        ausencia_de_deadlocks=valores["Ausencia de deadlocks"],
-        ausencia_de_condicion_de_carrera=valores["Ausencia de condición de carrera"],
-        uso_correcto_de_exclusion_mutua=valores["Uso correcto de exclusión mutua"],
+        sincronizacion_correcta=valores[TEXTO_ENCABEZADO_SINCRONIZACION_CORRECTA],
+        ausencia_de_deadlocks=valores[TEXTO_ENCABEZADO_AUSENCIA_DEADLOCKS],
+        ausencia_de_condicion_de_carrera=valores[TEXTO_ENCABEZADO_AUSENCIA_CONDICION_CARRERA],
+        uso_correcto_de_exclusion_mutua=valores[TEXTO_ENCABEZADO_USO_CORRECTO_EXCLUSION_MUTUA],
         promedio=promedio,
         interpretacion=interpretacion,
     )

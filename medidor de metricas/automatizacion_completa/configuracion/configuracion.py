@@ -50,38 +50,21 @@ def cargar_configuracion(ruta_archivo="configuracion.json"):
         if campo not in configuracion:
             raise ValueError(f"Falta el campo obligatorio en configuracion.json: {campo}")
 
-    for nombre in ("umbrales_cc", "umbrales_mi", "umbrales_issues", "umbrales_isi", "umbrales_concurrencia"):
-        validar_umbrales(configuracion[nombre], nombre)
+    for nombre in (
+        definiciones.TEXTO_CAMPO_UMBRALES_CC,
+        definiciones.TEXTO_CAMPO_UMBRALES_MI,
+        definiciones.TEXTO_CAMPO_UMBRALES_ISI,
+        definiciones.TEXTO_CAMPO_UMBRALES_CONCURRENCIA,
+    ):
+        validar_umbrales(configuracion[nombre], nombre)        
 
     validar_coeficiente_penalizacion(
         configuracion["coeficiente_penalizacion_tokens"]
     )
-    validar_configuracion_umbrales(configuracion["uso_cpu"], "uso_cpu")
-    validar_configuracion_umbrales(configuracion["uso_memoria"], "uso_memoria")
+    validar_umbrales(configuracion[definiciones.TEXTO_CAMPO_UMBRALES_CPU], definiciones.TEXTO_CAMPO_UMBRALES_CPU)
+    validar_umbrales(configuracion[definiciones.TEXTO_CAMPO_UMBRALES_MEM], definiciones.TEXTO_CAMPO_UMBRALES_MEM)
 
     return configuracion
-
-def validar_configuracion_umbrales(configuracion, nombre):
-    """Valida una configuración con umbrales bajo y medio."""
-
-    if not isinstance(configuracion, dict):
-        raise ValueError(f"'{nombre}' debe ser un objeto")
-
-    for campo in ("umbral_bajo", "umbral_medio"):
-        if campo not in configuracion:
-            raise ValueError(f"Falta '{campo}' en '{nombre}'")
-
-        valor = configuracion[campo]
-
-        if isinstance(valor, bool) or not isinstance(valor, Real):
-            raise ValueError(f"'{campo}' de '{nombre}' debe ser numérico")
-
-        if not math.isfinite(valor) or valor < 0 or valor > 100:
-            raise ValueError(f"'{campo}' de '{nombre}' debe estar entre 0 y 100")
-
-    if configuracion["umbral_bajo"] >= configuracion["umbral_medio"]:
-        raise ValueError(f"'umbral_bajo' debe ser menor que 'umbral_medio' en '{nombre}'")
-        
 
 
 def validar_coeficiente_penalizacion(valor):
@@ -110,7 +93,7 @@ def validar_umbrales(umbrales, nombre):
     for posicion, umbral in enumerate(umbrales, start=1):
         if not isinstance(umbral, dict) or "min" not in umbral or "max" not in umbral:
             raise ValueError(f"Umbral {posicion} inválido en '{nombre}'")
-        if umbral["max"] is not None and umbral["min"] > umbral["max"]:
+        if umbral[definiciones.TEXTO_CAMPO_MAX] is not None and umbral[definiciones.TEXTO_CAMPO_MIN] > umbral[definiciones.TEXTO_CAMPO_MAX]:
             raise ValueError(f"Rango invertido en el umbral {posicion} de '{nombre}'")
 
 def cargar_proyectos(ruta_archivo="proyectos.json"):
@@ -164,30 +147,34 @@ def cargar_proyectos(ruta_archivo="proyectos.json"):
     return proyectos
 
 
-def clasificar_por_umbrales(valor, umbrales, nivel_sin_datos="Sin clasificar", interpretacion_sin_datos="No se encontró un criterio aplicable"):
-    """Clasifica un valor mediante una colección de intervalos.
+def clasificar_por_umbrales(valor, umbrales):
+    """Retorna el umbral correspondiente al valor."""
+
+    for umbral in umbrales:
+        minimo = umbral[definiciones.TEXTO_CAMPO_MIN]
+        maximo = umbral[definiciones.TEXTO_CAMPO_MAX]
+
+        if (maximo is None) and (valor >= minimo) or (maximo is not None) and (minimo <= valor <= maximo):
+            return umbral
+
+    return None
+
+
+
+def clasificar_mi(mi, umbrales):
+    """Clasifica un índice de mantenibilidad según los umbrales.
 
     Args:
-        valor: Valor numérico que se desea clasificar.
-        umbrales: Intervalos con nivel e interpretación asociados.
-        nivel_sin_datos: Nivel usado cuando ningún intervalo coincide.
-        interpretacion_sin_datos: Interpretación usada sin coincidencias.
+        mi: Índice de mantenibilidad.
+        umbrales: Intervalos de clasificación configurados.
 
     Returns:
-        Una tupla con el nivel y la interpretación correspondientes.
+        Una tupla con el nivel y su interpretación.
     """
-    for umbral in umbrales:
-        minimo = umbral["min"]
-        maximo = umbral["max"]
-
-        if maximo is None and valor >= minimo:
-            return umbral["nivel"], umbral["interpretacion"]
-
-        if maximo is not None and minimo <= valor <= maximo:
-            return umbral["nivel"], umbral["interpretacion"]
-
-    return nivel_sin_datos, interpretacion_sin_datos
-
+    resultado = clasificar_por_umbrales(mi, umbrales)
+      
+    return resultado[definiciones.TEXTO_CAMPO_NIVEL], resultado[definiciones.TEXTO_CAMPO_INTERPRETACION]
+      
 
 def clasificar_ccn(ccn_promedio, umbrales):
     """Clasifica una complejidad ciclomática promedio.
@@ -202,30 +189,32 @@ def clasificar_ccn(ccn_promedio, umbrales):
     if ccn_promedio <= 0:
         return "Sin funciones", "No se detectaron funciones analizables"
 
-    return clasificar_por_umbrales(ccn_promedio, umbrales)
+    resultado = clasificar_por_umbrales(ccn_promedio, umbrales)
+    
+    return resultado[definiciones.TEXTO_CAMPO_NIVEL], resultado[definiciones.TEXTO_CAMPO_INTERPRETACION]
+
+def clasificar_uso_cpu(cpu_promedio, umbrales):
+    resultado = clasificar_por_umbrales(cpu_promedio, umbrales)
+
+    return resultado[definiciones.TEXTO_CAMPO_NIVEL], resultado[definiciones.TEXTO_CAMPO_INTERPRETACION]  
+
+def clasificar_uso_mem(cpu_promedio, umbrales):
+    resultado = clasificar_por_umbrales(cpu_promedio, umbrales)
+
+    return resultado[definiciones.TEXTO_CAMPO_NIVEL], resultado[definiciones.TEXTO_CAMPO_INTERPRETACION]
+
+def clasificar_isi(issues_kloc, umbrales):
+    resultado = clasificar_por_umbrales(issues_kloc, umbrales)
+
+    return resultado[definiciones.TEXTO_CAMPO_NIVEL], resultado[definiciones.TEXTO_CAMPO_INTERPRETACION], resultado[definiciones.TEXTO_CAMPO_OBSERVACION]
 
 
-def clasificar_issues(issues_kloc, umbrales):
-    """Clasifica la cantidad de incidencias por mil líneas de código.
+def clasificar_concurrencia(promedio, umbrales):
+    resultado = clasificar_por_umbrales(promedio, umbrales)
 
-    Args:
-        issues_kloc: Cantidad de incidencias por KLOC.
-        umbrales: Intervalos de clasificación configurados.
+    return resultado[definiciones.TEXTO_CAMPO_INTERPRETACION]
 
-    Returns:
-        Una tupla con el nivel y su interpretación.
-    """
-    return clasificar_por_umbrales(issues_kloc, umbrales)
+def clasificar_eficiencia_token(promedio_ponderada, umbrales):
+    resultado = clasificar_por_umbrales(promedio_ponderada, umbrales)
 
-
-def clasificar_isi(isi, umbrales):
-    """Clasifica un índice de severidad de incidencias.
-
-    Args:
-        isi: Índice de severidad de incidencias.
-        umbrales: Intervalos de clasificación configurados.
-
-    Returns:
-        Una tupla con el nivel y su interpretación.
-    """
-    return clasificar_por_umbrales(isi, umbrales)
+    return resultado[definiciones.TEXTO_CAMPO_NIVEL], resultado[definiciones.TEXTO_CAMPO_INTERPRETACION]

@@ -7,6 +7,18 @@ from metricas.concurrencia import analizar_concurrencia
 from metricas.mantenibilidad import analizar_mantenibilidad
 from metricas.tokens import analizar_tokens
 from metricas.cpu_memoria import analizar_cpu_memoria
+from constantes.definiciones import(
+    TEXTO_CAMPO_CARPETA_RESULTADOS,
+    TEXTO_CAMPO_COEFICIENTE_PENALIZACION_TOKENS,
+    TEXTO_CAMPO_PONDERACION_CONCURRENCIA,
+    TEXTO_CAMPO_UMBRALES_CC,
+    TEXTO_CAMPO_UMBRALES_CONCURRENCIA,
+    TEXTO_CAMPO_UMBRALES_ISI,
+    TEXTO_CAMPO_UMBRALES_MI,
+    TEXTO_CAMPO_UMBRALES_CPU,
+    TEXTO_CAMPO_UMBRALES_MEM,
+    TEXTO_CAMPO_UMBRALES_TOKEN
+)
 
 
 
@@ -25,7 +37,7 @@ def analizar_complejidad(proyecto, configuracion, logger, contexto):
     try:
         metricas, archivo_csv = ejecutar_lizard(
             proyecto=proyecto,
-            carpeta_resultados=configuracion["carpeta_resultados"],
+            carpeta_resultados=configuracion[TEXTO_CAMPO_CARPETA_RESULTADOS],
             logger=logger,
         )
 
@@ -33,7 +45,7 @@ def analizar_complejidad(proyecto, configuracion, logger, contexto):
 
         nivel_cc, interpretacion_cc = clasificar_ccn(
             metricas.ccn_promedio,
-            configuracion["umbrales_cc"],
+            configuracion[TEXTO_CAMPO_UMBRALES_CC],
         )
         metricas.nivel_cc = nivel_cc
         metricas.interpretacion_cc = interpretacion_cc
@@ -65,8 +77,8 @@ def analizar_mi(proyecto, configuracion, logger, contexto):
         return analizar_mantenibilidad(
             proyecto=proyecto,
             archivo_csv_lizard=contexto.archivo_csv_lizard,
-            carpeta_resultados=configuracion["carpeta_resultados"],
-            umbrales_mi=configuracion["umbrales_mi"],
+            carpeta_resultados=configuracion[TEXTO_CAMPO_CARPETA_RESULTADOS],
+            umbrales_mi=configuracion[TEXTO_CAMPO_UMBRALES_MI],
             logger=logger,
         )
     except Exception as error:
@@ -103,9 +115,8 @@ def analizar_bugs_smells_seguro(
     try:
         return analizar_bugs_smells(
             proyecto=proyecto,
-            carpeta_resultados=configuracion["carpeta_resultados"],
-            umbrales_issues=configuracion["umbrales_issues"],
-            umbrales_isi=configuracion["umbrales_isi"],
+            carpeta_resultados=configuracion[TEXTO_CAMPO_CARPETA_RESULTADOS],
+            umbrales_isi=configuracion[TEXTO_CAMPO_UMBRALES_ISI],
             logger=logger,
             loc_codigo=metricas_mi.nloc_mi,
         )
@@ -133,8 +144,8 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, libro_entrada,
     try:
         return analizar_concurrencia(
             proyecto=proyecto,
-            ponderacion=configuracion["ponderacion_concurrencia"],
-            umbrales=configuracion["umbrales_concurrencia"],
+            ponderacion=configuracion[TEXTO_CAMPO_PONDERACION_CONCURRENCIA],
+            umbrales=configuracion[TEXTO_CAMPO_UMBRALES_CONCURRENCIA],
             logger=logger,
             libro_entrada=libro_entrada
         )
@@ -156,7 +167,8 @@ def analizar_tokens_seguro(
             proyecto=proyecto,
             libro_entrada=libro_entrada,
             nloc_total=metricas_cc.nloc_total,
-            coeficiente=configuracion["coeficiente_penalizacion_tokens"],
+            umbrales=configuracion[TEXTO_CAMPO_UMBRALES_TOKEN],
+            coeficiente=configuracion[TEXTO_CAMPO_COEFICIENTE_PENALIZACION_TOKENS],
             logger=logger,
         )
     except Exception as error:
@@ -171,8 +183,8 @@ def analizar_cpu_memoria_seguro(proyecto, configuracion, logger, libro_entrada, 
         return analizar_cpu_memoria(
             proyecto=proyecto,
             libro_entrada=libro_entrada,
-            configuracion_cpu=configuracion["uso_cpu"],
-            configuracion_memoria=configuracion["uso_memoria"],
+            configuracion_cpu=configuracion[TEXTO_CAMPO_UMBRALES_CPU],
+            configuracion_memoria=configuracion[TEXTO_CAMPO_UMBRALES_MEM],
             logger=logger,
         )
     except Exception as error:

@@ -21,21 +21,21 @@ def main():
         configuracion = cargar_configuracion(definiciones.CONFIGURACION_JSON)
         inicializar_directorios(configuracion)
 
-        logger = configurar_logger(configuracion["carpeta_logs"])
+        logger = configurar_logger(configuracion[definiciones.TEXTO_CAMPO_CARPETA_LOGS])
         logger.info("Inicio del análisis de métricas")
 
         limitar_cpu(definiciones.PORCENTAJE_MAX_CPU, logger)
 
         proyectos = cargar_proyectos(definiciones.DATOS_PROYECTOS_JSON)
-        libro_salida = crear_o_abrir_excel_salida(configuracion["archivo_excel_salida"])
+        libro_salida = crear_o_abrir_excel_salida(configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA])
 
-        libro_entrada = abrir_excel_entrada(configuracion["archivo_excel_entrada"])
+        libro_entrada = abrir_excel_entrada(configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_ENTRADA])
 
         gestionar_procesamiento_proyectos(proyectos, configuracion, libro_salida,libro_entrada, logger)
 
         finalizar_libro(
             libro_salida,
-            configuracion["archivo_excel_salida"],
+            configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA],
             incluir_graficos=True,
         )
         informar_resultados_finales(logger, configuracion)
@@ -63,8 +63,8 @@ def inicializar_directorios(configuracion):
     Raises:
         OSError: Si no es posible crear alguno de los directorios.
     """
-    crear_directorio(configuracion["carpeta_resultados"])
-    crear_directorio(configuracion["carpeta_logs"])
+    crear_directorio(configuracion[definiciones.TEXTO_CAMPO_CARPETA_RESULTADOS])
+    crear_directorio(configuracion[definiciones.TEXTO_CAMPO_CARPETA_LOGS])
 
 
 def informar_resultados_finales(logger, configuracion):
@@ -80,7 +80,7 @@ def informar_resultados_finales(logger, configuracion):
     logger.info("=" * 24)
     logger.info(
         "Informe creado en el archivo Excel: "
-        + str(configuracion["archivo_excel_salida"])
+        + str(configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA])
     )
 
 

@@ -10,19 +10,19 @@ import xml.etree.ElementTree as ET
 from collections import Counter
 from pathlib import Path, PureWindowsPath
 
+from constantes.definiciones import  ISSUE_CATEGORIA, ISSUE_REGLA, ISSUE_SEVERIDAD, ISSUE_SEVERIDAD_ALTA, ISSUE_SEVERIDAD_BAJA, ISSUE_SEVERIDAD_MEDIA
 from util.archivos import crear_directorio, validar_ruta_proyecto
-from configuracion.configuracion import clasificar_issues, clasificar_isi
+from configuracion.configuracion import clasificar_isi
 from util.lenguajes import normalizar_lenguaje
 from modelos.modelos import MetricaBugsSmells
 
 
-def analizar_bugs_smells(proyecto, carpeta_resultados, umbrales_issues, umbrales_isi, logger, loc_codigo=None):
+def analizar_bugs_smells(proyecto, carpeta_resultados, umbrales_isi, logger, loc_codigo=None):
     """Ejecuta el analizador adecuado y genera las métricas de incidencias.
 
     Args:
         proyecto: Proyecto que debe analizarse.
         carpeta_resultados: Directorio para los reportes generados.
-        umbrales_issues: Umbrales de incidencias por KLOC.
         umbrales_isi: Umbrales del índice de severidad.
         logger: Logger utilizado para registrar la ejecución.
         loc_codigo: Líneas de código conocidas, si están disponibles.
@@ -50,7 +50,7 @@ def analizar_bugs_smells(proyecto, carpeta_resultados, umbrales_issues, umbrales
 
     loc = loc_codigo if loc_codigo is not None else 0
 
-    metricas = calcular_metricas_bugs_smells(analizador, issues, loc, umbrales_issues, umbrales_isi)
+    metricas = calcular_metricas_bugs_smells(analizador, issues, loc, umbrales_isi)
     generar_resumen_bugs_smells_txt(proyecto, metricas, loc, issues, archivo_txt)
 
     return metricas
@@ -419,10 +419,10 @@ def clasificar_severidad_detekt(regla):
     ]
 
     if any(valor in regla for valor in alta):
-        return "Alta"
+        return ISSUE_SEVERIDAD_ALTA
     if any(valor in regla for valor in media):
-        return "Media"
-    return "Baja"
+        return ISSUE_SEVERIDAD_MEDIA
+    return ISSUE_SEVERIDAD_BAJA
 
 
 def clasificar_categoria_detekt(regla):
@@ -447,14 +447,13 @@ def clasificar_categoria_detekt(regla):
     return "Otros"
 
 
-def calcular_metricas_bugs_smells(analizador, issues, loc, umbrales_issues, umbrales_isi):
+def calcular_metricas_bugs_smells(analizador, issues, loc, umbrales_isi):
     """Agrega incidencias en métricas comparables de calidad.
 
     Args:
         analizador: Nombre del analizador utilizado.
         issues: Incidencias detectadas.
         loc: Cantidad de líneas de código analizadas.
-        umbrales_issues: Umbrales de incidencias por KLOC.
         umbrales_isi: Umbrales del índice de severidad.
 
     Returns:
@@ -463,23 +462,23 @@ def calcular_metricas_bugs_smells(analizador, issues, loc, umbrales_issues, umbr
     total_issues = len(issues)
     issues_kloc = round((total_issues / loc) * 1000, 2) if loc > 0 else 0.0
     
-    severidades = Counter(issue["severidad"] for issue in issues)
-    reglas = Counter(issue["regla"] for issue in issues)
+    severidades = Counter(issue[ISSUE_SEVERIDAD] for issue in issues)
+    reglas = Counter(issue[ISSUE_REGLA] for issue in issues)
 
-    cantidad_alta = severidades["Alta"]
-    cantidad_media = severidades["Media"]
-    cantidad_baja = severidades["Baja"]
+    cantidad_alta = severidades[ISSUE_SEVERIDAD_ALTA]
+    cantidad_media = severidades[ISSUE_SEVERIDAD_MEDIA]
+    cantidad_baja = severidades[ISSUE_SEVERIDAD_BAJA]
     
     isi = calcular_isi(cantidad_alta, cantidad_media, cantidad_baja, total_issues)
-    nivel_isi, interpretacion_isi = clasificar_isi(isi, umbrales_isi)
+    nivel_isi, interpretacion_isi,observacion = clasificar_isi(isi, umbrales_isi)
 
-    if cantidad_alta > 0:
-        observacion = "Contiene issues altos"
+    """if cantidad_alta > 0:
+        observacion = INTERPRETACION_ISSUE_ALTOS
     elif cantidad_media > 0:
-        observacion= "Contiene issues medios"
+        observacion= INTERPRETACION_ISSUE_MEDIOS
     else:
-        observacion = "Solo issues bajos"
-    
+        observacion = INTERPRETACION_ISSUE_BAJOS
+    """
     return MetricaBugsSmells(
         analizador=analizador,
         total_issues=total_issues,
@@ -524,8 +523,8 @@ def generar_resumen_bugs_smells_txt(proyecto, metricas, loc, issues, archivo_txt
         issues: Detalle de incidencias detectadas.
         archivo_txt: Ruta del archivo de salida.
     """
-    severidades = Counter(issue["severidad"] for issue in issues)
-    categorias = Counter(issue["categoria"] for issue in issues)
+    severidades = Counter(issue[ISSUE_SEVERIDAD] for issue in issues)
+    categorias = Counter(issue[ISSUE_CATEGORIA] for issue in issues)
 
     with open(archivo_txt, "w", encoding="utf-8") as archivo:
         archivo.write(f"REPORTE DE BUGS Y SMELLS - {metricas.analizador}\n")
@@ -550,9 +549,9 @@ def generar_resumen_bugs_smells_txt(proyecto, metricas, loc, issues, archivo_txt
 
         archivo.write("SEVERIDAD\n")
         archivo.write("-" * 60 + "\n")
-        archivo.write(f"Alta: {severidades['Alta']}\n")
-        archivo.write(f"Media: {severidades['Media']}\n")
-        archivo.write(f"Baja: {severidades['Baja']}\n\n")
+        archivo.write(f"Alta: {severidades[ISSUE_SEVERIDAD_ALTA]}\n")
+        archivo.write(f"Media: {severidades[ISSUE_SEVERIDAD_MEDIA]}\n")
+        archivo.write(f"Baja: {severidades[ISSUE_SEVERIDAD_BAJA]}\n\n")
 
         archivo.write("CATEGORIAS\n")
         archivo.write("-" * 60 + "\n")
@@ -571,8 +570,8 @@ def generar_resumen_bugs_smells_txt(proyecto, metricas, loc, issues, archivo_txt
         else:
             for issue in issues:
                 archivo.write(
-                    f"[{issue['severidad']}] "
-                    f"[{issue['categoria']}] "
+                    f"[{issue[ISSUE_SEVERIDAD]}] "
+                    f"[{issue[ISSUE_CATEGORIA]}] "
                     f"{normalizar_ruta_salida(issue.get('archivo', ''))}:"
                     f"{issue.get('linea', '')}:{issue.get('columna', '')} "
                     f"{issue.get('regla', '')} - {issue.get('mensaje', '')}\n"

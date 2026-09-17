@@ -7,7 +7,7 @@ from collections import defaultdict
 from dataclasses import asdict, dataclass
 from pathlib import Path, PureWindowsPath
 
-from configuracion.configuracion import clasificar_por_umbrales
+from configuracion.configuracion import clasificar_mi, clasificar_por_umbrales
 from modelos.modelos import MetricaMantenibilidad
 
 
@@ -101,17 +101,6 @@ def parse_lizard_csv_mi(csv_path):
     return dict(metrics_by_file)
 
 
-def clasificar_mi(mi, umbrales):
-    """Clasifica un índice de mantenibilidad según los umbrales.
-
-    Args:
-        mi: Índice de mantenibilidad.
-        umbrales: Intervalos de clasificación configurados.
-
-    Returns:
-        Una tupla con el nivel y su interpretación.
-    """
-    return clasificar_por_umbrales(mi, umbrales)
 
 
 def calcular_metricas_mi(metrics_by_file, umbrales_mi):

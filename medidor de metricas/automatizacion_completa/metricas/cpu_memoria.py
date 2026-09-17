@@ -3,11 +3,23 @@
 import math
 from numbers import Real
 
+from configuracion.configuracion import clasificar_uso_cpu, clasificar_uso_mem
 from constantes.definiciones import (
     ENCABEZADOS_CPU_MEMORIA_ENTRADA,
     HOJA_CPU_MEMORIA_ENTRADA,
     MODO_CPU_NUCLEO,
     MODO_CPU_TOTAL,
+    TEXTO_CAMPO_UMBRALES_CPU,
+    TEXTO_CAMPO_UMBRALES_MEM,
+    TEXTO_CPU_MEDIDA,
+    TEXTO_ENCABEZADO_CPU_ACC1,
+    TEXTO_ENCABEZADO_CPU_ACC2,
+    TEXTO_ENCABEZADO_CPUS_LOGICAS,
+    TEXTO_ENCABEZADO_MEMORIA_ACC1_MB,
+    TEXTO_ENCABEZADO_MEMORIA_ACC2_MB,
+    TEXTO_ENCABEZADO_MEMORIA_TOTAL_ENTRADA_MB,
+    TEXTO_ENCABEZADO_METODO_MEDICION,
+    TEXTO_ENCABEZADO_MODO_CPU,
 )
 from modelos.modelos import MetricaCpuMemoria
 from reportes.excel import leer_fila_por_codigo
@@ -61,7 +73,7 @@ def validar_modo_cpu(valor, hay_medicion_cpu):
 
 def convertir_porcentaje(valor, formato):
     """Convierte una celda porcentual de Excel a porcentaje numérico."""
-    valor = validar_numero_opcional(valor, "CPU medida")
+    valor = validar_numero_opcional(valor, TEXTO_CPU_MEDIDA)
 
     if valor is None:
         return None
@@ -101,24 +113,15 @@ def calcular_maximo(valores):
     return max(disponibles) if disponibles else None
 
 
-def clasificar_consumo(valor_porcentaje, umbral_bajo, umbral_medio, recurso):
-    """Clasifica CPU o memoria utilizando umbrales configurados."""
-    if valor_porcentaje is None:
-        return "No evaluable", f"No existen datos válidos suficientes para evaluar el consumo de {recurso}"
-    if valor_porcentaje < umbral_bajo:
-        return "Bajo", f"Consumo bajo de {recurso}"
-    if valor_porcentaje <= umbral_medio:
-        return "Medio", f"Consumo medio de {recurso}"
-    return "Alto", f"Consumo alto de {recurso}"
 
 
 def obtener_cpu(valores, formatos):
     """Valida y normaliza las dos mediciones de CPU."""
 
-    cpu_1 = convertir_porcentaje(valores["CPU Acc1"], formatos["CPU Acc1"])
-    cpu_2 = convertir_porcentaje(valores["CPU Acc2"], formatos["CPU Acc2"])
-    modo = validar_modo_cpu(valores["Modo CPU"], cpu_1 is not None or cpu_2 is not None)
-    cpus = validar_cpus_logicas(valores["CPUs lógicas"], modo == MODO_CPU_NUCLEO)
+    cpu_1 = convertir_porcentaje(valores[TEXTO_ENCABEZADO_CPU_ACC1], formatos[TEXTO_ENCABEZADO_CPU_ACC1])
+    cpu_2 = convertir_porcentaje(valores[TEXTO_ENCABEZADO_CPU_ACC2], formatos[TEXTO_ENCABEZADO_CPU_ACC2])
+    modo = validar_modo_cpu(valores[TEXTO_ENCABEZADO_MODO_CPU], cpu_1 is not None or cpu_2 is not None)
+    cpus = validar_cpus_logicas(valores[TEXTO_ENCABEZADO_CPUS_LOGICAS], modo == MODO_CPU_NUCLEO)
 
     return cpu_1, cpu_2, modo, cpus
 
@@ -126,9 +129,9 @@ def obtener_cpu(valores, formatos):
 def obtener_memoria(valores):
     """Valida las mediciones de memoria y la memoria total."""
 
-    memoria_1 = validar_numero_opcional(valores["Memoria Acc1 (MB)"], "Memoria Acc1 (MB)")
-    memoria_2 = validar_numero_opcional(valores["Memoria Acc2 (MB)"], "Memoria Acc2 (MB)")
-    total = validar_numero_opcional(valores["MemoriaTotal (MB)"], "Memoria de total (MB)")
+    memoria_1 = validar_numero_opcional(valores[TEXTO_ENCABEZADO_MEMORIA_ACC1_MB], TEXTO_ENCABEZADO_MEMORIA_ACC1_MB)
+    memoria_2 = validar_numero_opcional(valores[TEXTO_ENCABEZADO_MEMORIA_ACC2_MB], TEXTO_ENCABEZADO_MEMORIA_ACC2_MB)
+    total = validar_numero_opcional(valores[TEXTO_ENCABEZADO_MEMORIA_TOTAL_ENTRADA_MB], TEXTO_ENCABEZADO_MEMORIA_TOTAL_ENTRADA_MB)
 
     return memoria_1, memoria_2, total
 
@@ -157,16 +160,12 @@ def construir_resultado(proyecto, valores, configuracioncpu, configuracionmemori
     """Construye el objeto final conservando valores sin redondear."""
 
     # Clasificación de CPU
-    bajo_cpu = configuracioncpu["umbral_bajo"]
-    medio_cpu = configuracioncpu["umbral_medio"]
-    nivel_cpu, int_cpu = clasificar_consumo(cpu_promedio, bajo_cpu, medio_cpu, "CPU")
+    nivel_cpu, int_cpu = clasificar_uso_cpu(cpu_promedio, configuracioncpu)
 
     # Clasificación de memoria
-    bajo_mem = configuracionmemoria["umbral_bajo"]
-    medio_mem = configuracionmemoria["umbral_medio"]
-    nivel_mem, int_mem = clasificar_consumo(memoria_norm, bajo_mem, medio_mem, "memoria")
+    nivel_mem, int_mem = clasificar_uso_mem(memoria_norm, configuracionmemoria)
 
-    return MetricaCpuMemoria(proyecto.codigo, proyecto.lenguaje, str(valores["Método medición"] or "").strip(), modo, cpus, str(valores["Acción 1"] or "").strip(), cpu_1, str(valores["Acción 2"] or "").strip(), cpu_2, norm_1, norm_2, cpu_promedio, cpu_maxima, nivel_cpu, int_cpu, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima, nivel_mem, int_mem)
+    return MetricaCpuMemoria(proyecto.codigo, proyecto.lenguaje, str(valores[TEXTO_ENCABEZADO_METODO_MEDICION] or "").strip(), modo, cpus, str(valores["Acción 1"] or "").strip(), cpu_1, str(valores["Acción 2"] or "").strip(), cpu_2, norm_1, norm_2, cpu_promedio, cpu_maxima, nivel_cpu, int_cpu, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima, nivel_mem, int_mem)
 
 
 def analizar_cpu_memoria(proyecto, libro_entrada, configuracion_cpu, configuracion_memoria, logger):

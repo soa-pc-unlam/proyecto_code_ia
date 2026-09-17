@@ -16,9 +16,17 @@ PORCENTAJE_MAX_CPU = 0.65
 # Modo de logging
 MODO_LOGGING = "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
 
+#Hoja del excel que tiene los datos den entrada
+HOJA_CONCURRENCIA_ENTRADA = "Concurrencia"
+HOJA_TOKENS_ENTRADA = "Datos Tokens"
+HOJA_CPU_MEMORIA_ENTRADA = "CPU_Memoria"
+
+#constante de lo modo de uso de cpu que esta en la hoja HOJA_CPU_MEMORIA_ENTRADA
+# en el excel de datos de entrada
 MODO_CPU_NUCLEO = "100%=1 núcleo"
 MODO_CPU_TOTAL = "100%=capacidad total"
 
+#Hojas que del excel resultante con los datos de salida
 HOJA_RESUMEN = "Resumen"
 HOJA_COMPLEJIDAD = "Complejidad"
 HOJA_MANTENIBILIDAD = "Mantenibilidad"
@@ -28,150 +36,248 @@ HOJA_CONCURRENCIA_SALIDA = "Concurrencia"
 HOJA_TOKENS_SALIDA = "Tokens"
 HOJA_CPU_MEMORIA_SALIDA = "CPU-Memoria PC"
 
-HOJA_CONCURRENCIA_ENTRADA = "Concurrencia"
-HOJA_TOKENS_ENTRADA = "Datos Tokens"
-HOJA_CPU_MEMORIA_ENTRADA = "CPU_Memoria"
+
+#texto de las columna de cada hoja del excel
+#textos de las columnas de la hoja Resumen
+TEXTO_ENCABEZADO_CODIGO = "Código"
+TEXTO_ENCABEZADO_NOMBRE_PROYECTO = "Nombre del proyecto"
+TEXTO_ENCABEZADO_HERRAMIENTA_IA = "Herramienta IA"
+TEXTO_ENCABEZADO_MODELO_IA = "Modelo IA"
+TEXTO_ENCABEZADO_LENGUAJE = "Lenguaje"
+TEXTO_ENCABEZADO_CCN_PROMEDIO_RESUMEN = "CCN promedio"
+TEXTO_ENCABEZADO_NIVEL_CC_RESUMEN = "Nivel de CC"
+TEXTO_ENCABEZADO_MI_RESUMEN = "MI"
+TEXTO_ENCABEZADO_NIVEL_MI_RESUMEN = "Nivel de MI"
+TEXTO_ENCABEZADO_ISSUES_KLOC_RESUMEN = "Issues/KLOC"
+TEXTO_ENCABEZADO_ISI_RESUMEN = "ISI"
+TEXTO_ENCABEZADO_INTERPRETACION_ISSUE_RESUMEN = "Interpretación de Issue"
+TEXTO_ENCABEZADO_PROMEDIO_CONCURRENCIA_RESUMEN = "Promedio concurrencia"
+TEXTO_ENCABEZADO_INTERPRETACION_CONCURRENCIA_RESUMEN = "Interpretación concurrencia"
+TEXTO_ENCABEZADO_EFICIENCIA_GENERACION_RESUMEN = "Eficiencia de generación"
+TEXTO_ENCABEZADO_INTERPRETACION_TOKENS = "Interpretación tokens"
+TEXTO_ENCABEZADO_CPU_PROMEDIO = "% CPU promedio"
+TEXTO_ENCABEZADO_INTERPRETACION_CPU_RESUMEN = "Interpretación CPU"
+TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN = "% Memoria promedio"
+TEXTO_ENCABEZADO_INTERPRETACION_MEMORIA = "Interpretación memoria"
+
+#textos de la columnas de la hoja Complejidad
+TEXTO_ENCABEZADO_CANTIDAD_FUNCIONES = "Cantidad de funciones"
+TEXTO_ENCABEZADO_CCN_TOTAL = "CCN Total"
+TEXTO_ENCABEZADO_CCN_PROMEDIO_CC = "CCN promedio"
+TEXTO_ENCABEZADO_NLOC_TOTAL = "NLOC total"
+TEXTO_ENCABEZADO_NIVEL_CC_CC = "Nivel de CC"
+TEXTO_ENCABEZADO_INTERPRETACION_CC = "Interpretación CC"
+TEXTO_ENCABEZADO_NLOC_PROMEDIO = "NLOC promedio"
+
+#textos de la columnas de la hoja mantenibilidad
+TEXTO_ENCABEZADO_NLOC_MI = "NLOC MI"
+TEXTO_ENCABEZADO_CANTIDAD_FUNCIONES_MI = "Cantidad de funciones MI"
+TEXTO_ENCABEZADO_TOKENS_CODIGO = "Tokens código"
+TEXTO_ENCABEZADO_MI_MI = "MI"
+TEXTO_ENCABEZADO_NIVEL_MI_MI= "Nivel de MI"
+TEXTO_ENCABEZADO_INTERPRETACION_MI = "Interpretación MI"
+
+#textos de la columnas de la hoja Bugmsells
+TEXTO_ENCABEZADO_ANALIZADOR = "Analizador"
+TEXTO_ENCABEZADO_TOTAL_ISSUES = "Total de issues"
+TEXTO_ENCABEZADO_ISSUES_KLOC_BS = "Issues/KLOC"
+TEXTO_ENCABEZADO_ISI_BS = "ISI"
+TEXTO_ENCABEZADO_NIVEL_ISI = "Nivel de ISI"
+TEXTO_ENCABEZADO_INTERPRETACION_ISI = "Interpretación de ISI"
+TEXTO_ENCABEZADO_OBSERVACION = "Observacion"
+TEXTO_ENCABEZADO_CANT_SEVERIDAD_ALTA = "Cant. severidad alta"
+TEXTO_ENCABEZADO_CANT_SEVERIDAD_MEDIA = "Cant. severidad media"
+TEXTO_ENCABEZADO_CANT_SEVERIDAD_BAJA = "Cant. severidad baja"
+TEXTO_ENCABEZADO_REGLAS_INCUMPLIDAS = "Reglas incumplidas"
+
+#textos de la columnas de la hoja error
+TEXTO_ENCABEZADO_ERROR = "Error"
+
+#textos de la columnas de la hoja concurrencia
+TEXTO_ENCABEZADO_SINCRONIZACION_CORRECTA = "Sincronización correcta"
+TEXTO_ENCABEZADO_AUSENCIA_DEADLOCKS = "Ausencia de deadlocks"
+TEXTO_ENCABEZADO_AUSENCIA_CONDICION_CARRERA = "Ausencia de condición de carrera"
+TEXTO_ENCABEZADO_USO_CORRECTO_EXCLUSION_MUTUA = "Uso correcto de exclusión mutua"
+TEXTO_ENCABEZADO_PROMEDIO_CONCURRENCIA_C = "Promedio concurrencia"
+TEXTO_ENCABEZADO_INTERPRETACION_CONCURRENCIA_C = "Interpretación concurrencia"
+
+#textos de la columnas de la hoja Datos tokens
+TEXTO_ENCABEZADO_METODO_UTILIZADO = "Método utilizado"
+TEXTO_ENCABEZADO_REFINAMIENTOS = "Refinamientos"
+TEXTO_ENCABEZADO_TOKENS_REGISTRADOS = "Tokens registrados"
+TEXTO_ENCABEZADO_NLOC_TOTAL_TOKENS = "NlocTotal"
+TEXTO_ENCABEZADO_EFICIENCIA_GENERACION_TOKENS = "Eficiencia de generación (NLOC/1000 tokens)"
+TEXTO_ENCABEZADO_EFICIENCIA_PONDERADA = "Eficiencia ponderada"
+TEXTO_ENCABEZADO_NIVEL_EFICIENCIA = "Nivel de eficiencia"
+TEXTO_ENCABEZADO_INTERPRETACION = "Interpretación"
+
+#textos de la columnas de la hoja Cpu_memoria
+TEXTO_ENCABEZADO_METODO_MEDICION = "Método medición"
+TEXTO_ENCABEZADO_MODO_CPU = "Modo CPU"
+TEXTO_ENCABEZADO_CPUS_LOGICAS = "CPUs lógicas"
+TEXTO_ENCABEZADO_ACCION_1 = "Acción 1"
+TEXTO_ENCABEZADO_CPU_ACC1 = "CPU Acc1"
+TEXTO_ENCABEZADO_ACCION_2 = "Acción 2"
+TEXTO_ENCABEZADO_CPU_ACC2 = "CPU Acc2"
+TEXTO_ENCABEZADO_MEMORIA_ACC1_MB = "Memoria Acc1 (MB)"
+TEXTO_ENCABEZADO_MEMORIA_ACC2_MB = "Memoria Acc2 (MB)"
+TEXTO_ENCABEZADO_MEMORIA_TOTAL_ENTRADA_MB = "MemoriaTotal (MB)"
+TEXTO_ENCABEZADO_CPU_MEDIDA_1 = "CPU medida 1"
+TEXTO_ENCABEZADO_CPU_MEDIDA_2 = "CPU medida 2"
+TEXTO_ENCABEZADO_CPU_NORMALIZADA_1 = "CPU normalizada 1"
+TEXTO_ENCABEZADO_CPU_NORMALIZADA_2 = "CPU normalizada 2"
+TEXTO_ENCABEZADO_CPU_PROMEDIO_NORMALIZADA = "CPU promedio normalizada"
+TEXTO_ENCABEZADO_CPU_MAXIMA_NORMALIZADA = "CPU máxima normalizada"
+TEXTO_ENCABEZADO_NIVEL_CPU = "Nivel CPU"
+TEXTO_ENCABEZADO_INTERPRETACION_CPU_CM = "Interpretación CPU"
+TEXTO_ENCABEZADO_MEMORIA_TOTAL_SALIDA_MB = "Memoria de total (MB)"
+TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_MB = "Memoria promedio (MB)"
+TEXTO_ENCABEZADO_MEMORIA_NORMALIZADA_PROMEDIO = "Memoria normalizada promedio (%)"
+TEXTO_ENCABEZADO_MEMORIA_MAXIMA_MB = "Memoria máxima (MB)"
+TEXTO_ENCABEZADO_NIVEL_MEMORIA = "Nivel memoria"
+TEXTO_ENCABEZADO_INTERPRETACION_MEMORIA = "Interpretación memoria"
+
+#Arrays con los encabezados de cada hoja del excel resultante
 
 ENCABEZADOS_RESUMEN = [
-    "Código",
-    "Nombre del proyecto",
-    "Herramienta IA",
-    "Modelo IA",
-    "Lenguaje",
-    "CCN promedio",
-    "Nivel de CC",
-    "MI",
-    "Nivel de MI",
-    "Issues/KLOC",
-    "ISI",
-    "Interpretación de Issue",
-    "Promedio concurrencia",
-    "Interpretación concurrencia",
-    "Eficiencia de generación",
-    "Interpretación tokens",  
-    "% CPU promedio",
-    "Interpretación CPU",
-    "% Memoria promedio",
-    "Interpretación memoria",  
+    TEXTO_ENCABEZADO_CODIGO,
+    TEXTO_ENCABEZADO_NOMBRE_PROYECTO,
+    TEXTO_ENCABEZADO_HERRAMIENTA_IA,
+    TEXTO_ENCABEZADO_MODELO_IA,
+    TEXTO_ENCABEZADO_LENGUAJE,
+    TEXTO_ENCABEZADO_CCN_PROMEDIO_RESUMEN,
+    TEXTO_ENCABEZADO_NIVEL_CC_RESUMEN,
+    TEXTO_ENCABEZADO_MI_RESUMEN,
+    TEXTO_ENCABEZADO_NIVEL_MI_RESUMEN,
+    TEXTO_ENCABEZADO_ISSUES_KLOC_RESUMEN,
+    TEXTO_ENCABEZADO_ISI_RESUMEN,
+    TEXTO_ENCABEZADO_INTERPRETACION_ISSUE_RESUMEN,
+    TEXTO_ENCABEZADO_PROMEDIO_CONCURRENCIA_RESUMEN,
+    TEXTO_ENCABEZADO_INTERPRETACION_CONCURRENCIA_RESUMEN,
+    TEXTO_ENCABEZADO_EFICIENCIA_GENERACION_RESUMEN,
+    TEXTO_ENCABEZADO_INTERPRETACION_TOKENS,
+    TEXTO_ENCABEZADO_CPU_PROMEDIO,
+    TEXTO_ENCABEZADO_INTERPRETACION_CPU_RESUMEN,
+    TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN,
+    TEXTO_ENCABEZADO_INTERPRETACION_MEMORIA,
 ]
-
 ENCABEZADOS_COMPLEJIDAD = [
-    "Código",
-    "Cantidad de funciones",
-    "CCN Total",
-    "CCN promedio",
-    "NLOC total",
-    "Nivel de CC",
-    "Interpretación CC",
-    "NLOC promedio",
+    TEXTO_ENCABEZADO_CODIGO,
+    TEXTO_ENCABEZADO_CANTIDAD_FUNCIONES,
+    TEXTO_ENCABEZADO_CCN_TOTAL,
+    TEXTO_ENCABEZADO_CCN_PROMEDIO_CC,
+    TEXTO_ENCABEZADO_NLOC_TOTAL,
+    TEXTO_ENCABEZADO_NIVEL_CC_CC,
+    TEXTO_ENCABEZADO_INTERPRETACION_CC,
+    TEXTO_ENCABEZADO_NLOC_PROMEDIO,
 ]
 
 ENCABEZADOS_MANTENIBILIDAD = [
-    "Código",
-    "NLOC MI",
-    "Cantidad de funciones MI",
-    "Tokens código",
-    "MI",
-    "Nivel de MI",
-    "Interpretación MI",
+    TEXTO_ENCABEZADO_CODIGO,
+    TEXTO_ENCABEZADO_NLOC_MI,
+    TEXTO_ENCABEZADO_CANTIDAD_FUNCIONES_MI,
+    TEXTO_ENCABEZADO_TOKENS_CODIGO,
+    TEXTO_ENCABEZADO_MI_MI,
+    TEXTO_ENCABEZADO_NIVEL_MI_MI,
+    TEXTO_ENCABEZADO_INTERPRETACION_MI,
 ]
 
 ENCABEZADOS_BUGS_SMELLS = [
-    "Código",
-    "Analizador",
-    "Total de issues",
-    "Issues/KLOC",
-    "ISI",
-    "Nivel de ISI",
-    "Interpretación de ISI",
-    "Observacion",
-    "Cant. severidad alta",
-    "Cant. severidad media",
-    "Cant. severidad baja",
-    "Reglas incumplidas",
+    TEXTO_ENCABEZADO_CODIGO,
+    TEXTO_ENCABEZADO_ANALIZADOR,
+    TEXTO_ENCABEZADO_TOTAL_ISSUES,
+    TEXTO_ENCABEZADO_ISSUES_KLOC_BS,
+    TEXTO_ENCABEZADO_ISI_BS,
+    TEXTO_ENCABEZADO_NIVEL_ISI,
+    TEXTO_ENCABEZADO_INTERPRETACION_ISI,
+    TEXTO_ENCABEZADO_OBSERVACION,
+    TEXTO_ENCABEZADO_CANT_SEVERIDAD_ALTA,
+    TEXTO_ENCABEZADO_CANT_SEVERIDAD_MEDIA,
+    TEXTO_ENCABEZADO_CANT_SEVERIDAD_BAJA,
+    TEXTO_ENCABEZADO_REGLAS_INCUMPLIDAS,
 ]
 
 ENCABEZADOS_ERRORES = [
-    "Código",
-    "Nombre del proyecto",
-    "Error",
+    TEXTO_ENCABEZADO_CODIGO,
+    TEXTO_ENCABEZADO_NOMBRE_PROYECTO,
+    TEXTO_ENCABEZADO_ERROR,
 ]
 
 ENCABEZADOS_CONCURRENCIA_SALIDA = [
-    "Código",
-    "Sincronización correcta",
-    "Ausencia de deadlocks",
-    "Ausencia de condición de carrera",
-    "Uso correcto de exclusión mutua",
-    "Promedio concurrencia",
-    "Interpretación concurrencia",
+    TEXTO_ENCABEZADO_CODIGO,
+    TEXTO_ENCABEZADO_SINCRONIZACION_CORRECTA,
+    TEXTO_ENCABEZADO_AUSENCIA_DEADLOCKS,
+    TEXTO_ENCABEZADO_AUSENCIA_CONDICION_CARRERA,
+    TEXTO_ENCABEZADO_USO_CORRECTO_EXCLUSION_MUTUA,
+    TEXTO_ENCABEZADO_PROMEDIO_CONCURRENCIA_C,
+    TEXTO_ENCABEZADO_INTERPRETACION_CONCURRENCIA_C,
 ]
 
 ENCABEZADOS_CONCURRENCIA_ENTRADA = [
-    "Sincronización correcta",
-    "Ausencia de deadlocks",
-    "Ausencia de condición de carrera",
-    "Uso correcto de exclusión mutua",
+    TEXTO_ENCABEZADO_SINCRONIZACION_CORRECTA,
+    TEXTO_ENCABEZADO_AUSENCIA_DEADLOCKS,
+    TEXTO_ENCABEZADO_AUSENCIA_CONDICION_CARRERA,
+    TEXTO_ENCABEZADO_USO_CORRECTO_EXCLUSION_MUTUA,
 ]
 
 ENCABEZADOS_TOKENS_ENTRADA = [
-    "Método utilizado",
-    "Refinamientos",
-    "Tokens registrados",
+    TEXTO_ENCABEZADO_METODO_UTILIZADO,
+    TEXTO_ENCABEZADO_REFINAMIENTOS,
+    TEXTO_ENCABEZADO_TOKENS_REGISTRADOS,
 ]
 
-
 ENCABEZADOS_CPU_MEMORIA_ENTRADA = [
-    "Método medición",
-    "Modo CPU",
-    "CPUs lógicas",
-    "Acción 1",
-    "CPU Acc1",
-    "Acción 2",
-    "CPU Acc2",
-    "Memoria Acc1 (MB)",
-    "Memoria Acc2 (MB)",
-    "MemoriaTotal (MB)",
+    TEXTO_ENCABEZADO_METODO_MEDICION,
+    TEXTO_ENCABEZADO_MODO_CPU,
+    TEXTO_ENCABEZADO_CPUS_LOGICAS,
+    TEXTO_ENCABEZADO_ACCION_1,
+    TEXTO_ENCABEZADO_CPU_ACC1,
+    TEXTO_ENCABEZADO_ACCION_2,
+    TEXTO_ENCABEZADO_CPU_ACC2,
+    TEXTO_ENCABEZADO_MEMORIA_ACC1_MB,
+    TEXTO_ENCABEZADO_MEMORIA_ACC2_MB,
+    TEXTO_ENCABEZADO_MEMORIA_TOTAL_ENTRADA_MB,
 ]
 
 ENCABEZADOS_CPU_MEMORIA_SALIDA = [
-    "Código",
-    "Lenguaje",
-    "Método medición",
-    "Modo CPU",
-    "CPUs lógicas",
-    "Acción 1",
-    "CPU medida 1",
-    "Acción 2",
-    "CPU medida 2",
-    "CPU normalizada 1",
-    "CPU normalizada 2",
-    "CPU promedio normalizada",
-    "CPU máxima normalizada",
-    "Nivel CPU",
-    "Interpretación CPU",
-    "Memoria Acc1 (MB)",
-    "Memoria Acc2 (MB)",
-    "Memoria de total (MB)",
-    "Memoria promedio (MB)",
-    "Memoria normalizada promedio (%)",
-    "Memoria máxima (MB)",
-    "Nivel memoria",
-    "Interpretación memoria",
+    TEXTO_ENCABEZADO_CODIGO,
+    TEXTO_ENCABEZADO_LENGUAJE,
+    TEXTO_ENCABEZADO_METODO_MEDICION,
+    TEXTO_ENCABEZADO_MODO_CPU,
+    TEXTO_ENCABEZADO_CPUS_LOGICAS,
+    TEXTO_ENCABEZADO_ACCION_1,
+    TEXTO_ENCABEZADO_CPU_MEDIDA_1,
+    TEXTO_ENCABEZADO_ACCION_2,
+    TEXTO_ENCABEZADO_CPU_MEDIDA_2,
+    TEXTO_ENCABEZADO_CPU_NORMALIZADA_1,
+    TEXTO_ENCABEZADO_CPU_NORMALIZADA_2,
+    TEXTO_ENCABEZADO_CPU_PROMEDIO_NORMALIZADA,
+    TEXTO_ENCABEZADO_CPU_MAXIMA_NORMALIZADA,
+    TEXTO_ENCABEZADO_NIVEL_CPU,
+    TEXTO_ENCABEZADO_INTERPRETACION_CPU_CM,
+    TEXTO_ENCABEZADO_MEMORIA_ACC1_MB,
+    TEXTO_ENCABEZADO_MEMORIA_ACC2_MB,
+    TEXTO_ENCABEZADO_MEMORIA_TOTAL_SALIDA_MB,
+    TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_MB,
+    TEXTO_ENCABEZADO_MEMORIA_NORMALIZADA_PROMEDIO,
+    TEXTO_ENCABEZADO_MEMORIA_MAXIMA_MB,
+    TEXTO_ENCABEZADO_NIVEL_MEMORIA,
+    TEXTO_ENCABEZADO_INTERPRETACION_MEMORIA,
 ]
 
 ENCABEZADOS_TOKENS_SALIDA = [
-    "Código",
-    "Método utilizado",
-    "NlocTotal",
-    "Refinamientos",
-    "Tokens registrados",
-    "Eficiencia de generación (NLOC/1000 tokens)",
-    "Eficiencia ponderada",
-    "Nivel de eficiencia",
-    "Interpretación",
+    TEXTO_ENCABEZADO_CODIGO,
+    TEXTO_ENCABEZADO_METODO_UTILIZADO,
+    TEXTO_ENCABEZADO_NLOC_TOTAL_TOKENS,
+    TEXTO_ENCABEZADO_REFINAMIENTOS,
+    TEXTO_ENCABEZADO_TOKENS_REGISTRADOS,
+    TEXTO_ENCABEZADO_EFICIENCIA_GENERACION_TOKENS,
+    TEXTO_ENCABEZADO_EFICIENCIA_PONDERADA,
+    TEXTO_ENCABEZADO_NIVEL_EFICIENCIA,
+    TEXTO_ENCABEZADO_INTERPRETACION,
 ]
 
+#array que indica las hojas que contiene el excel resultante
 HOJAS_REPORTE = {
     HOJA_RESUMEN: ENCABEZADOS_RESUMEN,
     HOJA_COMPLEJIDAD: ENCABEZADOS_COMPLEJIDAD,
@@ -183,29 +289,47 @@ HOJAS_REPORTE = {
     HOJA_CPU_MEMORIA_SALIDA: ENCABEZADOS_CPU_MEMORIA_SALIDA,
 }
 
+
+#estos son campos que esten en el archivo configuracion. JSON
+TEXTO_CAMPO_ARCHIVO_EXCEL_ENTRADA = "archivo_excel_entrada"
+TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA = "archivo_excel_salida"
+TEXTO_CAMPO_CARPETA_RESULTADOS = "carpeta_resultados"
+TEXTO_CAMPO_CARPETA_LOGS = "carpeta_logs"
+TEXTO_CAMPO_UMBRALES_CC = "umbrales_cc"
+TEXTO_CAMPO_UMBRALES_MI = "umbrales_mi"
+TEXTO_CAMPO_UMBRALES_ISI = "umbrales_isi"
+TEXTO_CAMPO_UMBRALES_CPU = "umbrales_uso_cpu"
+TEXTO_CAMPO_UMBRALES_MEM = "umbrales_uso_mem"
+TEXTO_CAMPO_PONDERACION_CONCURRENCIA = "ponderacion_concurrencia"
+TEXTO_CAMPO_UMBRALES_CONCURRENCIA = "umbrales_concurrencia"
+TEXTO_CAMPO_UMBRALES_TOKEN = "umbrales_token"
+TEXTO_CAMPO_COEFICIENTE_PENALIZACION_TOKENS = "coeficiente_penalizacion_tokens"
+
+TEXTO_CAMPO_INTERPRETACION        = "interpretacion"
+TEXTO_CAMPO_MIN                   = "min"
+TEXTO_CAMPO_MAX                   = "max"
+TEXTO_CAMPO_NIVEL                 = "nivel"
+TEXTO_CAMPO_OBSERVACION           = "observacion"
+
+#array con los campos que son obligatorios en el archivo configuracion json
 CAMPOS_OBLIGATORIOS_CONFIGURACION_JSON = [
-        "archivo_excel_entrada",
-        "archivo_excel_salida",
-        "carpeta_resultados",
-        "carpeta_logs",
-        "umbrales_cc",
-        "umbrales_mi",
-        "umbrales_issues",
-        "umbrales_isi",
-        "ponderacion_concurrencia",
-        "umbrales_concurrencia",
-        "coeficiente_penalizacion_tokens",
-        "uso_cpu",
-        "uso_memoria",
-]
+    TEXTO_CAMPO_ARCHIVO_EXCEL_ENTRADA,
+    TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA,
+    TEXTO_CAMPO_CARPETA_RESULTADOS,
+    TEXTO_CAMPO_CARPETA_LOGS,
+    TEXTO_CAMPO_UMBRALES_CC,
+    TEXTO_CAMPO_UMBRALES_MI,
+    TEXTO_CAMPO_UMBRALES_ISI,
+    TEXTO_CAMPO_UMBRALES_CPU,
+    TEXTO_CAMPO_UMBRALES_MEM,
+    TEXTO_CAMPO_PONDERACION_CONCURRENCIA,
+    TEXTO_CAMPO_UMBRALES_CONCURRENCIA,
+    TEXTO_CAMPO_UMBRALES_TOKEN,
+    TEXTO_CAMPO_COEFICIENTE_PENALIZACION_TOKENS
+    ]
 
-COLUMNA_CCN_PROMEDIO = 6
-COLUMNA_NLOC_TOTAL = 5
-COLUMNA_MI = 8
-COLUMNA_ISI = 11
-COLUMNA_PROMEDIO_CONCURRENCIA = 13
-COLUMNA_EFICIENCIA_TOKENS = 15
-
+#constantes para la generacion de los graficos
+#filas de la hoja graficos, que indican en que filas deben colocarse cada imagen
 FILA_GRAFICO_CCN = 1
 FILA_GRAFICO_NLOC = FILA_GRAFICO_CCN+18
 FILA_GRAFICO_MI = FILA_GRAFICO_NLOC*2
@@ -213,14 +337,22 @@ FILA_GRAFICO_ISI = FILA_GRAFICO_NLOC*3
 FILA_GRAFICO_CONCURRENCIA = FILA_GRAFICO_NLOC*4
 FILA_GRAFICO_TOKENS = FILA_GRAFICO_NLOC*5
 
+#columnas de las hojas en donde deben obtenerse los datos para hacer los graficos
+COLUMNA_CCN_PROMEDIO = ENCABEZADOS_RESUMEN.index(TEXTO_ENCABEZADO_CCN_PROMEDIO_RESUMEN)+1
+COLUMNA_NLOC_TOTAL = ENCABEZADOS_COMPLEJIDAD.index(TEXTO_ENCABEZADO_NLOC_TOTAL)+1
+COLUMNA_MI = ENCABEZADOS_RESUMEN.index(TEXTO_ENCABEZADO_MI_RESUMEN)+1
+COLUMNA_ISI = ENCABEZADOS_RESUMEN.index(TEXTO_ENCABEZADO_ISI_RESUMEN)+1
+COLUMNA_PROMEDIO_CONCURRENCIA = ENCABEZADOS_RESUMEN.index(TEXTO_ENCABEZADO_PROMEDIO_CONCURRENCIA_RESUMEN)+1
+COLUMNA_EFICIENCIA_TOKENS = ENCABEZADOS_RESUMEN.index(TEXTO_ENCABEZADO_EFICIENCIA_GENERACION_RESUMEN)+1
+
 CONFIGURACION_GRAFICOS = [
-    #hoja, columna_datos, titulo, etiqueta, posicion_del_grafico
-    (HOJA_RESUMEN, COLUMNA_CCN_PROMEDIO, "CCN promedio por proyecto", "CCN promedio", f"A{FILA_GRAFICO_CCN}"),
+    # hoja, columna_datos, titulo, etiqueta, posicion_del_grafico
+    (HOJA_RESUMEN,COLUMNA_CCN_PROMEDIO , "CCN promedio por proyecto", "CCN promedio", f"A{FILA_GRAFICO_CCN}"),
     (HOJA_COMPLEJIDAD, COLUMNA_NLOC_TOTAL, "NLOC total por proyecto", "NLOC total", f"A{FILA_GRAFICO_NLOC}"),
-    (HOJA_RESUMEN, COLUMNA_MI, "MI por proyecto", "Índice de mantenibilidad", f"A{FILA_GRAFICO_MI}"),
+    (HOJA_RESUMEN, COLUMNA_MI , "MI por proyecto", "Índice de mantenibilidad", f"A{FILA_GRAFICO_MI}"),
     (HOJA_RESUMEN, COLUMNA_ISI, "ISI por proyecto", "Índice de severidad de issues", f"A{FILA_GRAFICO_ISI}"),
     (HOJA_RESUMEN, COLUMNA_PROMEDIO_CONCURRENCIA, "Promedio de concurrencia por proyecto", "Promedio concurrencia", f"A{FILA_GRAFICO_CONCURRENCIA}"),
-    (HOJA_RESUMEN, COLUMNA_EFICIENCIA_TOKENS, "Eficiencia de generación por proyecto", "Eficiencia de generación", f"A{FILA_GRAFICO_TOKENS}"),
+    (HOJA_RESUMEN,COLUMNA_EFICIENCIA_TOKENS , "Eficiencia de generación por proyecto", "Eficiencia de generación", f"A{FILA_GRAFICO_TOKENS}"),
 ]
 
 CANTIDAD_CAMPOS_COMPLEJIDAD = len(ENCABEZADOS_COMPLEJIDAD) - 1
@@ -229,3 +361,24 @@ CANTIDAD_CAMPOS_CONCURRENCIA = len(ENCABEZADOS_CONCURRENCIA_SALIDA) - 1
 CANTIDAD_CAMPOS_BUGS_SMELLS = len(ENCABEZADOS_BUGS_SMELLS) - 1
 CANTIDAD_CAMPOS_TOKENS = len(ENCABEZADOS_TOKENS_SALIDA) - 1
 CANTIDAD_CAMPOS_CPU_MEMORIA = len(ENCABEZADOS_CPU_MEMORIA_SALIDA) - 1
+
+#CONSTANTES DEL ARHCIVO BUGS_SMELL.PY
+#Estas constante se sacan de los campos del archivo txt, 
+#que se genera tras usar pmd, pylint o deteckt.
+
+ISSUE_SEVERIDAD                  = "severidad"
+ISSUE_CATEGORIA                  = "categoria"
+ISSUE_REGLA                      = "regla"
+ISSUE_SEVERIDAD_ALTA             = "Alta"
+ISSUE_SEVERIDAD_MEDIA            = "Media"
+ISSUE_SEVERIDAD_BAJA             = "Baja"
+
+#CONSTANTES DEL ARHCIVO CPU_MEMORIA.PY
+TEXTO_CPU_MEDIDA            = "CPU medida"
+
+
+
+
+
+
+
