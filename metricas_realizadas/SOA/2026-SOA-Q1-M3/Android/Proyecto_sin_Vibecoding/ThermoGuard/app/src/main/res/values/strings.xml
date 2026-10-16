@@ -1,0 +1,92 @@
+<resources>
+    <string name="app_name">ThermoGuard</string>
+
+    <!-- Pantalla de Inicio / Conexión -->
+    <string name="title_mqtt">Conexión al Sistema</string>
+    <string name="subtitle_mqtt">Configura el broker para sincronizar telemetría</string>
+    <string name="hint_broker">Dirección del Servidor (URL)</string>
+    <string name="hint_port">Puerto de Red</string>
+    <string name="btn_conectar">ESTABLECER VÍNCULO</string>
+    <string name="btn_desconectar">CERRAR CONEXIÓN</string>
+
+    <!-- Panel de Control (Hub) -->
+    <string name="title_config">Panel de Gestión</string>
+    <string name="subtitle_config">Selecciona un módulo para operar el hardware</string>
+    <string name="status_connected">● Sistema en Línea</string>
+    <string name="status_disconnected">● Sistema Fuera de Línea</string>
+    <string name="status_hardware_format">Estado Hardware: %s</string>
+    <string name="status_hardware_waiting">Esperando reporte de hardware...</string>
+
+    <string name="card_termometro_title">Monitor Térmico</string>
+    <string name="card_termometro_desc">Lectura de temperatura desde base de datos</string>
+    <string name="card_modo_title">Control de Perfiles</string>
+    <string name="card_modo_desc">Ajustar rangos operativos por software</string>
+    <string name="card_sensor_title">Apagar Agitando</string>
+    <string name="card_sensor_desc">Vigilancia por acelerómetro del dispositivo</string>
+    <string name="card_alarma_title">Actuador Digital</string>
+    <string name="card_alarma_desc">Control manual de encendido/apagado remoto</string>
+    <string name="card_historial_title">Auditoría de Datos</string>
+    <string name="card_historial_desc">Revisión de registros históricos del servidor</string>
+
+    <!-- Actividades específicas -->
+    <string name="title_thermometer">Lectura Termómetro</string>
+    <string name="subtitle_thermometer">Monitoreo de telemetría del sensor activo</string>
+    <string name="last_update_format">Sincronizado: %s</string>
+    <string name="btn_actualizar_term">REFRESCAR DATOS</string>
+
+    <string name="title_seleccionar_modo">Gestión de Modos</string>
+    <string name="subtitle_seleccionar_modo">Cambia el perfil operativo</string>
+    <string name="modo_actual_prefix">Perfil activo: %s</string>
+    <string name="modo_desconocido">—</string>
+
+    <string name="title_sensor">Apagar alarma</string>
+    <string name="subtitle_sensor">Detección de eventos por agitación física</string>
+    <string name="desc_motion_icon">Icono de movimiento</string>
+    <string name="instruccion_shake">Agitá el teléfono para enviar señal de reset</string>
+    <string name="estado_reposo">Estado: Vigilando...</string>
+
+    <string name="title_alarma">Accionamiento Manual</string>
+    <string name="subtitle_alarma">Control de encendido para dispositivos remotos</string>
+    <string name="btn_encender">ENCENDER ACTUADOR</string>
+    <string name="toast_alarma_encendida">Señal de encendido enviada</string>
+
+    <string name="title_historial">Historial de Red</string>
+    <string name="subtitle_historial">Consulta de registros en base de datos</string>
+    <string name="hint_api_ip">IP del Servidor Central</string>
+    <string name="hint_device_id">Identificador del Dispositivo</string>
+    <string name="hint_limit">Registros a traer</string>
+    <string name="default_limit">50</string>
+    <string name="btn_actualizar">CARGAR REGISTROS</string>
+
+    <string name="btn_volver_icon">‹  Volver al Panel</string>
+
+    <!-- Formatos y Errores -->
+    <string name="default_temp">0.0°C</string>
+    <string name="temp_format">%.1f°C</string>
+    <string name="mode_format">PERFIL %s</string>
+    <string name="preset_bajo">BAJO</string>
+    <string name="preset_medio">MEDIO</string>
+    <string name="preset_alto">ALTO</string>
+    <string name="label_frio">FRÍO</string>
+    <string name="label_caliente">CALIENTE</string>
+    <string name="toast_enviado_format">Enviado %1$s: %2$d°C</string>
+    <string name="toast_connected_to">Vínculo exitoso con %s</string>
+    <string name="toast_desconectando">Finalizando sesión...</string>
+    <string name="status_connecting">Sincronizando...</string>
+    <string name="error_broker_empty">La dirección es obligatoria</string>
+    <string name="error_port_invalid">Puerto no válido</string>
+    <string name="toast_error_prefix">Falla de sistema: %s</string>
+    <string name="error_not_connected">Sin conexión activa</string>
+    <string name="toast_modo_enviado">Perfil actualizado: %s</string>
+    <string name="sensor_no_acelerometro">Hardware de sensor no detectado</string>
+    <string name="sensor_agitacion_detectada">¡Evento detectado!</string>
+    <string name="sensor_alarma_apagada">Comando de apagado enviado</string>
+    <string name="error_no_mqtt">Error: Broker inaccesible</string>
+
+    <string name="error_ip_required">La IP es requerida</string>
+    <string name="error_http_code">Error de servidor: %d</string>
+    <string name="error_network">Error de red: %s</string>
+    <string name="no_data_available">No hay datos disponibles</string>
+    <string name="status_no_data">Sin registros</string>
+    <string name="status_syncing">Sincronizando...</string>
+</resources>

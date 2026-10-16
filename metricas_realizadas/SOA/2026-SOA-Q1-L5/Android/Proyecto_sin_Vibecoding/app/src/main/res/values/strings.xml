@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">SOA - Grupo L5</string>
+    <string name="main_title">Stock y Seguridad</string>
+    <string name="main_subtitle">Sistema de Gestión y Monitoreo en Tiempo Real</string>
+    <string name="state_label">Estado del sistema</string>
+    <string name="state_off">EMBEBIDO VIRGEN</string>
+    <string name="state_stock">MODO STOCK</string>
+    <string name="state_security">MODO SEGURIDAD</string>
+
+    <string name="btn_stock">Activar modo Stock</string>
+    <string name="btn_security">Activar modo seguridad</string>
+    <string name="btn_stop">Detener Sistema</string>
+    <string name="btn_view_stock">Mostrar detalles del Stock</string>
+    <string name="btn_view_security">Mostrar detalles de seguridad</string>
+
+    <!-- Security Screen -->
+    <string name="security_title">Sistema de Seguridad</string>
+    <string name="security_subtitle">Monitoreo de Seguridad en Tiempo Real</string>
+    <string name="sensor_1_label">SENSOR DE CARGA 1</string>
+    <string name="sensor_2_label">SENSOR DE CARGA 2</string>
+    <string name="product_1_name">Manzanas</string>
+    <string name="product_2_name">Galletitas</string>
+    <string name="shelf_01">Estantería 1</string>
+    <string name="status_safe">SIN ALERTAS</string>
+    <string name="status_alert">ANOMALÍA DETECTADA</string>
+    <string name="btn_deactivate_security">Desactivar modo de seguridad</string>
+
+    <!-- Stock Screen -->
+    <string name="stock_title">Inventario</string>
+    <string name="stock_subtitle">Monitoreo de Stock en Tiempo Real</string>
+    <string name="weight_label">Peso Actual</string>
+    <string name="weight_placeholder">-- g</string>
+    <string name="status_ok">STOCK SUFICIENTE</string>
+    <string name="status_low">STOCK FALTANTE</string>
+    <string name="btn_deactivate_stock">Desactivar modo Stock</string>
+
+    <!-- Formats -->
+    <string name="weight_format">Peso total: %.0f g</string>
+    <string name="unit_weight_format">Peso por unidad: %.0f g</string>
+    <string name="stock_available_format">Stock disponible: %d</string>
+    <string name="min_stock_format">Stock mínimo: %d</string>
+    <string name="security_detail_format">Peso esperado: %.0f g\nPeso registrado: %.0f g</string>
+    <string name="last_updated_format">Se actualizado a las %s</string>
+</resources>

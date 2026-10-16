@@ -1,0 +1,35 @@
+
+@hostname = localhost
+@port = 1880
+@host = http://{{hostname}}:{{port}}
+@device = corridor-01
+
+###
+GET {{host}}/api/{{device}}
+
+###
+# @prompt status ON | OFF
+POST {{host}}/api/{{device}}/stock
+Content-Type: application/json
+
+{
+    "status": "{{status}}"
+}
+
+###
+# @prompt status ON | OFF
+POST {{host}}/api/{{device}}/security
+Content-Type: application/json
+
+{
+    "status": "{{status}}"
+}
+
+###
+# @prompt status UNMUTE | MUTE
+POST {{host}}/api/{{device}}/security/alarm
+Content-Type: application/json
+
+{
+    "status": "{{status}}"
+}

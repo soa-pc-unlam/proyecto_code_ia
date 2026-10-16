@@ -1,0 +1,394 @@
+<resources>
+    <!-- Backend config (apunta al API Gateway de AWS - cambiar si se redeploya) -->
+    <string name="api_base_url" translatable="false">https://e6wp3s6rdf.execute-api.us-east-1.amazonaws.com/prod/</string>
+    <string name="default_device_id" translatable="false">pawgate-001</string>
+
+    <!-- Splash -->
+    <string name="app_name">PawGate</string>
+    <string name="splash_subtitle">Puerta inteligente para tu mascota</string>
+
+    <!-- Login -->
+    <string name="login_button">Iniciar sesión</string>
+    <string name="loading">Cargando…</string>
+    <string name="login_no_account">¿No tenés cuenta?</string>
+    <string name="login_signup">Registrate</string>
+    <string name="login_forgot_password">Olvidé mi contraseña</string>
+    <string name="login_email_placeholder">Email</string>
+    <string name="login_password_placeholder">Contraseña</string>
+
+    <!-- Register -->
+    <string name="register_title">Crear cuenta</string>
+    <string name="register_subtitle">Completá tus datos para crear una cuenta.</string>
+    <string name="register_name_hint">Nombre</string>
+    <string name="register_email_hint">Email</string>
+    <string name="register_password_hint">Contraseña</string>
+    <string name="register_confirm_password_hint">Confirmar contraseña</string>
+    <string name="register_terms_text">Acepto los términos y condiciones</string>
+    <string name="register_button">Crear cuenta</string>
+    <string name="register_have_account">¿Ya tenés cuenta?</string>
+    <string name="register_login_link">Iniciar sesión</string>
+    <string name="cd_back_button">Volver</string>
+
+    <!-- Register - Confirmación de email (Cognito) -->
+    <string name="register_confirm_dialog_title">Confirmar email</string>
+    <string name="register_confirm_dialog_message">Te enviamos un código de 6 dígitos a %1$s. Ingresalo abajo.</string>
+    <string name="register_confirm_dialog_hint">Código de verificación</string>
+    <string name="register_confirm_dialog_confirm">Confirmar</string>
+    <string name="register_confirm_dialog_cancel">Cancelar</string>
+    <string name="register_confirm_code_required">Ingresá el código de 6 dígitos</string>
+    <string name="register_signup_ok">Cuenta creada. Ya podés iniciar sesión.</string>
+    <string name="register_confirm_ok">Email confirmado. Ya podés iniciar sesión.</string>
+
+    <!-- BottomNav -->
+    <string name="dashboard_tab_inicio">Inicio</string>
+    <string name="dashboard_tab_puerta">Puerta</string>
+    <string name="dashboard_tab_historial">Historial</string>
+    <string name="dashboard_tab_ajustes">Ajustes</string>
+
+    <!-- Dashboard - TopBar -->
+    <string name="dashboard_title">Inicio</string>
+    <string name="cd_notifications">Notificaciones</string>
+
+    <!-- Dashboard - Saludo -->
+    <string name="dashboard_greeting_template">Hola, %1$s</string>
+
+    <string name="dashboard_no_recent_activity">Última actividad: sin actividad reciente</string>
+
+    <!-- Dashboard - Card estado puerta -->
+    <string name="dashboard_door_closed">Puerta · Cerrada</string>
+    <string name="dashboard_door_locked">Puerta · Bloqueada</string>
+    <string name="dashboard_door_opening">Puerta · Abriendo…</string>
+    <string name="dashboard_door_opening_in">Puerta · Abriendo hacia adentro…</string>
+    <string name="dashboard_door_opening_out">Puerta · Abriendo hacia afuera…</string>
+    <string name="dashboard_door_open_countdown">Puerta · Abierta · %1$ds</string>
+    <string name="dashboard_door_open_in_countdown">Puerta · Abierta hacia adentro · %1$ds</string>
+    <string name="dashboard_door_open_out_countdown">Puerta · Abierta hacia afuera · %1$ds</string>
+    <string name="dashboard_door_closing">Puerta · Cerrando…</string>
+    <string name="dashboard_door_closing_in">Puerta · Cerrando (estaba hacia adentro)…</string>
+    <string name="dashboard_door_closing_out">Puerta · Cerrando (estaba hacia afuera)…</string>
+    <string name="dashboard_door_calling_countdown">Puerta · Llamando · %1$ds</string>
+    <string name="dashboard_door_ending_call">Puerta · Finalizando llamada…</string>
+    <string name="dashboard_last_activity_template">Última actividad: %1$s</string>
+
+    <!-- Dashboard - Metric cards -->
+    <string name="dashboard_metric_openings_label">Aperturas hoy</string>
+    <string name="dashboard_metric_light_label">Tiempo de luz encendida</string>
+    <string name="dashboard_light_minutes_format">%1$d min</string>
+    <string name="dashboard_light_hm_format">%1$dh %2$dm</string>
+    <string name="dashboard_light_on">Luz encendida</string>
+    <string name="dashboard_light_off">Luz apagada</string>
+
+    <!-- Dashboard - Acciones rápidas -->
+    <string name="dashboard_quick_actions">Acciones rápidas</string>
+    <string name="action_open">Abrir</string>
+    <string name="action_block">Bloquear</string>
+    <string name="action_unblock">Desbloquear</string>
+    <string name="action_call">Llamar</string>
+    <string name="action_schedules">Horarios</string>
+
+    <!-- Dashboard - Dialog bloquear/desbloquear -->
+    <string name="dashboard_block_dialog_title">¿Bloquear puerta?</string>
+    <string name="dashboard_block_dialog_message">La puerta quedará en modo seguridad. Tu mascota no podrá pasar hasta que la desbloquees.</string>
+    <string name="dashboard_unblock_dialog_title">¿Desbloquear puerta?</string>
+    <string name="dashboard_unblock_dialog_message">La puerta volverá al modo normal y se podrá abrir.</string>
+
+    <!-- Perfil de usuario (W16) -->
+    <string name="perfil_title">Mi perfil</string>
+    <string name="perfil_section_account">CUENTA</string>
+    <string name="perfil_field_name">Nombre</string>
+    <string name="perfil_field_email">Email</string>
+    <string name="perfil_section_session">SESIÓN</string>
+    <string name="perfil_logout_button">Cerrar sesión</string>
+    <string name="perfil_logout_dialog_title">¿Cerrar sesión?</string>
+    <string name="perfil_logout_dialog_message">Vas a tener que volver a iniciar sesión para acceder a tu PawGate.</string>
+    <string name="perfil_logout_dialog_confirm">Cerrar sesión</string>
+
+    <!-- Toast placeholders -->
+    <string name="toast_coming_soon">Próximamente</string>
+    <string name="toast_action_block">Puerta bloqueada</string>
+    <string name="toast_action_unblock">Puerta desbloqueada</string>
+    <string name="action_cancel">Cancelar</string>
+
+    <!-- Control de puerta -->
+    <string name="control_title">Control de puerta</string>
+    <string name="control_status_live">EN VIVO · ESP32 CONECTADO</string>
+    <string name="control_status_offline">ESP32 DESCONECTADO</string>
+    <string name="dashboard_call_blocked_toast">No se puede llamar mientras la puerta está bloqueada</string>
+    <string name="control_btn_open">ABRIR PUERTA</string>
+    <string name="control_card_block_title">Bloquear</string>
+    <string name="control_card_block_subtitle">Modo seguridad</string>
+    <string name="control_card_call_title">Llamar a la mascota</string>
+    <string name="control_card_call_subtitle">Activar buzzer 3s</string>
+    <string name="control_sensor_title">Sensor de ultrasonido activo</string>
+    <string name="control_sensor_subtitle">Distancia detectada: 14 cm</string>
+    <string name="control_block_dialog_title">¿Bloquear puerta?</string>
+    <string name="control_block_dialog_message">No se podrá abrir hasta que la desbloquees manualmente.</string>
+    <string name="control_block_dialog_confirm">Bloquear</string>
+
+    <!-- Control de puerta - Estados visuales -->
+    <string name="control_title_blocked">Modo seguridad</string>
+    <string name="control_title_calling">Llamando a la mascota</string>
+
+    <!-- Status pills segun estado -->
+    <string name="control_status_opening">ABRIENDO PUERTA</string>
+    <string name="control_status_open">PUERTA ABIERTA · CERRARÁ EN %1$ds</string>
+    <string name="control_status_closing">CERRANDO PUERTA</string>
+    <string name="control_status_blocked">MODO SEGURIDAD ACTIVO</string>
+    <string name="control_status_calling">BUZZER ACTIVO · %1$ds</string>
+    <string name="control_status_call_ending">FINALIZANDO LLAMADA</string>
+
+    <!-- BigBtn labels segun estado -->
+    <string name="control_btn_opening">ABRIENDO</string>
+    <string name="control_btn_open_state">ABIERTA</string>
+    <string name="control_btn_closing">CERRANDO</string>
+    <string name="control_btn_blocked">BLOQUEADO</string>
+    <string name="control_btn_calling">LLAMANDO</string>
+    <string name="control_btn_call_ending">FINALIZANDO</string>
+
+    <!-- Hints segun estado (solo los estados que tienen) -->
+    <string name="control_hint_open">Cerrará automáticamente en %1$ds</string>
+    <string name="control_hint_blocked">Tocá Desbloquear para reactivar la puerta</string>
+    <string name="control_hint_calling">Buzzer activo · %1$ds restantes</string>
+
+    <!-- Botones secundarios (visibles solo en BLOQUEADO / LLAMANDO / ABRIENDO) -->
+    <string name="control_secondary_unblock">Desbloquear</string>
+    <string name="control_secondary_stop_call">Detener llamada</string>
+    <string name="control_secondary_cancel">Cancelar</string>
+
+    <!-- Card highlight cuando esta activo -->
+    <string name="control_card_active">Activo</string>
+
+    <!-- Bottom info strip - variantes -->
+    <string name="control_info_last_open_title">Última apertura: ahora</string>
+    <string name="control_info_last_open_subtitle">Manual · desde Control</string>
+    <string name="control_info_blocked_title">Modo seguridad activado</string>
+    <string name="control_info_blocked_subtitle">Activado recién</string>
+    <string name="control_info_blocked_subtitle_with_time">Activado %1$s · %2$s</string>
+    <string name="control_info_blocked_subtitle_only_rel">Activado %1$s</string>
+    <string name="control_info_calling_title">Tu mascota fue notificada</string>
+    <string name="control_info_calling_subtitle">Esperando respuesta · %1$ds</string>
+
+    <!-- Direccion de apertura (RFID afuera / ultrasonido adentro) -->
+    <string name="historial_event_opened_in">Puerta abierta hacia adentro</string>
+    <string name="historial_event_opened_out">Puerta abierta hacia afuera</string>
+    <string name="historial_event_closed_in">Puerta cerrada hacia adentro</string>
+    <string name="historial_event_closed_out">Puerta cerrada hacia afuera</string>
+
+    <!-- BottomSheet elegir direccion al abrir -->
+    <string name="bs_open_dir_title">¿Hacia dónde se abre?</string>
+    <string name="bs_open_dir_in_title">Hacia adentro</string>
+    <string name="bs_open_dir_in_subtitle">Para que tu mascota entre a casa</string>
+    <string name="bs_open_dir_out_title">Hacia afuera</string>
+    <string name="bs_open_dir_out_subtitle">Para que tu mascota salga al patio</string>
+
+    <!-- Filtros historial avanzados (W13) -->
+    <string name="filtros_title">Filtros</string>
+    <string name="filtros_section_range">Rango de fechas</string>
+    <string name="filtros_pick_range">Seleccionar rango personalizado</string>
+    <string name="filtros_range_summary">Desde %1$s hasta %2$s</string>
+    <string name="filtros_section_options">Otras opciones</string>
+    <string name="filtros_include_sensors">Incluir telemetría de sensores</string>
+    <string name="filtros_include_sensors_subtitle">Por defecto se ocultan para no saturar el listado</string>
+    <string name="filtros_apply">Aplicar filtros</string>
+    <string name="filtros_clear">Limpiar filtros</string>
+    <string name="filtros_summary_active">Filtros activos · %1$d eventos</string>
+
+    <!-- Historial -->
+    <string name="historial_title">Historial</string>
+    <string name="cd_filter">Filtrar</string>
+    <string name="historial_filter_todas">Todas</string>
+    <string name="historial_filter_hoy">Hoy</string>
+    <string name="historial_filter_ayer">Ayer</string>
+    <string name="historial_filter_7d">7d</string>
+    <!-- Default subtitle de la row ESP32 en Ajustes mientras se carga el estado real -->
+    <string name="ajustes_device_esp32_subtitle_default">Tocá para ver detalle</string>
+    <string name="ajustes_device_wifi_subtitle_default">Tocá para ver detalle</string>
+
+    <!-- Fase 19 - Acelerometro shake-to-call -->
+    <string name="ajustes_shake_to_call_title">Llamar al sacudir</string>
+    <string name="ajustes_shake_to_call_subtitle">Sacudí el teléfono y el dispositivo va a llamar a la mascota</string>
+    <string name="shake_to_call_triggered">¡Llamando al dispositivo!</string>
+
+    <!-- Fase 18 - Network / offline UX -->
+    <string name="offline_banner_text">Sin conexión a internet · algunas acciones podrían fallar</string>
+    <string name="generic_network_error">No pudimos conectar. Revisá tu red e intentá de nuevo.</string>
+    <string name="retry_label">Reintentar</string>
+
+    <!-- Auth refresh - sesion expirada irrecuperable -->
+    <string name="session_expired">Tu sesión expiró. Iniciá sesión de nuevo.</string>
+
+    <!-- W14 - Detalle red WiFi -->
+    <string name="wifi_detail_title">Red WiFi</string>
+    <string name="wifi_detail_loading">Cargando…</string>
+    <string name="wifi_detail_status_online">CONECTADA</string>
+    <string name="wifi_detail_status_offline">SIN SEÑAL</string>
+    <string name="wifi_detail_row_ssid">SSID</string>
+    <string name="wifi_detail_row_band">Banda</string>
+    <string name="wifi_detail_row_bssid">BSSID</string>
+    <string name="wifi_detail_row_ip">IP local</string>
+    <string name="wifi_detail_row_gateway">Gateway</string>
+    <string name="wifi_detail_row_security">Seguridad</string>
+    <string name="wifi_detail_row_rssi">Intensidad</string>
+    <string name="wifi_detail_signal_excellent">Excelente</string>
+    <string name="wifi_detail_signal_good">Buena</string>
+    <string name="wifi_detail_signal_fair">Regular</string>
+    <string name="wifi_detail_signal_poor">Pobre</string>
+    <string name="wifi_detail_btn_change">Cambiar red WiFi</string>
+    <string name="wifi_detail_btn_forget">Olvidar red</string>
+    <string name="wifi_provisioning_title">Cambiar red WiFi</string>
+    <string name="wifi_provisioning_subtitle">Ingresá las credenciales de la nueva red. El ESP32 se va a reiniciar y reconectar.</string>
+    <string name="wifi_provisioning_ssid_hint">SSID</string>
+    <string name="wifi_provisioning_password_hint">Contraseña</string>
+    <string name="wifi_provisioning_btn_connect">Conectar</string>
+    <string name="wifi_provisioning_sent">Credenciales enviadas. El dispositivo va a reiniciar para conectarse.</string>
+    <string name="wifi_provisioning_mock_notice">Funcionalidad mock: en esta versión las credenciales no se envían al ESP32 todavía (requiere BLE o AP-mode).</string>
+    <string name="wifi_forget_confirm_title">¿Olvidar esta red?</string>
+    <string name="wifi_forget_confirm_msg">El ESP32 va a quedar sin conexión hasta que cargues una red nueva.</string>
+
+    <!-- W15 - Detalle ESP32 -->
+    <string name="device_detail_title">ESP32</string>
+    <string name="device_detail_loading">Cargando…</string>
+    <string name="device_detail_status_loading">CARGANDO…</string>
+    <string name="device_detail_status_online">CONECTADO · %1$s</string>
+    <string name="device_detail_status_offline">DESCONECTADO</string>
+    <string name="device_detail_row_uptime">Uptime</string>
+    <string name="device_detail_row_cpu">Temperatura CPU</string>
+    <string name="device_detail_row_ram">RAM libre</string>
+    <string name="device_detail_row_flash">Flash usado</string>
+    <string name="device_detail_row_ip">IP</string>
+    <string name="device_detail_row_rssi">Señal WiFi</string>
+    <string name="device_detail_value_unavailable">—</string>
+    <string name="device_detail_btn_ota">Buscar actualización OTA</string>
+    <string name="device_detail_btn_reboot">⏻  Reiniciar dispositivo</string>
+    <string name="device_detail_reboot_confirm_title">¿Reiniciar el dispositivo?</string>
+    <string name="device_detail_reboot_confirm_msg">El ESP32 se va a reiniciar y va a estar offline unos segundos.</string>
+    <string name="device_detail_reboot_confirm_ok">Reiniciar</string>
+    <string name="device_detail_reboot_sent">Reinicio solicitado</string>
+    <string name="device_detail_ota_no_update">Tenés la última versión instalada.</string>
+    <string name="historial_empty_title">Sin actividad para mostrar</string>
+    <string name="historial_empty_subtitle">No hay eventos en este rango. Probá con otro filtro o vení más tarde.</string>
+    <string name="historial_event_puerta_abierta">Puerta abierta</string>
+    <string name="historial_event_luz_apagada">Luz apagada</string>
+    <string name="historial_event_puerta_bloqueada">Puerta bloqueada</string>
+    <string name="historial_event_luz_encendida">Luz encendida</string>
+    <string name="historial_event_wifi">WiFi reconectado</string>
+    <string name="historial_event_nocturno">Horario nocturno activado</string>
+    <string name="historial_event_puerta_desbloqueada">Puerta desbloqueada</string>
+
+    <!-- Horarios -->
+    <string name="horarios_title">Horarios</string>
+    <string name="cd_add">Agregar</string>
+    <string name="horarios_programados">Horarios programados</string>
+    <string name="horarios_add_button">+ Agregar horario</string>
+    <string name="horarios_estado_on">ON</string>
+    <string name="horarios_estado_off">OFF</string>
+    <string name="horarios_day_l">L</string>
+    <string name="horarios_day_m1">M</string>
+    <string name="horarios_day_x">X</string>
+    <string name="horarios_day_j">J</string>
+    <string name="horarios_day_v">V</string>
+    <string name="horarios_day_s">S</string>
+    <string name="horarios_day_d">D</string>
+    <string name="horarios_empty_title">No hay horarios todavía</string>
+    <string name="horarios_empty_subtitle">Agregá un horario para que tu puerta se desbloquee automáticamente en esa franja.</string>
+    <string name="horarios_loading">Cargando horarios…</string>
+    <string name="horarios_window_subtitle">Puerta destrabada %1$s · %2$s</string>
+
+    <!-- Form horario -->
+    <string name="form_horario_title_nuevo">Nuevo horario</string>
+    <string name="form_horario_title_editar">Editar horario</string>
+    <string name="form_horario_nombre">Nombre</string>
+    <string name="form_horario_nombre_hint">Ej: Horario diurno</string>
+    <string name="form_horario_hora_inicio">Hora de inicio</string>
+    <string name="form_horario_hora_fin">Hora de fin</string>
+    <string name="form_horario_dias">Días</string>
+    <string name="form_horario_activo">Activo</string>
+    <string name="form_horario_guardar">Guardar</string>
+    <string name="form_horario_cancelar">Cancelar</string>
+    <string name="form_horario_eliminar">Eliminar horario</string>
+    <string name="form_horario_info_30min">Los horarios se evalúan en bloques de 30 minutos.</string>
+    <string name="form_horario_saving">Guardando…</string>
+
+    <!-- Validaciones del form -->
+    <string name="form_horario_err_nombre">Ingresá un nombre</string>
+    <string name="form_horario_err_nombre_corto">El nombre debe tener al menos 3 caracteres</string>
+    <string name="form_horario_err_dias">Seleccioná al menos un día</string>
+    <string name="form_horario_err_horas">La hora de fin debe ser distinta a la de inicio</string>
+
+    <!-- Toasts -->
+    <string name="form_horario_toast_creado">Horario creado</string>
+    <string name="form_horario_toast_actualizado">Horario actualizado</string>
+    <string name="form_horario_toast_eliminado">Horario eliminado</string>
+    <string name="form_horario_toast_snap_30min">Ajustado al bloque de 30 min más cercano</string>
+
+    <!-- Modal eliminar horario (BottomSheet custom) -->
+    <string name="modal_delete_horario_title">Eliminar este horario</string>
+    <string name="modal_delete_horario_message">La puerta dejará de desbloquearse automáticamente en esta franja. Podés crear otro horario más tarde.</string>
+    <string name="modal_delete_horario_confirm">Sí, eliminar</string>
+    <string name="modal_delete_horario_cancel">Cancelar</string>
+
+    <!-- Dialog override (desbloquear fuera de horario) -->
+    <string name="override_unblock_title">Fuera de horario</string>
+    <string name="override_unblock_message">No estás dentro de ningún horario configurado. Si desbloqueás manualmente, la puerta quedará destrabada hasta que el próximo horario configurado se cumpla.</string>
+    <string name="override_unblock_confirm">Desbloquear igual</string>
+    <string name="override_unblock_cancel">Cancelar</string>
+    <string name="override_unblock_toast_ok">Desbloqueada manualmente</string>
+
+    <!-- Dialog override (bloquear dentro de horario) -->
+    <string name="override_block_title">Estás dentro de un horario</string>
+    <string name="override_block_message">Hay un horario configurado activo en este momento. Si bloqueás manualmente, la puerta quedará bloqueada hasta que termine este horario.</string>
+    <string name="override_block_confirm">Bloquear igual</string>
+    <string name="override_block_cancel">Cancelar</string>
+    <string name="override_block_toast_ok">Bloqueada manualmente</string>
+
+    <!-- Notificaciones -->
+    <string name="notificaciones_title">Notificaciones</string>
+    <string name="notificaciones_mark_read">Marcar leídas</string>
+    <string name="notificaciones_filter_todas">Todas</string>
+    <string name="notificaciones_filter_noleidas">No leídas</string>
+    <string name="notif_puerta_abierta">Puerta abierta por la mascota</string>
+    <string name="notif_bateria_baja">Batería baja en ESP32</string>
+    <string name="notif_puerta_bloqueada">Puerta bloqueada manualmente</string>
+    <string name="notif_llamada_perdida">Llamada perdida del dispositivo</string>
+    <string name="notif_wifi">WiFi reconectado</string>
+    <string name="notif_nocturno">Horario nocturno activado</string>
+    <string name="notif_entro">Tu mascota entró a casa</string>
+    <string name="notif_empty">No tenés notificaciones todavía</string>
+    <string name="notif_empty_unread">No tenés notificaciones sin leer</string>
+    <string name="notif_actor_system">Sistema</string>
+    <string name="notif_actor_you">Vos</string>
+    <string name="notif_actor_by">por %1$s</string>
+    <string name="notif_loading_error">No se pudieron cargar las notificaciones</string>
+    <string name="notif_marked_all_read">%1$d notificaciones marcadas como leídas</string>
+
+    <!-- Ajustes -->
+    <string name="ajustes_title">Ajustes</string>
+    <string name="ajustes_user_name_fallback">Usuario PawGate</string>
+    <string name="ajustes_section_device">DISPOSITIVO</string>
+    <string name="ajustes_section_sensors">SENSORES Y DIAGNÓSTICO</string>
+    <string name="ajustes_section_schedules">HORARIOS</string>
+    <string name="ajustes_section_notifications">NOTIFICACIONES</string>
+    <string name="ajustes_badge_all_ok">Todo OK</string>
+    <string name="ajustes_badge_active">Activo</string>
+    <string name="ajustes_badge_ok">OK</string>
+    <string name="ajustes_device_esp32">ESP32</string>
+    <string name="ajustes_device_wifi">Red WiFi</string>
+    <string name="ajustes_device_ip">Dirección IP</string>
+    <string name="ajustes_device_uptime">Tiempo activo</string>
+    <string name="ajustes_device_mac">MAC address</string>
+    <string name="ajustes_value_loading">Cargando…</string>
+    <string name="ajustes_value_unavailable">No disponible</string>
+    <string name="ajustes_uptime_dhm">%1$dd · %2$dh · %3$dmin</string>
+    <string name="ajustes_uptime_hm">%1$dh · %2$dmin</string>
+    <string name="ajustes_uptime_m">%1$dmin</string>
+    <string name="perfil_edit_name_title">Cambiar nombre</string>
+    <string name="perfil_edit_name_hint">Nuevo nombre</string>
+    <string name="perfil_edit_name_save">Guardar</string>
+    <string name="perfil_edit_name_invalid">El nombre no puede estar vacío</string>
+    <string name="cd_edit">Editar</string>
+    <string name="ajustes_sensor_ultrasound">Ultrasonido HC-SR04</string>
+    <string name="ajustes_sensor_servo">Servomotor SG90</string>
+    <string name="ajustes_schedules_row">Horarios programados</string>
+    <string name="ajustes_schedules_subtitle">Configurar aperturas automáticas</string>
+    <string name="ajustes_notif_push">Push</string>
+</resources>

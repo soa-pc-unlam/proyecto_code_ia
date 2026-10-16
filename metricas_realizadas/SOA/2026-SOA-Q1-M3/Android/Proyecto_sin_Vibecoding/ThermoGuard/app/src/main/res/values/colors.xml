@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Deep Ocean Palette -->
+    <color name="deep_ocean_bg">#0A0E1A</color>
+    <color name="deep_ocean_surface">#0D1B2A</color>
+    <color name="deep_ocean_accent">#00B4D8</color>
+    <color name="deep_ocean_secondary">#023E8A</color>
+    <color name="deep_ocean_text">#CAF0F8</color>
+    <color name="deep_ocean_text_secondary">#90E0EF</color>
+
+    <!-- Temperature Scale (Blue, Yellow, Red) -->
+    <color name="thermometer_frio">#0077B6</color>     <!-- Cold Blue -->
+    <color name="thermometer_medio">#FFB703</color>    <!-- Amber/Yellow -->
+    <color name="thermometer_caliente">#E63946</color> <!-- Red -->
+
+    <!-- Thermometer UI Details -->
+    <color name="thermometer_track">#1B263B</color>
+    <color name="thermometer_tick">#415A77</color>
+    <color name="thermometer_label">#778DA9</color>
+
+    <!-- Semantic Aliases for code consistency -->
+    <color name="primary">@color/deep_ocean_accent</color>
+    <color name="primary_variant">@color/deep_ocean_secondary</color>
+    <color name="secondary">@color/deep_ocean_secondary</color>
+    <color name="status_green">#06D6A0</color>
+    <color name="status_red">@color/thermometer_caliente</color>
+    <color name="historial_accent">#00F5D4</color>
+
+    <!-- Legacy Mappings for Layouts not yet refactored -->
+    <color name="ice_blue">@color/deep_ocean_accent</color>
+    <color name="ice_blue_dark">@color/deep_ocean_secondary</color>
+    <color name="accent_blue">@color/deep_ocean_accent</color>
+    <color name="dark_bg">@color/deep_ocean_bg</color>
+    <color name="dark_surface">@color/deep_ocean_surface</color>
+    <color name="bg_app">@color/deep_ocean_bg</color>
+    <color name="bg_surface">@color/deep_ocean_surface</color>
+    <color name="gray_text">@color/thermometer_label</color>
+    <color name="text_primary">@color/deep_ocean_text</color>
+    <color name="text_secondary">@color/deep_ocean_text_secondary</color>
+    <color name="text_main">@color/deep_ocean_text</color>
+    <color name="text_sub">@color/deep_ocean_text_secondary</color>
+</resources>

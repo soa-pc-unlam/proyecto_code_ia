@@ -1,0 +1,63 @@
+{
+    "vsmqtt.brokerProfiles": [
+        {
+            "clientId": "vsmqtt_client_0707",
+            "name": "Mosquitto",
+            "host": "localhost",
+            "port": 1883,
+            "username": "grupo-l5",
+            "password": "secretl5",
+            "defaultsForPublish": {
+                "qos": 1,
+                "topic": "corridor-01/stock",
+                "payload": "{\n  \"status\": \"ON\"\n}"
+            },
+            "savedSubscriptions": [
+                {
+                    "qos": 1,
+                    "topic": "+/health"
+                },
+                {
+                    "qos": 1,
+                    "topic": "+/system"
+                },
+                {
+                    "qos": 1,
+                    "topic": "+/alarm"
+                },
+                {
+                    "qos": 1,
+                    "topic": "+/+/stock"
+                },
+                {
+                    "qos": 1,
+                    "topic": "+/+/security"
+                },
+                {
+                    "qos": 1,
+                    "topic": "+/stock"
+                },
+                {
+                    "qos": 1,
+                    "topic": "+/security"
+                },
+                {
+                    "qos": 1,
+                    "topic": "+/security/alarm"
+                },
+                {
+                    "qos": 1,
+                    "topic": "+/+/tare/request"
+                },
+                {
+                    "qos": 1,
+                    "topic": "+/+/tare/save"
+                },
+                {
+                    "qos": 1,
+                    "topic": "+/+/tare"
+                }
+            ]
+        }
+    ]
+}

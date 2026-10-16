@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">ThermoGuard</string>
+    <string name="mqtt_url_hint">MQTT Broker URL (e.g. tcp://192.168.1.10:1883)</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="status_idle">IDLE</string>
+    <string name="status_monitoring">MONITORING</string>
+    <string name="status_alert">ALERT</string>
+    <string name="status_alarm">ALARM</string>
+    <string name="temp_label">Temperature: %.1f°C</string>
+    <string name="history_title">Thermal History</string>
+    <string name="shake_to_stop">Shake to Stop Alarm</string>
+    <string name="btn_history">View History</string>
+    <string name="btn_sensor">Shake Test</string>
+    <string name="btn_thermometer">Real-time Monitor</string>
+    <string name="notification_channel_name">ThermoGuard Alerts</string>
+    <string name="notification_title">THERMAL ALERT!</string>
+    <string name="notification_text">Critical temperature detected!</string>
+    <string name="modo_actual_prefix">Modo actual: %s</string>
+    <string name="toast_modo_enviado">Comando enviado: %s</string>
+    <string name="preset_bajo">BAJO</string>
+    <string name="preset_medio">MEDIO</string>
+    <string name="preset_alto">ALTO</string>
+</resources>

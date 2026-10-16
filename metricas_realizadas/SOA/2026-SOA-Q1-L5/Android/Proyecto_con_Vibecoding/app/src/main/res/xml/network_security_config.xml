@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Node-RED on the local machine is served over plain HTTP (no TLS), so we must
+  allow cleartext traffic. Scoped to the whole app because the broker IP is
+  configured at runtime by the user.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

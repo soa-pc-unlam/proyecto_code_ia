@@ -1,0 +1,84 @@
+Actúa como un ingeniero senior de Android con experiencia en Kotlin, Jetpack Compose, arquitectura limpia, servicios de ubicación de Google Play y comunicación MQTT. Vas a EXTENDER una app Android existente, no vas a crear una nueva. No regeneres el proyecto: agregá la funcionalidad nueva respetando la arquitectura, las convenciones y la línea visual que ya tiene.
+
+CONTEXTO DEL PROYECTO EXISTENTE
+
+La app ya está construida en Kotlin + Jetpack Compose + Material 3, con arquitectura en capas (data/mqtt, domain, presentation, ui) y una sola Activity con navegación entre pantallas (Dashboard, Configuración y Log). Se comunica con un ESP32 por MQTT (broker.emqx.io:1883) usando los tópicos:
+
+- volante/estado (recibe)
+- volante/sensores (recibe)
+- volante/comandos (envía)
+
+El ESP32 implementa una máquina de estados que detecta manos en el volante y maniobras sinuosas. Ya existe un MqttManager con reconexión automática, un repositorio, ViewModel con estado central de UI y persistencia de configuración. Reutilizá todo eso: no dupliques la conexión MQTT ni crees un cliente nuevo.
+
+OBJETIVO
+
+Agregar una nueva pantalla de "Velocidad GPS" integrada a la navegación existente. Su propósito: leer la velocidad real del vehículo desde el GPS del teléfono y publicarla al ESP32, para que el firmware pueda ignorar las maniobras sinuosas cuando el vehículo va lento (el conductor está doblando, no zigzagueando). Por debajo del umbral de velocidad, el ESP32 silencia las alarmas por maniobra; por encima, las habilita.
+
+COMPORTAMIENTO GPS
+
+- Usar FusedLocationProviderClient (Google Play Services Location).
+- Pedir el permiso ACCESS_FINE_LOCATION en runtime, con manejo elegante de la denegación (mensaje claro en pantalla, sin crash, con opción de reintentar).
+- Solicitar actualizaciones de ubicación con prioridad alta cada 1 segundo (intervalo mínimo 500 ms), sin esperar ubicación de alta precisión para arrancar.
+- Cálculo de velocidad en km/h (entero, redondeado):
+  - Si la ubicación trae velocidad directa del GPS (hasSpeed), usarla: m/s × 3.6.
+  - Si no, calcularla por diferencia de posición entre la ubicación actual y la anterior (distancia / tiempo).
+  - Filtrar ruido: velocidades menores a 1 km/h se consideran 0.
+- Detener las actualizaciones de ubicación cuando la pantalla deja de estar visible y al destruirse (manejo correcto del ciclo de vida con Compose; no dejar el GPS corriendo de fondo).
+
+PUBLICACIÓN MQTT
+
+- Publicar la velocidad al tópico volante/comandos con el formato exacto: VELOCIDAD:<entero>  (ejemplo: VELOCIDAD:45)
+- Publicar como máximo cada 2 segundos, y solo si el valor cambió respecto del último enviado (evitar mensajes redundantes).
+- Usar el cliente MQTT ya existente en la app. Si la conexión está caída, no encolar infinito: descartar y seguir; el estado de conexión ya lo maneja la app.
+
+UMBRAL DE VELOCIDAD
+
+- Nuevo comando hacia el ESP32, formato exacto: UMBRAL_VELOCIDAD:<entero>  (ejemplo: UMBRAL_VELOCIDAD:10)
+- La pantalla debe permitir ver y editar el umbral de velocidad en km/h. Valor por defecto: 10. Rango válido: 1 a 100 (validar antes de enviar, igual que hace la app con los otros umbrales).
+- Al guardar: persistirlo con el mismo mecanismo de preferencias que ya usa la app, enviarlo por MQTT y dar confirmación visual del envío.
+- Al conectarse o reconectarse el MQTT, enviar automáticamente el umbral guardado para sincronizar el ESP32.
+
+UI/UX DE LA PANTALLA
+
+Mantené la línea visual existente (tema, tipografía, tarjetas, espaciado). Debe incluir:
+
+- La velocidad actual bien grande y protagonista, en km/h.
+- Un indicador visual del modo actual según el umbral:
+  - velocidad >= umbral → "las maniobras activan alarma" (color de alerta habilitada)
+  - velocidad < umbral → "maniobras silenciadas (velocidad baja)" (color neutro/advertencia)
+- Estado del GPS: buscando señal / activo / permiso denegado / error.
+- Datos secundarios en tarjeta: latitud, longitud y precisión en metros.
+- Control para editar y guardar el umbral de velocidad, con validación y feedback de envío.
+- Acceso desde la navegación existente (ítem de menú, tab o botón en el Dashboard, según lo que ya use la app) y vuelta atrás correcta.
+- Registrar en el log/historial interno de la app los envíos de VELOCIDAD y UMBRAL_VELOCIDAD y los eventos de GPS relevantes, usando el mismo mecanismo de registro que ya existe.
+
+CAMBIOS DE PROYECTO NECESARIOS
+
+- Agregar la dependencia de play-services-location (versión actual estable) en el Gradle del módulo.
+- Agregar los permisos de ubicación al AndroidManifest.
+- No agregues ninguna otra dependencia nueva salvo que sea imprescindible.
+
+CALIDAD
+
+- Respetá la separación en capas existente: la lógica de ubicación y velocidad va en data/domain (por ejemplo, un LocationRepository o similar expuesto como Flow), el ViewModel expone el estado, y la pantalla Compose solo renderiza y emite eventos.
+- Nada de lógica de negocio en los composables. Nada de MQTT en la UI.
+- Código consistente con el estilo del proyecto: nombres claros, funciones chicas, sin duplicación.
+- La app debe seguir compilando y funcionando exactamente igual en todo lo que ya hacía.
+
+ENTREGABLES
+
+- La pantalla nueva completa (composable + ViewModel o extensión del existente + capa de datos de ubicación).
+- Integración con la navegación.
+- Cambios en Gradle y AndroidManifest.
+- Cualquier archivo necesario para que compile.
+
+IMPORTANTE
+
+- No generes código del ESP32, ni Python, ni backend.
+- No rehagas pantallas existentes ni cambies la estructura actual del proyecto.
+- No rompas los comandos ya implementados (ALARMA, UMBRAL_MANO, UMBRAL_LEVE, UMBRAL_BRUSCO).
+- Antes de escribir código, dame primero un resumen corto de cómo vas a integrar la funcionalidad (archivos nuevos y modificados) y después implementá todo.
+
+SI HAY DECISIONES ABIERTAS
+
+Elegí la opción que reduzca el acoplamiento, respete la arquitectura existente, cuide la batería (GPS solo cuando la pantalla está activa) y haga la app más robusta ante pérdida de señal GPS o de conexión MQTT.

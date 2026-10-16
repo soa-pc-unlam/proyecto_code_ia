@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="160dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- base -->
+    <path
+        android:fillColor="#2E5C6E"
+        android:pathData="M50,100h20v12h-20z" />
+    <path
+        android:fillColor="#2E5C6E"
+        android:pathData="M38,112h44v6h-44z" />
+    <!-- stand -->
+    <path
+        android:fillColor="#5C6B70"
+        android:pathData="M56,60h8v42h-8z" />
+    <!-- frame -->
+    <path
+        android:fillColor="#2E5C6E"
+        android:pathData="M60,10 C30,10 14,32 14,58 C14,84 30,102 60,102 C90,102 106,84 106,58 C106,32 90,10 60,10zM60,18 C85,18 98,36 98,58 C98,80 85,94 60,94 C35,94 22,80 22,58 C22,36 35,18 60,18z" />
+    <!-- glass -->
+    <path
+        android:fillColor="#DCEEF2"
+        android:pathData="M60,18 C85,18 98,36 98,58 C98,80 85,94 60,94 C35,94 22,80 22,58 C22,36 35,18 60,18z"
+        android:fillAlpha="0.55" />
+    <!-- glare -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.6"
+        android:pathData="M36,32 C42,26 50,22 58,21 C48,26 40,33 36,42 C34,38 34,35 36,32z" />
+    <!-- sensor dots -->
+    <path
+        android:fillColor="#F2A93B"
+        android:pathData="M56,56m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0z" />
+    <path
+        android:fillColor="#F2A93B"
+        android:pathData="M72,56m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0z" />
+</vector>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_app"
+    android:padding="24dp">
+
+    <!-- Volver -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:text="@string/btn_volver_icon"
+        android:textColor="@color/text_sub"
+        android:textSize="14sp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        app:backgroundTint="@android:color/transparent"
+        app:rippleColor="#22FFFFFF"
+        app:cornerRadius="22dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_alarma"
+        android:textColor="@color/text_main"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/subtitle_alarma"
+        android:textColor="@color/text_sub"
+        android:textSize="13sp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Botón Encender -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEncender"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:text="@string/btn_encender"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/deep_ocean_bg"
+        app:icon="@drawable/power_settings_new_118764"
+        app:iconGravity="textStart"
+        app:iconPadding="12dp"
+        app:iconSize="28dp"
+        app:iconTint="@color/deep_ocean_bg"
+        app:backgroundTint="@color/primary"
+        app:cornerRadius="18dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

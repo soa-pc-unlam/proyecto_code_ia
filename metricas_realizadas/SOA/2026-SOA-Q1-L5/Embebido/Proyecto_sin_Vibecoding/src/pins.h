@@ -1,0 +1,16 @@
+#ifndef PINS_H_INCLUDED
+#define PINS_H_INCLUDED
+
+#define STOCK_BUTTON_PIN 2
+#define STOCK_LED_PIN    4
+
+#define SECURITY_BUTTON_PIN 5
+#define SECURITY_LED_PIN    18
+
+#define BUZZER_PIN 32
+
+#define WEIGHT_SENSOR_DT_PIN  13
+#define WEIGHT_SENSOR_SCK_PIN 12
+#define WEIGHT_SENSOR_LED_PIN 14
+
+#endif

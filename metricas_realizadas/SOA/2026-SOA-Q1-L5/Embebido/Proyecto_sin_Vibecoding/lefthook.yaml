@@ -1,0 +1,25 @@
+assert_lefthook_installed: true
+
+pre-commit:
+  parallel: true
+
+  jobs:
+    - name: " Format with Oxc"
+      run: pnpm exec oxfmt --no-error-on-unmatched-pattern {staged_files}
+      glob:
+        - "*.md"
+        - "*.json"
+        - "*.yaml"
+        - "*.toml"
+      stage_fixed: true
+
+    - name: " Format with Clang-format"
+      run: clang-format -i {staged_files}
+      glob:
+        - "*.h"
+        - "*.ino"
+      stage_fixed: true
+
+    - name: " Lint GitHub Actions workflows"
+      run: zizmor --persona=auditor --color=never {staged_files}
+      glob: .github/workflows/*.yaml

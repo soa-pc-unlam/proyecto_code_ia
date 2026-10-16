@@ -1,0 +1,9 @@
+rules:
+  artipacked:
+    ignore:
+      - copyright.yml
+
+  unpinned-uses:
+    config:
+      policies:
+        actions/*: ref-pin

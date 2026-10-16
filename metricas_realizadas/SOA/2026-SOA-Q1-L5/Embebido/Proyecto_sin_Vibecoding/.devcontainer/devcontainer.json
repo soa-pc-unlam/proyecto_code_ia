@@ -1,0 +1,95 @@
+{
+    "service": "devcontainer",
+    "dockerComposeFile": "compose.yaml",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "24",
+            "pnpmVersion": "latest"
+        },
+        "ghcr.io/devcontainer-community/devcontainer-features/clang-format:1": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "version": "latest",
+            "dockerDashComposeVersion": "v2"
+        }
+    },
+    "remoteUser": "root",
+    "onCreateCommand": "chmod +x .devcontainer/setup-tools.sh",
+    "postCreateCommand": ".devcontainer/setup-tools.sh",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools-extension-pack",
+                "platformio.platformio-ide",
+                "Wokwi.wokwi-vscode",
+                "docker.docker",
+                "ms-azuretools.vscode-docker",
+                "EditorConfig.EditorConfig",
+                "bierner.markdown-checkbox",
+                "bierner.markdown-preview-github-styles",
+                "streetsidesoftware.code-spell-checker",
+                "streetsidesoftware.code-spell-checker-spanish",
+                "bierner.markdown-mermaid",
+                "redhat.vscode-yaml",
+                "tamasfe.even-better-toml",
+                "oxc.oxc-vscode",
+                "rpdswtk.vsmqtt",
+                "humao.rest-client"
+            ],
+            "settings": {
+                "telemetry.telemetryLevel": "off",
+                "telemetry.feedback.enabled": false,
+                "files.exclude": {
+                    "**/.DS_Store": true,
+                    "**/.git": false,
+                    "**/.hg": true,
+                    "**/.svn": true,
+                    "**/Thumbs.db": true,
+                    "**/.pnpm-store": true,
+                    "**/node_modules": true,
+                    "package.json": true,
+                    "pnpm-lock.yaml": true,
+                    "pnpm-workspace.yaml": true
+                },
+                "search.exclude": {
+                    "**/.DS_Store": true,
+                    "**/.git": true,
+                    "**/.hg": true,
+                    "**/.svn": true,
+                    "**/Thumbs.db": true,
+                    "**/node_modules": true,
+                    "**/bower_components": true,
+                    "**/*.code-search": true,
+                    "**/.pio": true,
+                    "**/.pnpm-store": true,
+                    "package.json": true,
+                    "pnpm-lock.yaml": true,
+                    "pnpm-workspace.yaml": true
+                },
+                "oxc.requireConfig": true,
+                "C_Cpp.copilotHover": "disabled",
+                "[cpp]": {
+                    "editor.defaultFormatter": "ms-vscode.cpptools"
+                },
+                "rest-client.enableTelemetry": false,
+                "rest-client.previewOption": "exchange",
+                "chat.agent.enabled": true,
+                "chat.editing.confirmEditRequestRemoval": false,
+                "docker.extension.enableComposeLanguageServer": true,
+                "containers.images.sortBy": "Label",
+                "containers.images.description": ["CreatedTime", "Size"],
+                "containers.containers.label": "ContainerName",
+                "containers.containers.sortBy": "Label",
+                "containers.containers.description": ["ContainerName", "CreatedTime", "Image", "Ports", "Status"],
+                "containers.networks.sortBy": "Label",
+                "containers.networks.description": ["CreatedTime", "NetworkDriver"],
+                "yaml.schemas": {
+                    "https://raw.githubusercontent.com/docker/vscode-extension/6a88caada42b57090df7ce91ec2a6561b422afe1/misc/empty.json": [
+                        ".github/workflows/*.yaml",
+                        "compose.yaml"
+                    ]
+                }
+            }
+        }
+    }
+}

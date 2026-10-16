@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Lightweight framework theme (no Material Components dependency needed).
+      The real look & feel is driven by Jetpack Compose's MaterialTheme.
+    -->
+    <style name="Theme.StockSecurityApp" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/cream</item>
+        <item name="android:navigationBarColor">@color/cream</item>
+        <item name="android:windowBackground">@color/cream</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

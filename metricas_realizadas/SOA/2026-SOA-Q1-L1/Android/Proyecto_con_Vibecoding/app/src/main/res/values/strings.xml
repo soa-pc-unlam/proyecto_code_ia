@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Espejo Inteligente</string>
+
+    <!-- Welcome -->
+    <string name="welcome_title">Espejo Inteligente</string>
+    <string name="welcome_body">Controlá tu espejo IoT: mirá la telemetría de los sensores en tiempo real, ajustá la posición y la luz de forma manual o agitando el celular, y revisá el historial de la sesión.</string>
+    <string name="welcome_start">Comenzar</string>
+
+    <!-- Connection -->
+    <string name="connection_title">Conexión al espejo</string>
+    <string name="connection_ip_hint">IP del broker MQTT</string>
+    <string name="connection_port_hint">Puerto</string>
+    <string name="connection_simulated_switch">Usar datos simulados</string>
+    <string name="connection_connect">Conectar</string>
+    <string name="connection_status_idle">Ingresá los datos de conexión o activá el modo simulado</string>
+    <string name="connection_status_connecting">Conectando…</string>
+    <string name="connection_status_error">No se pudo conectar</string>
+    <string name="connection_status_missing_fields">Completá todos los campos</string>
+
+    <!-- Dashboard / bottom nav -->
+    <string name="nav_sensores">Sensores</string>
+    <string name="nav_control">Control</string>
+    <string name="nav_historial">Historial</string>
+    <string name="dashboard_connection_lost">Se perdió la conexión con el espejo</string>
+
+    <!-- Sensores -->
+    <string name="sensor_distancia1_label">Distancia 1</string>
+    <string name="sensor_distancia2_label">Distancia 2</string>
+    <string name="sensor_luz_label">Luz</string>
+    <string name="sensor_distancia_placeholder">-- cm</string>
+    <string name="sensor_luz_placeholder">-- luz</string>
+    <string name="sensor_value_cm">%1$s cm</string>
+    <string name="sensor_value_luz">%1$s luz</string>
+
+    <!-- Control -->
+    <string name="control_manual_switch">Manual</string>
+    <string name="control_shake_switch">Shake</string>
+    <string name="control_position_label">Posición del espejo</string>
+    <string name="control_position_left">Izquierda</string>
+    <string name="control_position_center">Centro</string>
+    <string name="control_position_right">Derecha</string>
+    <string name="control_light_label">Intensidad de luz</string>
+    <string name="control_send">Enviar</string>
+    <string name="control_shake_requires_manual">Activar modo manual primero</string>
+
+    <!-- Historial -->
+    <string name="historial_distancia1_title">Distancia 1</string>
+    <string name="historial_distancia2_title">Distancia 2</string>
+    <string name="historial_luz_title">Luz</string>
+
+    <!-- Usage alert service / notifications -->
+    <string name="alert_channel_persistent_name">Monitoreo del espejo</string>
+    <string name="alert_channel_high_name">Alerta de tiempo de uso</string>
+    <string name="alert_persistent_title">Espejo Inteligente activo</string>
+    <string name="alert_persistent_text">Monitoreando el tiempo frente al espejo</string>
+    <string name="alert_high_title">¡Llevás mucho tiempo frente al espejo!</string>
+    <string name="alert_high_text">Alejate un momento del espejo.</string>
+</resources>

@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Vibenofono</string>
+    <string name="title_localizar">Localizar dispositivo</string>
+    <string name="title_agregar_contactos">Agregar contactos</string>
+    <string name="contacto_agregado">Contacto agregado</string>
+    <string name="contacto_eliminado">Contacto eliminado</string>
+    <string name="error_contacto_vacio">Debe ingresar un contacto</string>
+    <string name="error_contacto_valido">El contacto debe tener entre 8 y 15 caracteres</string>
+    <string name="error_agregar_contacto">No se pudo agregar el contacto</string>
+    <string name="error_eliminar_contacto">No se pudo eliminar el contacto</string>
+    <string name="mqtt_status_connected">MQTT conectado</string>
+    <string name="mqtt_status_disconnected">MQTT desconectado</string>
+    <string name="telegram_status_audio">Telegram: audio recibido</string>
+    <string name="telegram_status_texto">Telegram: mensaje predeterminado recibido</string>
+    <string name="telegram_status_emergencia">Telegram: emergencia recibida</string>
+    <string name="telegram_status_live">Telegram: live recibido</string>
+    <string name="notification_title">Nonófono activo</string>
+    <string name="notification_text">Servicio de MQTT y Telegram en ejecución</string>
+    <string name="notification_channel_name">Nonófono</string>
+    <string name="action_stop_service">Detener servicio</string>
+    <string name="localizar_esperando_agitar">Agitar el teléfono para localizar</string>
+    <string name="localizar_sin_sensor">Acelerómetro no disponible</string>
+    <string name="localizar_agitado">Shake detectado, enviando comando</string>
+    <string name="localizar_enviando_evento">Evento enviado</string>
+</resources>

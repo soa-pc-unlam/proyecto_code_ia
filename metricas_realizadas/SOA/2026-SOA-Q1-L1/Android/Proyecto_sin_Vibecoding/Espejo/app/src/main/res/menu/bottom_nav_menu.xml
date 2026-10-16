@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_sensores"
+        android:icon="@drawable/ic_sensores"
+        android:title="Sensores" />
+
+    <item
+        android:id="@+id/nav_control"
+        android:icon="@drawable/ic_control"
+        android:title="Control" />
+
+    <item
+        android:id="@+id/nav_historial"
+        android:icon="@drawable/ic_historial"
+        android:title="Historial" />
+
+</menu>

@@ -1,0 +1,33 @@
+name: soa-practical-work-2026_mqtt-architecture
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2.1.2-alpine
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+      - ./mosquitto/config:/mosquitto/config
+    restart: unless-stopped
+
+  node-red:
+    build:
+      context: ./node-red
+      dockerfile: Dockerfile
+    container_name: node-red
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./node-red:/data
+    environment:
+      - TZ=America/Argentina/Buenos_Aires
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+
+volumes:
+  mosquitto_data:
+  mosquitto_log:
