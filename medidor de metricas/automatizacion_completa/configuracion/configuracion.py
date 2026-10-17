@@ -96,7 +96,7 @@ def validar_umbrales(umbrales, nombre):
         if umbral[definiciones.TEXTO_CAMPO_MAX] is not None and umbral[definiciones.TEXTO_CAMPO_MIN] > umbral[definiciones.TEXTO_CAMPO_MAX]:
             raise ValueError(f"Rango invertido en el umbral {posicion} de '{nombre}'")
 
-def cargar_proyectos(ruta_archivo="proyectos.json"):
+def cargar_proyectos(ruta_archivo="proyectos_pc.json"):
     """Carga y valida los proyectos definidos en un archivo JSON.
 
     Args:
@@ -111,7 +111,7 @@ def cargar_proyectos(ruta_archivo="proyectos.json"):
     datos = cargar_json(ruta_archivo)
 
     if not isinstance(datos, list):
-        raise ValueError("El archivo proyectos.json debe contener una lista de proyectos.")
+        raise ValueError("El archivo proyectos_pc.json debe contener una lista de proyectos.")
 
     proyectos = []
     codigos = set()
@@ -127,7 +127,7 @@ def cargar_proyectos(ruta_archivo="proyectos.json"):
     for item in datos:
         for campo in campos:
             if campo not in item:
-                raise ValueError(f"Falta el campo '{campo}' en un proyecto del archivo proyectos.json")
+                raise ValueError(f"Falta el campo '{campo}' en un proyecto del archivo proyectos_pc.json")
 
         if item["codigo"] in codigos:
             raise ValueError(f"Código de proyecto duplicado: {item['codigo']}")

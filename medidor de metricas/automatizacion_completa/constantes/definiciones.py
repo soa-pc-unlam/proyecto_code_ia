@@ -1,6 +1,6 @@
 """Define las constantes generales de la aplicación."""
 
-DATOS_PROYECTOS_JSON = "datos_entrada/proyectos.json"
+DATOS_PROYECTOS_JSON = "datos_entrada/proyectos_pc.json"
 CONFIGURACION_JSON = "configuracion/configuracion.json"
 
 

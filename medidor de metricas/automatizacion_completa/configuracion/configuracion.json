@@ -1,5 +1,5 @@
 {
-  "archivo_excel_entrada": "datos_entrada/datos_entrada.xlsx",
+  "archivo_excel_entrada": "datos_entrada/datos_entrada_pc.xlsx",
   "archivo_excel_salida": "metricas_calidad_resultados.xlsx",
   "carpeta_resultados": "resultados",
   "carpeta_logs": "logs",

@@ -35,8 +35,8 @@ Detekt para Kotlin.
 ## Configuración
 
 1. Definir rutas, ponderaciones y umbrales en `configuracion/configuracion.json`.
-2. Definir los proyectos en `datos_entrada/proyectos.json`.
-3. Completar la hoja `Concurrencia` de `datos_entrada/datos_entrada.xlsx`.
+2. Definir los proyectos en `datos_entrada/proyectos_pc.json`.
+3. Completar la hoja `Concurrencia` de `datos_entrada/datos_entrada_pc.xlsx`.
 
 Los códigos de proyecto deben ser únicos. Las rutas pueden contener espacios.
 
