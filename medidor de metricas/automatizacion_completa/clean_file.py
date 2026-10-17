@@ -24,9 +24,9 @@ def borrar_archivos_directorios():
                     print(f"Error eliminando {archivo}: {e}")
 
 
-def borrar_archivo_excel():
+def borrar_archivo_excel(configuracion=None):
     """Elimina el libro Excel de métricas si existe."""
-    configuracion = cargar_configuracion(definiciones.CONFIGURACION_JSON)
+    configuracion = cargar_configuracion(configuracion)
 
     archivo_excel = Path(configuracion["archivo_excel_salida"])
 
@@ -40,10 +40,19 @@ def borrar_archivo_excel():
         print(f"No existe: {archivo_excel}")
 
 
+def borrar_archivos_excel():
+    """Elimina los libros Excel de métricas para ambos tipos de proyecto."""
+    for tipo_proyecto in [definiciones.TIPO_PROYECTO_PC, definiciones.TIPO_PROYECTO_ESP32_ANDROID]:
+        if tipo_proyecto == definiciones.TIPO_PROYECTO_PC:
+            configuracion = definiciones.CONFIGURACION_JSON_PC
+        elif tipo_proyecto == definiciones.TIPO_PROYECTO_ESP32_ANDROID:
+            configuracion = definiciones.CONFIGURACION_JSON_ESP32_ANDROID
+        borrar_archivo_excel(configuracion)
+        
 def main():
     """Ejecuta la limpieza de archivos generados."""
     borrar_archivos_directorios()
-    borrar_archivo_excel()
+    borrar_archivos_excel()
     print("Proceso finalizado.")
 
 

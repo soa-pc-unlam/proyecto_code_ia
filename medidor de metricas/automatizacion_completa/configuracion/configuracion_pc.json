@@ -1,0 +1,177 @@
+{
+  "archivo_excel_entrada": "datos_entrada/datos_entrada_pc.xlsx",
+  "archivo_excel_salida": "metricas_resultados_pc.xlsx",
+  "carpeta_resultados": "resultados",
+  "carpeta_logs": "logs",
+  "coeficiente_penalizacion_tokens": 0.1,
+  "umbrales_cc": [
+    {
+      "min": 1,
+      "max": 5,
+      "nivel": "Bajo",
+      "interpretacion": "Testeabilidad alta"
+    },
+    {
+      "min": 6,
+      "max": 10,
+      "nivel": "Moderado",
+      "interpretacion": "Tolerable"
+    },
+    {
+      "min": 11,
+      "max": 20,
+      "nivel": "Alto",
+      "interpretacion": "Considerar refactoring"
+    },
+    {
+      "min": 21,
+      "max": null,
+      "nivel": "Muy alto",
+      "interpretacion": "Crítico"
+    }
+  ],
+  "umbrales_mi": [
+    {
+      "min": 0,
+      "max": 19.99,
+      "nivel": "Bajo",
+      "interpretacion": "Factores que afectan la mantenibilidad"
+    },
+    {
+      "min": 20,
+      "max": 39.99,
+      "nivel": "Aceptable",
+      "interpretacion": "Mantenibilidad aceptable"
+    },
+    {
+      "min": 40,
+      "max": 59.99,
+      "nivel": "Buena",
+      "interpretacion": "Buena mantenibilidad"
+    },
+    {
+      "min": 60,
+      "max": null,
+      "nivel": "Muy buena",
+      "interpretacion": "Muy buena mantenibilidad"
+    }
+  ],
+  "umbrales_isi": [
+    {
+      "min": 0,
+      "max": 0,
+      "nivel": "Sin issues",
+      "interpretacion": "No se detectaron issues",
+      "observacion":  "Sin issues"
+    },
+    {
+      "min": 1,
+      "max": 1.49,
+      "nivel": "Bajo",
+      "interpretacion": "Predominan issues bajos",
+      "observacion" : "solo issues bajos"
+    },
+    {
+      "min": 1.5,
+      "max": 2.49,
+      "nivel": "Moderado",
+      "interpretacion": "Predominan issues medios",
+      "observacion": "Contiene issues medios"
+    },
+    {
+      "min": 2.5,
+      "max": 3.99,
+      "nivel": "Alto",
+      "interpretacion": "Presencia de issues altos",
+      "observacion": "Contiene issues altos"
+    },
+    {
+      "min": 4,
+      "max": null,
+      "nivel": "Muy alto",
+      "interpretacion": "Predominan issues altos"
+    }
+  ],
+  "ponderacion_concurrencia": {
+    "Alta": 3,
+    "Media": 2,
+    "Baja": 1
+  },
+  "umbrales_concurrencia": [
+    {
+      "min": 3,
+      "max": null,
+      "interpretacion": "Muy buen uso de concurrencia"
+    },
+    {
+      "min": 2.5,
+      "max": 2.99,
+      "interpretacion": "Hay aspectos que requieren observación"
+    },
+    {
+      "min": 0,
+      "max": 2.49,
+      "interpretacion": "Requiere revisión"
+    }
+  ],
+  "umbrales_uso_cpu": [
+    {
+      "min": 0,
+      "max": 24.9,
+      "nivel": "Bajo",
+      "interpretacion": "Consumo bajo de CPU"
+    },
+    {
+      "min": 25,
+      "max": 59.9,
+      "nivel": "Medio",
+      "interpretacion": "Consumo medio de CPU"
+    },
+    {
+      "min": 60,
+      "max": 100,
+      "nivel": "Alto",
+      "interpretacion": "Consumo alto de CPU"
+    }
+  ],
+  "umbrales_uso_mem": [
+    {
+      "min": 0,
+      "max": 29.9,
+      "nivel": "Bajo",
+      "interpretacion": "Consumo bajo de CPU"
+    },
+    {
+      "min": 30,
+      "max": 59.9,
+      "nivel": "Medio",
+      "interpretacion": "Consumo medio de CPU"
+    },
+    {
+      "min": 60,
+      "max": 100,
+      "nivel": "Alto",
+      "interpretacion": "Consumo alto de CPU"
+    }
+  ],
+  "umbrales_token": [
+    {
+      "min": 0,
+      "max": 9.9,
+      "nivel": "Bajo",
+      "interpretacion": "Bajo NLOC/token, ajustada por refinamientos."
+    },
+    {
+      "min": 10,
+      "max": 29.9,
+      "nivel": "Medio",
+      "interpretacion": "Medio NLOC/token, ajustada por refinamientos."
+    },
+    {
+      "min": 30,
+      "max": 1000,
+      "nivel": "Alto",
+      "interpretacion": "Alto NLOC/token, ajustada por refinamientos."
+    }
+  ]
+}

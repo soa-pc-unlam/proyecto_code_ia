@@ -1,7 +1,20 @@
 """Define las constantes generales de la aplicación."""
 
-DATOS_PROYECTOS_JSON = "datos_entrada/proyectos_pc.json"
-CONFIGURACION_JSON = "configuracion/configuracion.json"
+#define los tipos de proyecto que se pueden procesar
+TIPO_PROYECTO_PC="PC"
+TIPO_PROYECTO_ESP32_ANDROID="ESP32-Android"
+
+DATOS_PC_PROYECTOS_JSON = "datos_entrada/proyectos_pc.json"
+DATOS_ESP32_ANDROID_PROYECTOS_JSON = "datos_entrada/proyectos_esp32-android.json"
+
+DATOS_ESP32_ANDROID_EXCEL = "datos_entrada/datos_entrada_esp32_android.xlsx"
+REPORTE_ESP32_ANDROID_EXCEL = "metricas_calidad_resultados_esp32_android.xlsx"
+
+CARPETA_RESULTADOS_ESP32_ANDROID = "resultados/esp32_android"
+CARPETA_LOGS_ESP32_ANDROID = "logs/esp32_android"
+
+CONFIGURACION_JSON_PC = "configuracion/configuracion_pc.json"
+CONFIGURACION_JSON_ESP32_ANDROID = "configuracion/configuracion_esp32_android.json"
 
 
 # Cantidad máxima de proyectos procesados simultáneamente.

@@ -1,6 +1,6 @@
 {
-  "archivo_excel_entrada": "datos_entrada/datos_entrada_pc.xlsx",
-  "archivo_excel_salida": "metricas_calidad_resultados.xlsx",
+  "archivo_excel_entrada": "datos_entrada/datos_entrada_esp32_android.xlsx",
+  "archivo_excel_salida": "metricas_resultados_esp32_android.xlsx",
   "carpeta_resultados": "resultados",
   "carpeta_logs": "logs",
   "coeficiente_penalizacion_tokens": 0.1,

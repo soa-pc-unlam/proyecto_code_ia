@@ -31,7 +31,7 @@ def cargar_json(ruta_archivo):
         return json.load(archivo)
 
 
-def cargar_configuracion(ruta_archivo="configuracion.json"):
+def cargar_configuracion(ruta_archivo):
     """Carga la configuración y comprueba sus campos obligatorios.
 
     Args:

@@ -11,22 +11,46 @@ from procesamiento.procesamiento import gestionar_procesamiento_proyectos
 from util.recursos import limitar_cpu
 
 
-def main():
-    """Ejecuta concurrentemente el análisis de los proyectos configurados."""
+SEPARADOR_FIN_PROCESO = "========================"
+
+
+def ejecutar_analisis(tipo_proyecto):
+    """Ejecuta el análisis y cierra los libros, registrando los errores.
+
+    Args:
+        ruta_configuracion: Ruta del JSON de configuración base.
+        ruta_proyectos: Ruta del JSON de proyectos que se procesará.
+        ajustes_configuracion: Valores que reemplazan la configuración cargada
+            en memoria, sin modificar el archivo original.
+        porcentaje_cpu: Fracción de CPUs disponibles que se permite utilizar.
+        incluir_graficos: Indica si se generan gráficos en el reporte.
+    """
     logger = logging.getLogger(__name__)
     libro_salida = None
     libro_entrada = None
     
     try:
-        configuracion = cargar_configuracion(definiciones.CONFIGURACION_JSON)
+
+        if tipo_proyecto == definiciones.TIPO_PROYECTO_PC:
+            ruta_configuracion = definiciones.CONFIGURACION_JSON_PC
+            ruta_proyectos = definiciones.DATOS_PC_PROYECTOS_JSON
+            porcentaje_cpu = 0.5
+            incluir_graficos = True
+        if tipo_proyecto == definiciones.TIPO_PROYECTO_ESP32_ANDROID:
+            ruta_configuracion = definiciones.CONFIGURACION_JSON_ESP32_ANDROID
+            ruta_proyectos = definiciones.DATOS_ESP32_ANDROID_PROYECTOS_JSON
+            porcentaje_cpu = 0.5
+            incluir_graficos = True
+            
+        configuracion = cargar_configuracion(ruta_configuracion)
         inicializar_directorios(configuracion)
 
         logger = configurar_logger(configuracion[definiciones.TEXTO_CAMPO_CARPETA_LOGS])
         logger.info("Inicio del análisis de métricas")
 
-        limitar_cpu(definiciones.PORCENTAJE_MAX_CPU, logger)
+        limitar_cpu(porcentaje_cpu, logger)
 
-        proyectos = cargar_proyectos(definiciones.DATOS_PROYECTOS_JSON)
+        proyectos = cargar_proyectos(ruta_proyectos)
         libro_salida = crear_o_abrir_excel_salida(configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA])
 
         libro_entrada = abrir_excel_entrada(configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_ENTRADA])
@@ -36,7 +60,7 @@ def main():
         finalizar_libro(
             libro_salida,
             configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA],
-            incluir_graficos=True,
+            incluir_graficos=incluir_graficos,
         )
         informar_resultados_finales(logger, configuracion)
 
@@ -75,14 +99,11 @@ def informar_resultados_finales(logger, configuracion):
         configuracion (dict): Configuración que contiene archivo_excel_salida.
     """
     logger.info("")
-    logger.info("=" * 24)
+    logger.info(SEPARADOR_FIN_PROCESO)
     logger.info("== Proceso finalizado ==")
-    logger.info("=" * 24)
+    logger.info(SEPARADOR_FIN_PROCESO)
     logger.info(
         "Informe creado en el archivo Excel: "
         + str(configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA])
     )
 
-
-if __name__ == "__main__":
-    main()
