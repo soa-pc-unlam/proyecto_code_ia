@@ -100,7 +100,8 @@ def cargar_proyectos(ruta_archivo="proyectos_pc.json"):
     """Carga y valida los proyectos definidos en un archivo JSON.
 
     Args:
-        ruta_archivo: Ruta del archivo de proyectos.
+        ruta_archivo: Ruta del archivo de proyectos. Los campos opcionales
+            id_proyecto, dispositivo e implementacion se conservan si existen.
 
     Returns:
         Lista de instancias de ``Proyecto``.
@@ -141,6 +142,9 @@ def cargar_proyectos(ruta_archivo="proyectos_pc.json"):
                 herramienta_ia=item["herramienta_ia"],
                 modelo_ia=item["modelo_ia"],
                 lenguaje=item["lenguaje"],
+                id_proyecto=item.get("id_proyecto", ""),
+                dispositivo=item.get("dispositivo", ""),
+                implementacion=item.get("implementacion", ""),
             )
         )
 

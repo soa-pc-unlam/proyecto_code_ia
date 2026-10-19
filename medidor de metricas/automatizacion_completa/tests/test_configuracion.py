@@ -9,7 +9,6 @@ from configuracion.configuracion import (
     cargar_proyectos,
     clasificar_por_umbrales,
     validar_coeficiente_penalizacion,
-    validar_configuracion_cpu_memoria,
     validar_umbrales,
 )
 
@@ -23,8 +22,8 @@ class ConfiguracionTest(unittest.TestCase):
             {"min": 0, "max": 1, "nivel": "Bajo", "interpretacion": "A"},
             {"min": 1.01, "max": None, "nivel": "Alto", "interpretacion": "B"},
         ]
-        self.assertEqual(clasificar_por_umbrales(1, umbrales), ("Bajo", "A"))
-        self.assertEqual(clasificar_por_umbrales(1.01, umbrales), ("Alto", "B"))
+        self.assertEqual(clasificar_por_umbrales(1, umbrales), umbrales[0])
+        self.assertEqual(clasificar_por_umbrales(1.01, umbrales), umbrales[1])
 
     def test_validar_umbrales_rechaza_rango_invertido(self):
         """Rechaza umbrales cuyo mínimo supera al máximo."""

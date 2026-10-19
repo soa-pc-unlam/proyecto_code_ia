@@ -14,6 +14,9 @@ class Proyecto:
         herramienta_ia: Herramienta de IA empleada en el proyecto.
         modelo_ia: Modelo de IA empleado.
         lenguaje: Lenguaje de programación principal.
+        id_proyecto: Identificador compartido por las implementaciones.
+        dispositivo: Plataforma del proyecto (Android, ESP32, etc.).
+        implementacion: Tipo de implementación (Manual o Vibecoding).
     """
     codigo: str
     nombre_proyecto: str
@@ -21,6 +24,9 @@ class Proyecto:
     herramienta_ia: str
     modelo_ia: str
     lenguaje: str
+    id_proyecto: str = ""
+    dispositivo: str = ""
+    implementacion: str = ""
 
 
 @dataclass

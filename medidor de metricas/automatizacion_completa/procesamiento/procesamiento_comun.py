@@ -18,12 +18,8 @@ def ejecutar_analisis(tipo_proyecto):
     """Ejecuta el análisis y cierra los libros, registrando los errores.
 
     Args:
-        ruta_configuracion: Ruta del JSON de configuración base.
-        ruta_proyectos: Ruta del JSON de proyectos que se procesará.
-        ajustes_configuracion: Valores que reemplazan la configuración cargada
-            en memoria, sin modificar el archivo original.
-        porcentaje_cpu: Fracción de CPUs disponibles que se permite utilizar.
-        incluir_graficos: Indica si se generan gráficos en el reporte.
+        tipo_proyecto: Tipo de proyecto PC o ESP32-Android. Selecciona las
+            rutas de configuración y las hojas del reporte correspondientes.
     """
     logger = logging.getLogger(__name__)
     libro_salida = None
@@ -36,12 +32,16 @@ def ejecutar_analisis(tipo_proyecto):
             ruta_proyectos = definiciones.DATOS_PC_PROYECTOS_JSON
             porcentaje_cpu = 0.5
             incluir_graficos = True
-        if tipo_proyecto == definiciones.TIPO_PROYECTO_ESP32_ANDROID:
+        elif tipo_proyecto == definiciones.TIPO_PROYECTO_ESP32_ANDROID:
             ruta_configuracion = definiciones.CONFIGURACION_JSON_ESP32_ANDROID
             ruta_proyectos = definiciones.DATOS_ESP32_ANDROID_PROYECTOS_JSON
             porcentaje_cpu = 0.5
             incluir_graficos = True
-            
+        else:
+            raise ValueError(f"Tipo de proyecto no admitido: {tipo_proyecto}")
+
+        hojas_reporte = definiciones.PERFILES_REPORTE[tipo_proyecto]
+
         configuracion = cargar_configuracion(ruta_configuracion)
         inicializar_directorios(configuracion)
 
@@ -51,16 +51,25 @@ def ejecutar_analisis(tipo_proyecto):
         limitar_cpu(porcentaje_cpu, logger)
 
         proyectos = cargar_proyectos(ruta_proyectos)
-        libro_salida = crear_o_abrir_excel_salida(configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA])
+        libro_salida = crear_o_abrir_excel_salida(
+            configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA],
+            hojas_reporte=hojas_reporte,
+        )
 
         libro_entrada = abrir_excel_entrada(configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_ENTRADA])
 
         gestionar_procesamiento_proyectos(proyectos, configuracion, libro_salida,libro_entrada, logger)
 
+        opciones_graficos = {}
+        if tipo_proyecto == definiciones.TIPO_PROYECTO_ESP32_ANDROID:
+            opciones_graficos["configuracion_graficos"] = (
+                definiciones.CONFIGURACION_GRAFICOS_DISPOSITIVOS
+            )
         finalizar_libro(
             libro_salida,
             configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA],
             incluir_graficos=incluir_graficos,
+            **opciones_graficos,
         )
         informar_resultados_finales(logger, configuracion)
 

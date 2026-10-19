@@ -23,7 +23,11 @@ def configurar_logger(carpeta_logs):
 
     logger = logging.getLogger("evaluador_metricas")
     logger.setLevel(constantes.MODO_LOGGING)
-    logger.handlers.clear()
+    # Cerrar los manejadores anteriores evita dejar archivos abiertos
+    # cuando se ejecutan ambos evaluadores o se repite una evaluación.
+    for manejador in logger.handlers[:]:
+        logger.removeHandler(manejador)
+        manejador.close()
 
     formato = logging.Formatter("%(asctime)s | %(levelname)-5s | %(message)s",
               datefmt="%Y-%m-%d %H:%M:%S")

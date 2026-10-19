@@ -13,6 +13,7 @@ from constantes.definiciones import (
     CANTIDAD_CAMPOS_MANTENIBILIDAD,
     CANTIDAD_CAMPOS_BUGS_SMELLS,
     HOJAS_REPORTE,
+    ENCABEZADOS_RESUMEN,
     HOJA_RESUMEN,
     HOJA_COMPLEJIDAD,
     HOJA_MANTENIBILIDAD,
@@ -20,11 +21,16 @@ from constantes.definiciones import (
     HOJA_CONCURRENCIA_SALIDA,
     HOJA_TOKENS_SALIDA,
     CONFIGURACION_GRAFICOS,
+    ENCABEZADOS_DATOS_PROYECTO_RESUMEN,
+    ENCABEZADOS_INTERPRETACION_RESUMEN,
     HOJA_ERRORES,
     CANTIDAD_CAMPOS_TOKENS,
     CANTIDAD_CAMPOS_CPU_MEMORIA,
     HOJA_CPU_MEMORIA_SALIDA,
     TEXTO_ENCABEZADO_CODIGO,
+    TEXTO_ENCABEZADO_ID_PROYECTO,
+    TEXTO_ENCABEZADO_DISPOSITIVO,
+    TEXTO_ENCABEZADO_IMPLEMENTACION,
     TEXTO_ENCABEZADO_CPU_PROMEDIO,
     TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN,
     TEXTO_ENCABEZADO_REGLAS_INCUMPLIDAS,
@@ -34,11 +40,13 @@ from constantes.definiciones import (
     COLOR_INTERPRETACION_RESUMEN,
 )
 
-def crear_o_abrir_excel_salida(archivo_excel):
-    """Abre un libro existente o crea uno con las hojas requeridas.
+def crear_o_abrir_excel_salida(archivo_excel, hojas_reporte=HOJAS_REPORTE):
+    """Abre o crea un libro con las hojas del perfil seleccionado.
 
     Args:
         archivo_excel: Ruta del libro de resultados.
+        hojas_reporte: Nombres y encabezados de las hojas requeridas.
+            Por defecto conserva la configuración original de PC.
 
     Returns:
         El libro preparado para recibir datos.
@@ -49,7 +57,7 @@ def crear_o_abrir_excel_salida(archivo_excel):
         libro = Workbook()
         libro.remove(libro.active)
 
-    crear_hojas_si_no_existen(libro)
+    crear_hojas_si_no_existen(libro, hojas_reporte)
     return libro
 
 def abrir_excel_entrada(archivo_excel):
@@ -104,13 +112,12 @@ def eliminar_columnas_obsoletas(hoja, encabezados_validos):
         if encabezado is not None and encabezado not in encabezados_validos:
             hoja.delete_cols(columna)
 
-def crear_hojas_si_no_existen(libro):
-    """Crea y prepara todas las hojas requeridas por el reporte.
-
+def crear_hojas_si_no_existen(libro, hojas_reporte=HOJAS_REPORTE):
+    """Crea las hojas del reporte y verifica sus encabezados.
     Args:
         libro: Libro de Excel que se desea preparar.
     """
-    for nombre, encabezados in HOJAS_REPORTE.items():
+    for nombre, encabezados in hojas_reporte.items(): 
         if nombre not in libro.sheetnames:
             libro.create_sheet(nombre).append(encabezados)
             continue
@@ -204,22 +211,31 @@ def buscar_filas_por_codigo(hoja, codigo, columna_codigo=1, normalizar=True):
 
 
 def escribir_o_actualizar_fila(hoja, codigo, valores):
-    """Agrega una fila o actualiza la que corresponde a un código.
+    """Agrega o actualiza una fila por código, por posición o encabezado.
 
     Args:
         hoja: Hoja que se desea modificar.
         codigo: Código usado como clave de la fila.
-        valores: Valores que deben escribirse.
+        valores: Lista en el orden de columnas o diccionario por encabezado.
     """
     filas_existentes = buscar_filas_por_codigo(hoja, codigo)
 
     if len(filas_existentes) > 1:
         raise ValueError(f"Código duplicado '{codigo}' en {hoja.title}")
-    elif not filas_existentes:
+
+    if isinstance(valores, dict):
+        if filas_existentes:
+            fila = filas_existentes[0]
+        else:
+            hoja.append([codigo])
+            fila = hoja.max_row
+        escribir_valores_por_encabezado(hoja, fila, valores)
+        return
+
+    if not filas_existentes:
         hoja.append(valores)
     else:
         fila_existente = filas_existentes[0]
-
         for columna, valor in enumerate(valores, start=1):
             hoja.cell(row=fila_existente, column=columna).value = valor
 
@@ -280,13 +296,43 @@ def obtener_columna_encabezado(encabezados, nombre, nombre_hoja):
         )
     return columna
 
-def finalizar_libro(libro_salida, archivo_excel, incluir_graficos=False):
-    """Aplica las tareas finales y guarda el libro una sola vez.
+def resolver_columnas_graficos(libro, configuracion):
+    """Resuelve encabezados de gráficos a columnas reales del Excel.
+
+    Args:
+        libro: Libro con las hojas que proporcionan los datos.
+        configuracion: Tuplas con columna numérica (PC) o encabezado (dispositivos).
+
+    Returns:
+        Lista de configuraciones con columnas numéricas.
+
+    Raises:
+        ValueError: Si un encabezado requerido no existe en su hoja.
+    """
+    resultado = []
+    for nombre_hoja, columna, titulo, eje_y, posicion in configuracion:
+        if isinstance(columna, str):
+            columnas = obtener_mapa_encabezados(libro[nombre_hoja])
+            if columna not in columnas:
+                raise ValueError(
+                    f"Falta la columna '{columna}' en la solapa {nombre_hoja}"
+                )
+            columna = columnas[columna]
+        resultado.append((nombre_hoja, columna, titulo, eje_y, posicion))
+    return resultado
+
+
+def finalizar_libro(
+    libro_salida, archivo_excel, incluir_graficos=False,
+    configuracion_graficos=None,
+):
+    """Formatea, genera los gráficos del perfil y guarda el libro.
 
     Args:
         libro_salida: Libro de Excel que se desea finalizar.
         archivo_excel: Ruta en la que se guarda el libro.
         incluir_graficos: Indica si deben regenerarse los gráficos.
+        configuracion_graficos: Gráficos a generar; None usa los de PC.
 
     Raises:
         OSError: Si no se puede guardar el temporal o reemplazar el archivo final.
@@ -294,7 +340,13 @@ def finalizar_libro(libro_salida, archivo_excel, incluir_graficos=False):
     aplicar_estilos_basicos(libro_salida)
 
     if incluir_graficos:
-        generar_graficos(libro_salida, CONFIGURACION_GRAFICOS)
+        graficos = (
+            CONFIGURACION_GRAFICOS
+            if configuracion_graficos is None
+            else configuracion_graficos
+        )
+        graficos = resolver_columnas_graficos(libro_salida, graficos)
+        generar_graficos(libro_salida, graficos)
 
     ruta_salida = Path(archivo_excel)
     ruta_salida.parent.mkdir(parents=True, exist_ok=True)
@@ -370,7 +422,9 @@ def guardar_resultado_excel(
     escribir_hoja_bugs_smells(hoja_bugs_smells, proyecto, metricas_bugs_smells)
     escribir_hoja_concurrencia(hoja_concurrencia, proyecto.codigo, metricas_concurrencia)
     escribir_hoja_tokens(hoja_tokens,proyecto.codigo,metricas_tokens)
-    escribir_hoja_cpu_memoria(hoja_cpu_memoria, proyecto.codigo, metricas_cpu_memoria)
+    escribir_hoja_cpu_memoria(
+        hoja_cpu_memoria, proyecto.codigo, metricas_cpu_memoria
+    )
 
 def escribir_hoja_resumen(
     hoja,
@@ -434,25 +488,25 @@ def escribir_hoja_resumen(
     )
 
     cpu_promedio = (
-        metricas_cpu_memoria.cpu_promedio_normalizada
+        getattr(metricas_cpu_memoria, "cpu_promedio_normalizada", "")
         if metricas_cpu_memoria
         else ""
     )
 
     interpretacion_cpu = (
-        metricas_cpu_memoria.interpretacion_cpu
+        getattr(metricas_cpu_memoria, "interpretacion_cpu", "")
         if metricas_cpu_memoria
         else "" 
     )
 
     memoria_promedio = (    
-        metricas_cpu_memoria.memoria_promedio_normalizada
+        getattr(metricas_cpu_memoria, "memoria_promedio_normalizada", "")
         if metricas_cpu_memoria
         else ""
     )
 
     interpretacion_memoria = (
-        metricas_cpu_memoria.interpretacion_memoria
+        getattr(metricas_cpu_memoria, "interpretacion_memoria", "")
         if metricas_cpu_memoria
         else "" 
     )
@@ -481,11 +535,18 @@ def escribir_hoja_resumen(
         interpretacion_memoria,
     ]
 
-    escribir_o_actualizar_fila(
-        hoja,
-        proyecto.codigo,
-        valores_resumen,
-    )
+    # El perfil de PC conserva la escritura por posición. En dispositivos se
+    # utilizan encabezados para no desplazar las métricas al agregar columnas.
+    if TEXTO_ENCABEZADO_ID_PROYECTO in obtener_mapa_encabezados(hoja):
+        valores = dict(zip(ENCABEZADOS_RESUMEN, valores_resumen))
+        valores.update({
+            TEXTO_ENCABEZADO_ID_PROYECTO: getattr(proyecto, "id_proyecto", ""),
+            TEXTO_ENCABEZADO_DISPOSITIVO: getattr(proyecto, "dispositivo", ""),
+            TEXTO_ENCABEZADO_IMPLEMENTACION: getattr(proyecto, "implementacion", ""),
+        })
+        escribir_o_actualizar_fila(hoja, proyecto.codigo, valores)
+    else:
+        escribir_o_actualizar_fila(hoja, proyecto.codigo, valores_resumen)
     formatear_celdas_hoja_resumen(hoja, proyecto.codigo)
 
 def escribir_hoja_complejidad(hoja, codigo, metricas_cc):
@@ -629,11 +690,12 @@ def escribir_hoja_tokens(hoja,proyecto_codigo, metricas_tokens):
 
 
 def escribir_hoja_cpu_memoria(hoja, proyecto_codigo, metricas):
-    """Agrega o actualiza las métricas de CPU y memoria de un proyecto."""
+    """Escribe las mismas métricas de CPU/memoria en PC y Android/ESP32."""
     if metricas is None:
         valores = [proyecto_codigo] + [""] * CANTIDAD_CAMPOS_CPU_MEMORIA
     else:
         valores = obtener_valores_cpu_memoria(metricas)
+
     escribir_o_actualizar_fila(hoja, proyecto_codigo, valores)
     aplicar_formato_cpu_memoria(hoja, proyecto_codigo)
 
@@ -651,56 +713,47 @@ def obtener_valores_cpu_memoria(metricas):
     ]
 
 def formatear_celdas_hoja_resumen(hoja, codigo):
-    """Aplica formato a las celdas de la hoja Resumen."""
-
+    """Colorea datos e interpretaciones usando los encabezados reales."""
     filas = buscar_filas_por_codigo(hoja, codigo)
 
     if len(filas) > 1:
         raise ValueError(f"Código duplicado '{codigo}' en {hoja.title}")
+    if not filas:
+        return
 
-    if filas:
-        fila = filas[0]
-        columnas = obtener_mapa_encabezados(hoja)
+    fila = filas[0]
+    columnas = obtener_mapa_encabezados(hoja)
 
-        # Encabezados amarillos
-        for celda in hoja[1]:
-            celda.fill = PatternFill(
-                "solid",
-                fgColor=COLOR_ENCABEZADO_RESUMEN
-            )
+    for celda in hoja[1]:
+        celda.fill = PatternFill("solid", fgColor=COLOR_ENCABEZADO_RESUMEN)
 
-        # Código en verde oscuro
-        hoja.cell(row=fila, column=1).fill = PatternFill(
-            "solid",
-            fgColor=COLOR_CODIGO_RESUMEN
-        )
+    hoja.cell(row=fila, column=columnas[TEXTO_ENCABEZADO_CODIGO]).fill = (
+        PatternFill("solid", fgColor=COLOR_CODIGO_RESUMEN)
+    )
 
-        # Nombre del proyecto hasta Lenguaje en verde claro
-        for columna in range(2, 6):
+    for encabezado in ENCABEZADOS_DATOS_PROYECTO_RESUMEN:
+        columna = columnas.get(encabezado)
+        if columna is not None:
             hoja.cell(row=fila, column=columna).fill = PatternFill(
-                "solid",
-                fgColor=COLOR_DATOS_PROYECTO_RESUMEN
+                "solid", fgColor=COLOR_DATOS_PROYECTO_RESUMEN
             )
 
-        # Nivel e interpretaciones en azul
-        for columna in (7, 9, 12, 14, 16, 18, 20):
+    for encabezado in ENCABEZADOS_INTERPRETACION_RESUMEN:
+        columna = columnas.get(encabezado)
+        if columna is not None:
             hoja.cell(row=fila, column=columna).fill = PatternFill(
-                "solid",
-                fgColor=COLOR_INTERPRETACION_RESUMEN
+                "solid", fgColor=COLOR_INTERPRETACION_RESUMEN
             )
 
-        hoja.cell(
-            row=fila,
-            column=columnas[TEXTO_ENCABEZADO_CPU_PROMEDIO]
-        ).number_format = r'0.00\%'
-
-        hoja.cell(
-            row=fila,
-            column=columnas[TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN]
-        ).number_format = r'0.00\%'
+    for encabezado in (
+        TEXTO_ENCABEZADO_CPU_PROMEDIO,
+        TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN,
+    ):
+        columna = columnas[encabezado]
+        hoja.cell(row=fila, column=columna).number_format = r'0.00\%'
 
 def aplicar_formato_cpu_memoria(hoja, codigo):
-    """Aplica formatos de visualización a porcentajes y valores decimales."""
+    """Aplica el mismo formato de CPU/memoria a todos los dispositivos."""
     filas = buscar_filas_por_codigo(hoja, codigo)
 
     if not filas:
@@ -708,13 +761,14 @@ def aplicar_formato_cpu_memoria(hoja, codigo):
     if len(filas) > 1:
         raise ValueError(f"Código duplicado '{codigo}' en {hoja.title}")
 
-    fila=filas[0]
+    fila = filas[0]
     for columna in (7, 9, 10, 11, 12, 13):
         hoja.cell(row=fila, column=columna).number_format = r'0.00\%'
     hoja.cell(row=fila, column=20).number_format = r'0.00\%'
 
     for columna in (16, 17, 18, 19, 21):
         hoja.cell(row=fila, column=columna).number_format = '0.00'
+
 
 def formatear_top_reglas(top_reglas):
     """Convierte el ranking de reglas en texto legible.

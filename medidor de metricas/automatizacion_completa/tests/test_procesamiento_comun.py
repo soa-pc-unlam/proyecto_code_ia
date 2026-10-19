@@ -1,4 +1,4 @@
-﻿"""Pruebas del flujo compartido y de la selección de entradas por plataforma."""
+"""Pruebas del flujo compartido y de la selección de entradas por plataforma."""
 
 import unittest
 from contextlib import ExitStack
@@ -39,13 +39,16 @@ class ProcesamientoComunTest(unittest.TestCase):
         """PC conserva las rutas y opciones de la configuración original."""
         main_pc.main()
         self.operaciones['cargar_configuracion'].assert_called_once_with(
-            definiciones.CONFIGURACION_JSON
+            definiciones.CONFIGURACION_JSON_PC
         )
         self.operaciones['cargar_proyectos'].assert_called_once_with(
             definiciones.DATOS_PC_PROYECTOS_JSON
         )
         self.operaciones['abrir_excel_entrada'].assert_called_once_with(
             'entrada_pc.xlsx'
+        )
+        self.operaciones['crear_o_abrir_excel_salida'].assert_called_once_with(
+            'salida_pc.xlsx', hojas_reporte=definiciones.HOJAS_REPORTE,
         )
         self.operaciones['finalizar_libro'].assert_called_once_with(
             self.operaciones['crear_o_abrir_excel_salida'].return_value,
@@ -56,22 +59,26 @@ class ProcesamientoComunTest(unittest.TestCase):
     def test_esp32_android_utiliza_sus_rutas(self):
         """ESP32 y Android usan entradas y destinos separados de PC."""
         main_esp32_android.main()
+        self.operaciones['cargar_configuracion'].assert_called_once_with(
+            definiciones.CONFIGURACION_JSON_ESP32_ANDROID
+        )
         self.operaciones['cargar_proyectos'].assert_called_once_with(
             definiciones.DATOS_ESP32_ANDROID_PROYECTOS_JSON
         )
+        self.operaciones['crear_o_abrir_excel_salida'].assert_called_once_with(
+            'salida_pc.xlsx',
+            hojas_reporte=definiciones.HOJAS_REPORTE_DISPOSITIVOS,
+        )
         self.operaciones['abrir_excel_entrada'].assert_called_once_with(
-            definiciones.DATOS_ESP32_ANDROID_EXCEL
+            'entrada_pc.xlsx'
         )
         self.operaciones['finalizar_libro'].assert_called_once_with(
             self.operaciones['crear_o_abrir_excel_salida'].return_value,
-            definiciones.REPORTE_ESP32_ANDROID_EXCEL, incluir_graficos=True,
+            'salida_pc.xlsx', incluir_graficos=True,
+            configuracion_graficos=definiciones.CONFIGURACION_GRAFICOS_DISPOSITIVOS,
         )
-        self.operaciones['configurar_logger'].assert_called_once_with(
-            definiciones.CARPETA_LOGS_ESP32_ANDROID
-        )
-        self.operaciones['crear_directorio'].assert_any_call(
-            definiciones.CARPETA_RESULTADOS_ESP32_ANDROID
-        )
+        self.operaciones['configurar_logger'].assert_called_once_with('logs')
+        self.operaciones['crear_directorio'].assert_any_call('resultados')
         self.operaciones['gestionar_procesamiento_proyectos'].assert_called_once_with(
             self.operaciones['cargar_proyectos'].return_value,
             self.configuracion,
@@ -82,15 +89,12 @@ class ProcesamientoComunTest(unittest.TestCase):
         self.verificar_cierre_libros()
 
     def test_opciones_cpu_y_graficos(self):
-        """El llamador puede elegir el límite de CPU y omitir gráficos."""
-        comun.ejecutar_analisis(
-            'config.json', 'proyectos.json', porcentaje_cpu=0.5,
-            incluir_graficos=False,
-        )
+        """Conserva el límite de CPU y el uso de gráficos del flujo actual."""
+        main_pc.main()
         self.operaciones['limitar_cpu'].assert_called_once_with(
             0.5, self.operaciones['configurar_logger'].return_value
         )
-        self.assertFalse(
+        self.assertTrue(
             self.operaciones['finalizar_libro'].call_args.kwargs['incluir_graficos']
         )
 
