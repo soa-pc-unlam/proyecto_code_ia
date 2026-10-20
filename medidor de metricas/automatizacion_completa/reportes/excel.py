@@ -557,12 +557,8 @@ def escribir_hoja_complejidad(hoja, codigo, metricas_cc):
         codigo: Código del proyecto.
         metricas_cc: Métricas de complejidad.
     """
-    fila_complejidad_vacia = [codigo] + [""] * CANTIDAD_CAMPOS_COMPLEJIDAD
 
-    if metricas_cc is None:
-        escribir_o_actualizar_fila(hoja, codigo, fila_complejidad_vacia)
-        return
-    else:
+    if metricas_cc is  not None:
         escribir_o_actualizar_fila(
             hoja,
             codigo,
@@ -586,24 +582,20 @@ def escribir_hoja_mantenibilidad(hoja, proyecto_codigo, metricas_mi):
         proyecto_codigo: Código del proyecto.
         metricas_mi: Métricas de mantenibilidad.
     """
-    fila_mantenibilidad_vacia = [proyecto_codigo] + [""] * CANTIDAD_CAMPOS_MANTENIBILIDAD
-
-    if metricas_mi is None:
-        escribir_o_actualizar_fila(hoja, proyecto_codigo, fila_mantenibilidad_vacia)
-        return
-    escribir_o_actualizar_fila(
-        hoja,
-        proyecto_codigo,
-        [
+    if metricas_mi is not None:
+        escribir_o_actualizar_fila(
+            hoja,
             proyecto_codigo,
-            metricas_mi.nloc_mi,
-            metricas_mi.cantidad_funciones_mi,
-            metricas_mi.tokens_codigo,
-            metricas_mi.mi,
-            metricas_mi.nivel_mi,
-            metricas_mi.interpretacion_mi,
-        ],
-    )
+            [
+                proyecto_codigo,
+                metricas_mi.nloc_mi,
+                metricas_mi.cantidad_funciones_mi,
+                metricas_mi.tokens_codigo,
+                metricas_mi.mi,
+                metricas_mi.nivel_mi,
+                metricas_mi.interpretacion_mi,
+            ],
+        )
 
 def escribir_hoja_bugs_smells(hoja, proyecto, metricas_bugs_smells):
     """Escribe las métricas de bugs y smells en la hoja correspondiente.
@@ -613,11 +605,7 @@ def escribir_hoja_bugs_smells(hoja, proyecto, metricas_bugs_smells):
         proyecto: Proyecto analizado.
         metricas_bugs_smells: Métricas de bugs y smells.
     """
-    fila_bugs_smells_vacia = [proyecto.codigo] + [""] * CANTIDAD_CAMPOS_BUGS_SMELLS   
-
-    if metricas_bugs_smells is None:
-        escribir_o_actualizar_fila(hoja, proyecto.codigo, fila_bugs_smells_vacia)
-    else:
+    if metricas_bugs_smells is not None:
         escribir_o_actualizar_fila(
             hoja,
             proyecto.codigo,
@@ -648,11 +636,8 @@ def escribir_hoja_concurrencia(hoja, codigo, metricas_concurrencia):
         codigo: Código del proyecto.
         metricas_concurrencia: Métricas de concurrencia.
     """
-    fila_concurrencia_vacia = [codigo] + [""] * CANTIDAD_CAMPOS_CONCURRENCIA
 
-    if metricas_concurrencia is None:
-        escribir_o_actualizar_fila(hoja, codigo, fila_concurrencia_vacia)
-    else:
+    if metricas_concurrencia is not None:
         escribir_o_actualizar_fila(
             hoja,
             codigo,
@@ -669,11 +654,9 @@ def escribir_hoja_concurrencia(hoja, codigo, metricas_concurrencia):
 
 def escribir_hoja_tokens(hoja,proyecto_codigo, metricas_tokens):
     """Agrega o actualiza un resultado válido de eficiencia en tokens."""
-    fila_tokens_vacia = [proyecto_codigo] + [""] * CANTIDAD_CAMPOS_TOKENS
 
-    if metricas_tokens is None:
-        valores = fila_tokens_vacia   
-    else:
+
+    if metricas_tokens is not None:
         valores = [
             metricas_tokens.codigo,
             metricas_tokens.metodo_utilizado,
@@ -685,19 +668,17 @@ def escribir_hoja_tokens(hoja,proyecto_codigo, metricas_tokens):
             metricas_tokens.nivel_eficiencia,
             metricas_tokens.interpretacion,
         ]
-    escribir_o_actualizar_fila(hoja, proyecto_codigo, valores)
+        escribir_o_actualizar_fila(hoja, proyecto_codigo, valores)
 
 
 
 def escribir_hoja_cpu_memoria(hoja, proyecto_codigo, metricas):
     """Escribe las mismas métricas de CPU/memoria en PC y Android/ESP32."""
-    if metricas is None:
-        valores = [proyecto_codigo] + [""] * CANTIDAD_CAMPOS_CPU_MEMORIA
-    else:
-        valores = obtener_valores_cpu_memoria(metricas)
 
-    escribir_o_actualizar_fila(hoja, proyecto_codigo, valores)
-    aplicar_formato_cpu_memoria(hoja, proyecto_codigo)
+    if metricas is not None:
+        valores = obtener_valores_cpu_memoria(metricas)
+        escribir_o_actualizar_fila(hoja, proyecto_codigo, valores)
+        aplicar_formato_cpu_memoria(hoja, proyecto_codigo)
 
 
 def obtener_valores_cpu_memoria(metricas):

@@ -8,6 +8,7 @@ from metricas.mantenibilidad import analizar_mantenibilidad
 from metricas.tokens import analizar_tokens
 from metricas.cpu_memoria import analizar_cpu_memoria
 from constantes.definiciones import(
+    TEXTO_ANDROID,
     TEXTO_CAMPO_CARPETA_RESULTADOS,
     TEXTO_CAMPO_COEFICIENTE_PENALIZACION_TOKENS,
     TEXTO_CAMPO_PONDERACION_CONCURRENCIA,
@@ -17,7 +18,9 @@ from constantes.definiciones import(
     TEXTO_CAMPO_UMBRALES_MI,
     TEXTO_CAMPO_UMBRALES_CPU,
     TEXTO_CAMPO_UMBRALES_MEM,
-    TEXTO_CAMPO_UMBRALES_TOKEN
+    TEXTO_CAMPO_UMBRALES_TOKEN,
+    TEXTO_ESP32,
+    TEXTO_MANUAL
 )
 
 
@@ -142,13 +145,22 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, libro_entrada,
         Las métricas de concurrencia o ``None`` si el análisis falla.
     """
     try:
-        return analizar_concurrencia(
-            proyecto=proyecto,
-            ponderacion=configuracion[TEXTO_CAMPO_PONDERACION_CONCURRENCIA],
-            umbrales=configuracion[TEXTO_CAMPO_UMBRALES_CONCURRENCIA],
-            logger=logger,
-            libro_entrada=libro_entrada
+        es_manual_dispositivo = (
+            proyecto.dispositivo.strip().lower() in (TEXTO_ANDROID, TEXTO_ESP32)
+            and proyecto.implementacion.strip().lower() == TEXTO_MANUAL
         )
+
+        if es_manual_dispositivo:
+            logger.info(f"[{proyecto.codigo}] Se omite análisis de concurrencia para implementación manual en dispositivo")
+            return None
+        else:
+            return analizar_concurrencia(
+                proyecto=proyecto,
+                ponderacion=configuracion[TEXTO_CAMPO_PONDERACION_CONCURRENCIA],
+                umbrales=configuracion[TEXTO_CAMPO_UMBRALES_CONCURRENCIA],
+                logger=logger,
+                libro_entrada=libro_entrada
+            )
     except Exception as error:
         mensaje_error = f"Análisis concurrencia: {error}"
         logger.error(f"[{proyecto.codigo}] {mensaje_error}")
@@ -161,16 +173,23 @@ def analizar_tokens_seguro(
 ):
     """Analiza tokens y registra el error sin interrumpir el proyecto."""
     try:
-        if metricas_cc is None:
-            raise ValueError("No se obtuvo NlocTotal del análisis de Lizard")
-        return analizar_tokens(
-            proyecto=proyecto,
-            libro_entrada=libro_entrada,
-            nloc_total=metricas_cc.nloc_total,
-            umbrales=configuracion[TEXTO_CAMPO_UMBRALES_TOKEN],
-            coeficiente=configuracion[TEXTO_CAMPO_COEFICIENTE_PENALIZACION_TOKENS],
-            logger=logger,
+        es_manual_dispositivo = (
+            proyecto.dispositivo.strip().lower() in (TEXTO_ANDROID, TEXTO_ESP32)
+            and proyecto.implementacion.strip().lower() == TEXTO_MANUAL
         )
+
+        if es_manual_dispositivo:
+            logger.info(f"[{proyecto.codigo}] Se omite análisis de concurrencia para implementación manual en dispositivo")
+            return None
+        else:
+            return analizar_tokens(
+                proyecto=proyecto,
+                libro_entrada=libro_entrada,
+                nloc_total=metricas_cc.nloc_total,
+                umbrales=configuracion[TEXTO_CAMPO_UMBRALES_TOKEN],
+                coeficiente=configuracion[TEXTO_CAMPO_COEFICIENTE_PENALIZACION_TOKENS],
+                logger=logger,
+            )
     except Exception as error:
         mensaje_error = f"Análisis tokens: {error}"
         logger.error(f"[{proyecto.codigo}] {mensaje_error}")

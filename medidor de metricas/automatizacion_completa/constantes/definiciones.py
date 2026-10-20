@@ -158,6 +158,12 @@ COLOR_CODIGO_RESUMEN = "76933C"
 COLOR_DATOS_PROYECTO_RESUMEN = "C4D79B"
 COLOR_INTERPRETACION_RESUMEN = "95B3D7"
 
+TEXTO_VIBECODING = "Vibecoding"
+TEXTO_MANUAL = "Manual"
+TEXTO_ESP32 = "ESP32"
+TEXTO_ANDROID = "Android"
+TEXTO_PC = "PC"
+
 # Encabezados cuyo formato es común a ambos perfiles. En PC se usan
 # solo los que existen, conservando el mismo color y posición originales.
 ENCABEZADOS_DATOS_PROYECTO_RESUMEN = (
