@@ -3,6 +3,8 @@
 ## 1. Principios generales
 
 - Priorizar código sencillo, legible, modular y fácil de mantener (KISS y DRY).
+- No usar expresiones complejas.
+- Usar expresiones simples, secillas de interpretar por un programador
 - Reutilizar funciones, clases y módulos existentes antes de crear otros.
 - Aplicar SOLID y patrones de diseño solo cuando aporten una mejora concreta.
 - Evitar abstracciones artificiales, duplicaciones y dependencias innecesarias.
@@ -54,7 +56,7 @@
 - Preferir código explícito antes que expresiones compactas difíciles de leer.
 - Evitar parámetros excesivos y optimizaciones prematuras.
 - Mantener juntas las funciones relacionadas sin crear un archivo por función.
-- Seguir el estilo existente; para Python, usar PEP 8 y PEP 257.
+- Seguir el estilo existente
 - En Python: 4 espacios, snake_case, PascalCase y constantes UPPER_SNAKE_CASE.
 - Preferir anotaciones de tipos y líneas de hasta 88 caracteres cuando corresponda.
 - Si estas convenciones difieren del proyecto, priorizar su consistencia interna.
@@ -84,6 +86,8 @@
 ## 8. Restricciónes
 - Evitar números mágicos; utilizar constantes con nombres descriptivos cuando mejoren la comprensión.
 - Definir las constantes compartidas en `definiciones.py`. Mantener constantes específicas dentro de sus módulos cuando no necesiten compartirse.
+- No usar expresiones complejas.
+- Usar 
 
 ## 9. Procedimiento y respuesta final
 

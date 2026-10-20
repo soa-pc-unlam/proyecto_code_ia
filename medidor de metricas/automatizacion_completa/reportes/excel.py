@@ -5,7 +5,7 @@ import unicodedata
 
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, PatternFill, Alignment
-
+from copy import copy
 from reportes.graficos import generar_graficos
 from constantes.definiciones import (
     CANTIDAD_CAMPOS_COMPLEJIDAD,
@@ -699,6 +699,9 @@ def obtener_valores_cpu_memoria(metricas):
         metricas.memoria_maxima, metricas.nivel_memoria, metricas.interpretacion_memoria,
     ]
 
+
+
+
 def formatear_celdas_hoja_resumen(hoja, codigo):
     """Colorea datos e interpretaciones usando los encabezados reales."""
     filas = buscar_filas_por_codigo(hoja, codigo)
@@ -711,13 +714,16 @@ def formatear_celdas_hoja_resumen(hoja, codigo):
     fila = filas[0]
     columnas = obtener_mapa_encabezados(hoja)
 
+    # Formato de encabezados.
     for celda in hoja[1]:
         celda.fill = PatternFill("solid", fgColor=COLOR_ENCABEZADO_RESUMEN)
 
+    # Formato del código.
     hoja.cell(row=fila, column=columnas[TEXTO_ENCABEZADO_CODIGO]).fill = (
         PatternFill("solid", fgColor=COLOR_CODIGO_RESUMEN)
     )
 
+    # Formato de datos del proyecto.
     for encabezado in ENCABEZADOS_DATOS_PROYECTO_RESUMEN:
         columna = columnas.get(encabezado)
         if columna is not None:
@@ -725,6 +731,7 @@ def formatear_celdas_hoja_resumen(hoja, codigo):
                 "solid", fgColor=COLOR_DATOS_PROYECTO_RESUMEN
             )
 
+    # Formato de interpretaciones.
     for encabezado in ENCABEZADOS_INTERPRETACION_RESUMEN:
         columna = columnas.get(encabezado)
         if columna is not None:
@@ -732,12 +739,43 @@ def formatear_celdas_hoja_resumen(hoja, codigo):
                 "solid", fgColor=COLOR_INTERPRETACION_RESUMEN
             )
 
+    # Formato porcentual de CPU y memoria.
     for encabezado in (
         TEXTO_ENCABEZADO_CPU_PROMEDIO,
         TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN,
     ):
-        columna = columnas[encabezado]
-        hoja.cell(row=fila, column=columna).number_format = r'0.00\%'
+        columna = columnas.get(encabezado)
+        if columna is not None:
+            hoja.cell(
+                row=fila, column=columna
+            ).number_format = r'0.00\%'
+
+    # Identificar las columnas que no son métricas.
+    campos_identificacion = {
+        TEXTO_ENCABEZADO_CODIGO,
+        *ENCABEZADOS_DATOS_PROYECTO_RESUMEN,
+        "ID proyecto",
+        "Dispositivo",
+        "Implementación",
+    }
+
+    # Mostrar "Sin datos" en verde y los valores válidos en negro.
+    for encabezado, columna in columnas.items():
+        if encabezado in campos_identificacion:
+            continue
+
+        celda = hoja.cell(row=fila, column=columna)
+        fuente = copy(celda.font)
+
+        if celda.value is None or celda.value == "" or celda.value == "Sin datos":
+            celda.value = "Sin datos"
+            fuente.color = "008000"
+            fuente.bold = True
+        else:
+            fuente.color = "000000"
+            fuente.bold = False
+
+        celda.font = fuente
 
 def aplicar_formato_cpu_memoria(hoja, codigo):
     """Aplica el mismo formato de CPU/memoria a todos los dispositivos."""
