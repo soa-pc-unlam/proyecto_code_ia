@@ -40,6 +40,12 @@ from constantes.definiciones import (
     COLOR_INTERPRETACION_RESUMEN,
 )
 
+
+class DatosProyectoNoEncontrados(ValueError):
+    """Indica que el proyecto no tiene datos en una hoja."""
+    pass
+
+
 def crear_o_abrir_excel_salida(archivo_excel, hojas_reporte=HOJAS_REPORTE):
     """Abre o crea un libro con las hojas del perfil seleccionado.
 
@@ -368,7 +374,7 @@ def leer_fila_por_codigo(libro_entrada, nombre_hoja, codigo, campos, incluir_for
     filas = buscar_filas_por_codigo(hoja, codigo, columna_codigo)
 
     if not filas:
-        raise ValueError(f"No se encontró el código '{codigo}' en {nombre_hoja}")
+        raise DatosProyectoNoEncontrados(f"No se encontró el código '{codigo}' en {nombre_hoja}")
 
     if len(filas) > 1:
         raise ValueError(f"Código duplicado '{codigo}' en {nombre_hoja}")

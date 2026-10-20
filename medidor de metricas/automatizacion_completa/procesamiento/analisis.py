@@ -7,6 +7,7 @@ from metricas.concurrencia import analizar_concurrencia
 from metricas.mantenibilidad import analizar_mantenibilidad
 from metricas.tokens import analizar_tokens
 from metricas.cpu_memoria import analizar_cpu_memoria
+from reportes.excel import DatosProyectoNoEncontrados
 from constantes.definiciones import(
     TEXTO_ANDROID,
     TEXTO_CAMPO_CARPETA_RESULTADOS,
@@ -53,6 +54,9 @@ def analizar_complejidad(proyecto, configuracion, logger, contexto):
         metricas.nivel_cc = nivel_cc
         metricas.interpretacion_cc = interpretacion_cc
         return metricas
+    except DatosProyectoNoEncontrados as aviso:
+        logger.warning(f"[{proyecto.codigo}] Análisis complejidad: {aviso}")
+        return None
     except Exception as error:
         mensaje_error = f"Análisis complejidad: {error}"
         logger.error(f"[{proyecto.codigo}] {mensaje_error}")
@@ -84,6 +88,9 @@ def analizar_mi(proyecto, configuracion, logger, contexto):
             umbrales_mi=configuracion[TEXTO_CAMPO_UMBRALES_MI],
             logger=logger,
         )
+    except DatosProyectoNoEncontrados as aviso:
+        logger.warning(f"[{proyecto.codigo}] Análisis Mantenibilidad: {aviso}")
+        return None
     except Exception as error:
         mensaje_error = f"Análisis mantenibilidad: {error}"
         logger.error(f"[{proyecto.codigo}] {mensaje_error}")
@@ -123,6 +130,9 @@ def analizar_bugs_smells_seguro(
             logger=logger,
             loc_codigo=metricas_mi.nloc_mi,
         )
+    except DatosProyectoNoEncontrados as aviso:
+        logger.warning(f"[{proyecto.codigo}] Análisis Bugs/Smells: {aviso}")
+        return None
     except Exception as error:
         mensaje_error = f"Análisis bugs/smells: {error}"
         logger.error(f"[{proyecto.codigo}] {mensaje_error}")
@@ -147,7 +157,7 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, libro_entrada,
     try:
         es_manual_dispositivo = (
             proyecto.dispositivo.strip().lower() in (TEXTO_ANDROID, TEXTO_ESP32)
-            and proyecto.implementacion.strip().lower() == TEXTO_MANUAL
+            and proyecto.implementacion.strip().lower() == TEXTO_MANUAL.tolower()
         )
 
         if es_manual_dispositivo:
@@ -161,6 +171,9 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, libro_entrada,
                 logger=logger,
                 libro_entrada=libro_entrada
             )
+    except DatosProyectoNoEncontrados as aviso:
+        logger.warning(f"[{proyecto.codigo}] Análisis concurrencia: {aviso}")
+        return None
     except Exception as error:
         mensaje_error = f"Análisis concurrencia: {error}"
         logger.error(f"[{proyecto.codigo}] {mensaje_error}")
@@ -175,11 +188,11 @@ def analizar_tokens_seguro(
     try:
         es_manual_dispositivo = (
             proyecto.dispositivo.strip().lower() in (TEXTO_ANDROID, TEXTO_ESP32)
-            and proyecto.implementacion.strip().lower() == TEXTO_MANUAL
+            and proyecto.implementacion.strip().lower() == TEXTO_MANUAL.tolower()
         )
 
         if es_manual_dispositivo:
-            logger.info(f"[{proyecto.codigo}] Se omite análisis de concurrencia para implementación manual en dispositivo")
+            logger.info(f"[{proyecto.codigo}] Se omite análisis de tokens para implementación manual en dispositivo")
             return None
         else:
             return analizar_tokens(
@@ -190,6 +203,9 @@ def analizar_tokens_seguro(
                 coeficiente=configuracion[TEXTO_CAMPO_COEFICIENTE_PENALIZACION_TOKENS],
                 logger=logger,
             )
+    except DatosProyectoNoEncontrados as aviso:
+        logger.warning(f"[{proyecto.codigo}] Análisis tokens: {aviso}")
+        return None
     except Exception as error:
         mensaje_error = f"Análisis tokens: {error}"
         logger.error(f"[{proyecto.codigo}] {mensaje_error}")
@@ -206,6 +222,9 @@ def analizar_cpu_memoria_seguro(proyecto, configuracion, logger, libro_entrada, 
             configuracion_memoria=configuracion[TEXTO_CAMPO_UMBRALES_MEM],
             logger=logger,
         )
+    except DatosProyectoNoEncontrados as aviso:
+        logger.warning(f"[{proyecto.codigo}] Análisis CPU/memoria: {aviso}")
+        return None
     except Exception as error:
         mensaje_error = f"Análisis CPU/memoria: {error}"
         logger.error(f"[{proyecto.codigo}] {mensaje_error}")
