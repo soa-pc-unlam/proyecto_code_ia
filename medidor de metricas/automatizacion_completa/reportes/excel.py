@@ -28,8 +28,6 @@ from constantes.definiciones import (
     ENCABEZADOS_DATOS_PROYECTO_RESUMEN,
     ENCABEZADOS_INTERPRETACION_RESUMEN,
     HOJA_ERRORES,
-    CANTIDAD_CAMPOS_TOKENS,
-    CANTIDAD_CAMPOS_CPU_MEMORIA,
     HOJA_CPU_MEMORIA_SALIDA,
     TEXTO_ENCABEZADO_CODIGO,
     TEXTO_ENCABEZADO_ID_PROYECTO,
@@ -375,47 +373,64 @@ def validar_encabezados_comparacion(resumen):
 
     return columnas
 
-def registrar_pareja_comparacion(parejas, identificador, dispositivo, implementacion, codigo):
-    """Registra una implementación Manual o Vibecoding de un proyecto."""
+def registrar_pareja_comparacion(
+    parejas, identificador, dispositivo, implementacion, codigo
+):
+    """Registra una implementación según el ID y el dispositivo."""
 
     tipo = normalizar_texto(implementacion)
-
     manual = normalizar_texto(TEXTO_MANUAL)
     vibecoding = normalizar_texto(TEXTO_VIBECODING)
 
     if tipo not in (manual, vibecoding):
         return
 
-    identificador = str(identificador).strip()
-    dispositivo = normalizar_texto(dispositivo)
-
-    pareja = parejas.setdefault(identificador,{"dispositivo": dispositivo})
-
-    if pareja["dispositivo"] != dispositivo:
+    if not dispositivo:
         raise ValueError(
-            f"El ID '{identificador}' corresponde a varios dispositivos. "
-            "Se requiere identificar cada comparación sin ambigüedad."
+            f"El proyecto '{identificador}' no tiene dispositivo."
         )
+
+    identificador = str(identificador).strip()
+    dispositivo = str(dispositivo).strip()
+
+    # Un mismo ID puede tener proyectos Android y ESP32.
+    clave = (identificador, normalizar_texto(dispositivo))
+
+    pareja = parejas.setdefault(
+        clave, {"dispositivo": dispositivo}
+    )
 
     if tipo in pareja:
         raise ValueError(
             f"La implementación '{implementacion}' está duplicada "
-            f"para el ID '{identificador}'."
+            f"para el ID '{identificador}' y dispositivo '{dispositivo}'."
         )
 
     pareja[tipo] = codigo
 
+
 def obtener_parejas_completas(resumen, columnas):
-    """Obtiene proyectos que tienen implementación Manual y Vibecoding."""
+    """Obtiene las parejas Manual/Vibecoding por ID y dispositivo."""
 
     parejas = {}
 
     for fila in range(2, resumen.max_row + 1):
 
-        identificador = resumen.cell(fila, columnas[TEXTO_ENCABEZADO_ID_PROYECTO]).value
-        implementacion = resumen.cell(fila, columnas[TEXTO_ENCABEZADO_IMPLEMENTACION]).value
-        dispositivo = resumen.cell(fila, columnas[TEXTO_ENCABEZADO_DISPOSITIVO]).value
-        codigo = resumen.cell(fila, columnas[TEXTO_ENCABEZADO_CODIGO]).value
+        identificador = resumen.cell(
+            fila, columnas[TEXTO_ENCABEZADO_ID_PROYECTO]
+        ).value
+
+        implementacion = resumen.cell(
+            fila, columnas[TEXTO_ENCABEZADO_IMPLEMENTACION]
+        ).value
+
+        dispositivo = resumen.cell(
+            fila, columnas[TEXTO_ENCABEZADO_DISPOSITIVO]
+        ).value
+
+        codigo = resumen.cell(
+            fila, columnas[TEXTO_ENCABEZADO_CODIGO]
+        ).value
 
         if not identificador or not codigo:
             continue
@@ -431,26 +446,42 @@ def obtener_parejas_completas(resumen, columnas):
     manual = normalizar_texto(TEXTO_MANUAL)
     vibecoding = normalizar_texto(TEXTO_VIBECODING)
 
-    completas = sorted(
-        (identificador, pareja[manual], pareja[vibecoding])
-        for identificador, pareja in parejas.items()
+    completas = [
+        (
+            identificador,
+            pareja["dispositivo"],
+            pareja[manual],
+            pareja[vibecoding]
+        )
+        for (identificador, _), pareja in parejas.items()
         if manual in pareja and vibecoding in pareja
+    ]
+
+    return sorted(
+        completas,
+        key=lambda p: (p[0], normalizar_texto(p[1]))
     )
 
-    return completas
-def preparar_hoja_comparacion(libro):
-    """Crea la hoja Comparacion conservando la selección anterior."""
 
-    seleccion_anterior = None
+def preparar_hoja_comparacion(libro):
+    """Crea la hoja conservando el ID y dispositivo seleccionados."""
+
+    seleccion_anterior = (None, None)
 
     if HOJA_COMPARACION in libro.sheetnames:
-        seleccion_anterior = libro[HOJA_COMPARACION]["B3"].value
+        anterior = libro[HOJA_COMPARACION]
+
+        seleccion_anterior = (
+            anterior["B3"].value,
+            anterior["B4"].value
+        )
+
         del libro[HOJA_COMPARACION]
 
     hoja = libro.create_sheet(HOJA_COMPARACION, 1)
 
     hoja.sheet_view.showGridLines = False
-    hoja.freeze_panes = "B6"
+    hoja.freeze_panes = "B7"
 
     hoja.column_dimensions["A"].width = 37
     hoja.column_dimensions["B"].width = 43
@@ -458,91 +489,182 @@ def preparar_hoja_comparacion(libro):
 
     return hoja, seleccion_anterior
 
-def configurar_encabezado_comparacion(hoja, parejas, seleccion_anterior):
-    """Configura el título, el selector y los encabezados de la tabla."""
 
-    # Título.
+def configurar_encabezado_comparacion(
+    hoja, parejas, seleccion_anterior
+):
+    """Configura el título, los dos selectores y los encabezados."""
+
+    # Título principal.
     hoja.merge_cells("A1:C1")
     hoja["A1"] = "COMPARACIÓN · MANUAL / VIBECODING"
     hoja["A1"].fill = PatternFill("solid", fgColor="1F4E78")
-    hoja["A1"].font = Font(name="Calibri", size=14, color="FFFFFF", bold=True)
+    hoja["A1"].font = Font(
+        name="Calibri", size=14, color="FFFFFF", bold=True
+    )
     hoja["A1"].alignment = Alignment(vertical="center")
     hoja.row_dimensions[1].height = 32
 
-    # Selector de proyecto.
-    identificadores = {pareja[0] for pareja in parejas}
+    # Recuperar la selección anterior, si sigue siendo válida.
+    id_anterior, dispositivo_anterior = seleccion_anterior
 
-    seleccion = (
-        seleccion_anterior
-        if seleccion_anterior in identificadores
+    identificadores = {p[0] for p in parejas}
+
+    identificador = (
+        id_anterior
+        if id_anterior in identificadores
         else (parejas[0][0] if parejas else "")
     )
 
+    dispositivos = [
+        p[1] for p in parejas if p[0] == identificador
+    ]
+
+    dispositivo = next(
+        (
+            d for d in dispositivos
+            if dispositivo_anterior
+            and normalizar_texto(d)
+            == normalizar_texto(dispositivo_anterior)
+        ),
+        dispositivos[0] if dispositivos else ""
+    )
+
+    # Selector ID proyecto.
     hoja["A3"] = "ID proyecto"
     hoja["A3"].font = Font(bold=True)
 
-    hoja["B3"] = seleccion
-    hoja["B3"].fill = PatternFill("solid", fgColor=COLOR_ENCABEZADO_RESUMEN)
-    hoja["B3"].font = Font(bold=True, color="000000")
-    hoja["B3"].alignment = Alignment(horizontal="center")
+    hoja["B3"] = identificador
 
-    hoja["A4"] = "Seleccioná un ID para comparar ambas implementaciones"
+    # Selector Dispositivo.
+    hoja["A4"] = "Dispositivo"
+    hoja["A4"].font = Font(bold=True)
 
-    # Encabezados de la tabla.
+    hoja["B4"] = dispositivo
+
+    # Aplicar el mismo estilo a ambos selectores.
+    for direccion in ("B3", "B4"):
+        celda = hoja[direccion]
+
+        celda.fill = PatternFill(
+            "solid", fgColor=COLOR_ENCABEZADO_RESUMEN
+        )
+        celda.font = Font(bold=True, color="000000")
+        celda.alignment = Alignment(horizontal="center")
+
+    hoja["A5"] = (
+        "Seleccioná un ID y un dispositivo para comparar "
+        "ambas implementaciones"
+    )
+
+    # Encabezados de la tabla: ahora están en la fila 6.
     titulos = ("Campo", TEXTO_MANUAL, TEXTO_VIBECODING)
 
     for columna, titulo in enumerate(titulos, 1):
-        celda = hoja.cell(row=5, column=columna, value=titulo)
+        celda = hoja.cell(row=6, column=columna, value=titulo)
 
-        celda.fill = PatternFill("solid", fgColor=COLOR_ENCABEZADO_RESUMEN)
+        celda.fill = PatternFill(
+            "solid", fgColor=COLOR_ENCABEZADO_RESUMEN
+        )
         celda.font = Font(color="000000", bold=True)
         celda.alignment = Alignment(horizontal="center")
 
-    hoja.row_dimensions[5].height = 25
+    hoja.row_dimensions[6].height = 25
 
 
 def configurar_tabla_auxiliar(hoja, parejas):
-    """Almacena las parejas y configura el selector de proyectos."""
+    """Configura los datos auxiliares y los dos desplegables."""
 
-    # Tabla auxiliar: ID, Manual y Vibecoding.
-    for fila, (identificador, manual, vibecoding) in enumerate(parejas, 2):
+    # E: ID proyecto
+    # F: Dispositivo
+    # G: Código Manual
+    # H: Código Vibecoding
+    # I: Clave ID|dispositivo
+
+    for fila, (identificador, dispositivo, manual, vibecoding) in enumerate(
+        parejas, 2
+    ):
         hoja.cell(fila, 5, identificador)
-        hoja.cell(fila, 6, manual)
-        hoja.cell(fila, 7, vibecoding)
+        hoja.cell(fila, 6, dispositivo)
+        hoja.cell(fila, 7, manual)
+        hoja.cell(fila, 8, vibecoding)
 
-    # Ocultar las columnas auxiliares.
-    for letra in "EFG":
+        clave = f"{identificador}|{normalizar_texto(dispositivo)}"
+        hoja.cell(fila, 9, clave)
+
+    # Listas sin duplicados para los desplegables.
+    identificadores = sorted({p[0] for p in parejas})
+
+    dispositivos = sorted(
+        {p[1] for p in parejas},
+        key=normalizar_texto
+    )
+
+    # J: ID disponibles.
+    for fila, identificador in enumerate(identificadores, 2):
+        hoja.cell(fila, 10, identificador)
+
+    # K: Dispositivos disponibles.
+    for fila, dispositivo in enumerate(dispositivos, 2):
+        hoja.cell(fila, 11, dispositivo)
+
+    # Ocultar todos los datos auxiliares.
+    for letra in "EFGHIJK":
         hoja.column_dimensions[letra].hidden = True
 
     if not parejas:
         return
 
-    ultima_fila = len(parejas) + 1
+    # Lista desplegable para ID proyecto (B3).
+    ultima_id = len(identificadores) + 1
 
-    validacion = DataValidation(
+    validacion_id = DataValidation(
         type="list",
-        formula1=f"=$E$2:$E${ultima_fila}",
+        formula1=f"=$J$2:$J${ultima_id}",
         allow_blank=False
     )
 
-    validacion.showErrorMessage = True
-    validacion.error = "Seleccioná un ID existente"
+    validacion_id.showErrorMessage = True
+    validacion_id.error = "Seleccioná un ID existente"
 
-    hoja.add_data_validation(validacion)
-    validacion.add(hoja["B3"])
+    hoja.add_data_validation(validacion_id)
+    validacion_id.add(hoja["B3"])
 
-def generar_formula_codigo_comparacion(columna_auxiliar, ultima_fila):
-    """Genera la fórmula para buscar el código según el ID seleccionado."""
+    # Lista desplegable para dispositivo (B4).
+    ultimo_dispositivo = len(dispositivos) + 1
 
-    return (
-        f'=IF($B$3="","Sin datos",'
-        f'IFERROR(INDEX(${columna_auxiliar}$2:'
-        f'${columna_auxiliar}${ultima_fila},'
-        f'MATCH($B$3,$E$2:$E${ultima_fila},0)),"Sin datos"))'
+    validacion_dispositivo = DataValidation(
+        type="list",
+        formula1=f"=$K$2:$K${ultimo_dispositivo}",
+        allow_blank=False
     )
 
-def generar_formula_valor_comparacion(campo, columna, fila_codigo, columnas, rango_codigos, ultima_resumen):
-    """Genera la fórmula para consultar una métrica desde Resumen."""
+    validacion_dispositivo.showErrorMessage = True
+    validacion_dispositivo.error = "Seleccioná un dispositivo existente"
+
+    hoja.add_data_validation(validacion_dispositivo)
+    validacion_dispositivo.add(hoja["B4"])
+
+
+def generar_formula_codigo_comparacion(columna_auxiliar, ultima_fila):
+    """Busca el código según el ID y dispositivo seleccionados."""
+
+    # La clave combina el ID de B3 y el dispositivo de B4.
+    clave = '$B$3&"|"&LOWER($B$4)'
+
+    return (
+        f'=IF(OR($B$3="",$B$4=""),"Sin datos",'
+        f'IFERROR(INDEX(${columna_auxiliar}$2:'
+        f'${columna_auxiliar}${ultima_fila},'
+        f'MATCH({clave},$I$2:$I${ultima_fila},0)),'
+        f'"Sin datos"))'
+    )
+
+
+def generar_formula_valor_comparacion(
+    campo, columna, fila_codigo, columnas, rango_codigos, ultima_resumen
+):
+    """Busca una métrica del proyecto en la hoja Resumen."""
 
     columna_valor = get_column_letter(columnas[campo])
 
@@ -557,11 +679,13 @@ def generar_formula_valor_comparacion(campo, columna, fila_codigo, columnas, ran
     )
 
     return (
-        f'=IF(OR($B$3="",{columna}${fila_codigo}="Sin datos"),'
-        f'"Sin datos",'
+        f'=IF(OR($B$3="",$B$4="",'
+        f'{columna}${fila_codigo}="Sin datos"),"Sin datos",'
         f'IFERROR(IF(COUNTBLANK({consulta})>0,"Sin datos",'
         f'{consulta}),"Sin datos"))'
     )
+
+
 
 def aplicar_estilo_celda_comparacion(celda, campo, borde):
     """Aplica los estilos correspondientes al tipo de campo."""
@@ -592,44 +716,53 @@ def aplicar_estilo_celda_comparacion(celda, campo, borde):
         celda.number_format = r"0.00\%"
 
 def generar_tabla_comparacion(hoja, resumen, columnas, parejas):
-    """Genera las filas de métricas y sus fórmulas Manual/Vibecoding."""
+    """Genera las métricas Manual/Vibecoding y aplica sus estilos."""
 
     campos = ENCABEZADOS_RESUMEN_DISPOSITIVOS
 
     ultima_auxiliar = max(2, len(parejas) + 1)
     ultima_resumen = max(2, resumen.max_row)
 
-    # Localizar la fila que contiene los códigos.
-    fila_codigo = 6 + campos.index(TEXTO_ENCABEZADO_CODIGO)
+    # Las métricas empiezan ahora en la fila 7.
+    fila_codigo = 7 + campos.index(TEXTO_ENCABEZADO_CODIGO)
 
-    columna_codigo = get_column_letter(columnas[TEXTO_ENCABEZADO_CODIGO])
+    columna_codigo = get_column_letter(
+        columnas[TEXTO_ENCABEZADO_CODIGO]
+    )
 
     rango_codigos = (
         f"'{HOJA_RESUMEN}'!${columna_codigo}$2:"
         f"${columna_codigo}${ultima_resumen}"
     )
 
-    borde = Border(bottom=Side(style="hair", color="D9E2F3"))
+    borde = Border(
+        bottom=Side(style="hair", color="D9E2F3")
+    )
 
-    for fila, campo in enumerate(campos, 6):
+    for fila, campo in enumerate(campos, 7):
 
-        # Etiqueta de la métrica.
+        # Etiqueta de cada métrica.
         etiqueta = hoja.cell(fila, 1, campo)
         etiqueta.font = Font(color="000000", bold=True)
         etiqueta.fill = PatternFill("solid", fgColor="E7EEF4")
         etiqueta.border = borde
-        etiqueta.alignment = Alignment(vertical="center", wrap_text=True)
+        etiqueta.alignment = Alignment(
+            vertical="center", wrap_text=True
+        )
 
         hoja.row_dimensions[fila].height = 30
 
-        # Valores Manual y Vibecoding.
-        for columna, origen in (("B", "F"), ("C", "G")):
+        # Columnas B (Manual) y C (Vibecoding).
+        for columna, origen in (("B", "G"), ("C", "H")):
 
             celda = hoja[f"{columna}{fila}"]
 
             if campo == TEXTO_ENCABEZADO_CODIGO:
 
-                celda.value = generar_formula_codigo_comparacion( origen, ultima_auxiliar)
+                celda.value = generar_formula_codigo_comparacion(
+                    origen,
+                    ultima_auxiliar
+                )
 
             else:
 
@@ -642,26 +775,56 @@ def generar_tabla_comparacion(hoja, resumen, columnas, parejas):
                     ultima_resumen
                 )
 
-            aplicar_estilo_celda_comparacion(celda, campo, borde)
+            aplicar_estilo_celda_comparacion(
+                celda, campo, borde
+            )
 
 def finalizar_hoja_comparacion(hoja, libro):
-    """Configura el formato condicional y el recálculo de fórmulas."""
+    """Configura el formato condicional y recálculo automático."""
 
-    ultima_fila = 5 + len(ENCABEZADOS_RESUMEN_DISPOSITIVOS)
+    ultima_fila = 6 + len(ENCABEZADOS_RESUMEN_DISPOSITIVOS)
 
-    # Resaltar automáticamente los valores sin datos.
     hoja.conditional_formatting.add(
-        f"B6:C{ultima_fila}",
+        f"B7:C{ultima_fila}",
         FormulaRule(
-            formula=['B6="Sin datos"'],
-            font=Font(color="008000", bold=True),
-        ),
+            formula=['B7="Sin datos"'],
+            font=Font(color="008000", bold=True)
+        )
     )
 
-    # Forzar el recálculo cuando Excel abra el archivo.
     libro.calculation.calcMode = "auto"
     libro.calculation.fullCalcOnLoad = True
     libro.calculation.forceFullCalc = True
+
+
+def generar_hojas_comparacion(libro):
+    """Genera la comparación Manual/Vibecoding por ID y dispositivo."""
+
+    # 1. Obtener y validar Resumen.
+    resumen = libro[HOJA_RESUMEN]
+    columnas = validar_encabezados_comparacion(resumen)
+
+    # 2. Identificar parejas completas por ID y dispositivo.
+    parejas = obtener_parejas_completas(resumen, columnas)
+
+    # 3. Preparar la hoja y conservar selecciones anteriores.
+    hoja, seleccion_anterior = preparar_hoja_comparacion(libro)
+
+    # 4. Configurar título y selectores ID/Dispositivo.
+    configurar_encabezado_comparacion(
+        hoja, parejas, seleccion_anterior
+    )
+
+    # 5. Crear datos auxiliares y listas desplegables.
+    configurar_tabla_auxiliar(hoja, parejas)
+
+    # 6. Generar la tabla de métricas y sus estilos.
+    generar_tabla_comparacion(
+        hoja, resumen, columnas, parejas
+    )
+
+    # 7. Configurar formato condicional y recálculo.
+    finalizar_hoja_comparacion(hoja, libro)
 
 def finalizar_libro(libro_salida, archivo_excel, tipo_proyecto=TIPO_PROYECTO_PC):
     """Formatea, genera los gráficos del perfil y guarda el libro.

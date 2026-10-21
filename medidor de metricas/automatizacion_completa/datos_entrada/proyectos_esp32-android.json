@@ -42,5 +42,26 @@
 	  "lenguaje":"Kotlin", 
 	  "dispositivo":"Android", 
 	  "implementacion":"Vibecoding"
+	},{
+	  "codigo":"L2-1C2026-ESP-M",
+  	  "id_proyecto":"L2-1C2026",
+	  "nombre_proyecto":"Sistema de Atención al Volante",
+	  "ruta_codigo":"C:\\proyecto_code_ia\\metricas_realizadas\\SOA\\2026-SOA-Q1-L2\\Android\\Proyecto_sin_Vibecoding", 
+	  "herramienta_ia":"No aplica", 
+	  "modelo_ia":"No aplica", 
+	  "lenguaje":"Wiring", 
+	  "dispositivo":"ESP32", 
+	  "implementacion":"Manual"
+	},
+	{
+	  "codigo":"L2-1C2026-ESP-V",
+  	  "id_proyecto":"L2-1C2026",
+	  "nombre_proyecto":"Sistema de Atención al Volante",
+	  "ruta_codigo":"C:\\proyecto_code_ia\\metricas_realizadas\\SOA\\2026-SOA-Q1-L2\\Android\\Proyecto_con_Vibecoding", 
+	  "herramienta_ia":"ChatGPT", 
+	  "modelo_ia":"Gemini Pro", 
+	  "lenguaje":"Wiring", 
+	  "dispositivo":"ESP32", 
+	  "implementacion":"Vibecoding"
 	}
 ]
