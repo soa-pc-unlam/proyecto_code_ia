@@ -48,7 +48,7 @@ HOJA_ERRORES = "Errores"
 HOJA_CONCURRENCIA_SALIDA = "Concurrencia"
 HOJA_TOKENS_SALIDA = "Tokens"
 HOJA_CPU_MEMORIA_SALIDA = "CPU-Memoria"
-
+HOJA_COMPARACION = "Comparacion"
 
 #texto de las columna de cada hoja del excel
 #textos de las columnas de la hoja Resumen

@@ -4,7 +4,7 @@ import logging
 
 from configuracion.configuracion import cargar_configuracion, cargar_proyectos
 from constantes import definiciones
-from reportes.excel import abrir_excel_entrada, crear_o_abrir_excel_salida, finalizar_libro
+from reportes.excel import abrir_excel_entrada, crear_o_abrir_excel_salida, finalizar_libro, generar_hojas_comparacion
 from util.archivos import crear_directorio
 from util.logging_config import configurar_logger
 from procesamiento.procesamiento import gestionar_procesamiento_proyectos
@@ -31,12 +31,10 @@ def ejecutar_analisis(tipo_proyecto):
             ruta_configuracion = definiciones.CONFIGURACION_JSON_PC
             ruta_proyectos = definiciones.DATOS_PC_PROYECTOS_JSON
             porcentaje_cpu = 0.5
-            incluir_graficos = True
         elif tipo_proyecto == definiciones.TIPO_PROYECTO_ESP32_ANDROID:
             ruta_configuracion = definiciones.CONFIGURACION_JSON_ESP32_ANDROID
             ruta_proyectos = definiciones.DATOS_ESP32_ANDROID_PROYECTOS_JSON
             porcentaje_cpu = 0.5
-            incluir_graficos = True
         else:
             raise ValueError(f"Tipo de proyecto no admitido: {tipo_proyecto}")
 
@@ -60,17 +58,12 @@ def ejecutar_analisis(tipo_proyecto):
 
         gestionar_procesamiento_proyectos(proyectos, configuracion, libro_salida,libro_entrada, logger)
 
-        opciones_graficos = {}
-        if tipo_proyecto == definiciones.TIPO_PROYECTO_ESP32_ANDROID:
-            opciones_graficos["configuracion_graficos"] = (
-                definiciones.CONFIGURACION_GRAFICOS_DISPOSITIVOS
-            )
         finalizar_libro(
             libro_salida,
             configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA],
-            incluir_graficos=incluir_graficos,
-            **opciones_graficos,
+            tipo_proyecto=tipo_proyecto,
         )
+        
         informar_resultados_finales(logger, configuracion)
 
     except PermissionError:
