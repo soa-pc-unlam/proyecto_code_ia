@@ -9,9 +9,8 @@ from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import FormulaRule
 from openpyxl.utils import get_column_letter
 from copy import copy
-from reportes.graficos import generar_graficos
+from reportes.graficos import generar_graficos_comparativo_dispositivos, generar_graficos_pc
 from constantes.definiciones import (
-    CONFIGURACION_GRAFICOS_DISPOSITIVOS,
     HOJA_COMPARACION,
     ENCABEZADOS_RESUMEN_DISPOSITIVOS,
     TEXTO_MANUAL,
@@ -308,9 +307,7 @@ def obtener_columna_encabezado(encabezados, nombre, nombre_hoja):
     """
     columna = encabezados.get(normalizar_texto(nombre))
     if columna is None:
-        raise ValueError(
-            f"Falta la columna '{nombre}' en la solapa {nombre_hoja}"
-        )
+        raise ValueError(f"Falta la columna '{nombre}' en la solapa {nombre_hoja}")
     return columna
 
 def resolver_columnas_graficos(libro, configuracion):
@@ -336,27 +333,6 @@ def resolver_columnas_graficos(libro, configuracion):
         resultado.append((nombre_hoja, columna, titulo, eje_y, posicion))
     return resultado
 
-def generar_hojas_comparacion(libro):
-    """Genera una comparación interactiva Manual/Vibecoding desde Resumen."""
-
-    # Obtener y validar los datos.
-    resumen = libro[HOJA_RESUMEN]
-    columnas = validar_encabezados_comparacion(resumen)
-    parejas = obtener_parejas_completas(resumen, columnas)
-
-    # Crear la hoja de comparación.
-    hoja, seleccion_anterior = preparar_hoja_comparacion(libro)
-
-    # Configurar presentación y selección del proyecto.
-    configurar_encabezado_comparacion(hoja, parejas, seleccion_anterior)
-    configurar_tabla_auxiliar(hoja, parejas)
-
-    # Generar las fórmulas y aplicar los estilos.
-    generar_tabla_comparacion(hoja, resumen, columnas, parejas)
-
-    # Configurar formato condicional y recálculo.
-    finalizar_hoja_comparacion(hoja, libro)
-
 def validar_encabezados_comparacion(resumen):
     """Verifica que Resumen contenga las columnas requeridas."""
 
@@ -373,9 +349,7 @@ def validar_encabezados_comparacion(resumen):
 
     return columnas
 
-def registrar_pareja_comparacion(
-    parejas, identificador, dispositivo, implementacion, codigo
-):
+def registrar_pareja_comparacion(parejas, identificador, dispositivo, implementacion, codigo):
     """Registra una implementación según el ID y el dispositivo."""
 
     tipo = normalizar_texto(implementacion)
@@ -386,9 +360,7 @@ def registrar_pareja_comparacion(
         return
 
     if not dispositivo:
-        raise ValueError(
-            f"El proyecto '{identificador}' no tiene dispositivo."
-        )
+        raise ValueError(f"El proyecto '{identificador}' no tiene dispositivo.")
 
     identificador = str(identificador).strip()
     dispositivo = str(dispositivo).strip()
@@ -396,9 +368,7 @@ def registrar_pareja_comparacion(
     # Un mismo ID puede tener proyectos Android y ESP32.
     clave = (identificador, normalizar_texto(dispositivo))
 
-    pareja = parejas.setdefault(
-        clave, {"dispositivo": dispositivo}
-    )
+    pareja = parejas.setdefault( clave, {"dispositivo": dispositivo})
 
     if tipo in pareja:
         raise ValueError(
@@ -416,21 +386,10 @@ def obtener_parejas_completas(resumen, columnas):
 
     for fila in range(2, resumen.max_row + 1):
 
-        identificador = resumen.cell(
-            fila, columnas[TEXTO_ENCABEZADO_ID_PROYECTO]
-        ).value
-
-        implementacion = resumen.cell(
-            fila, columnas[TEXTO_ENCABEZADO_IMPLEMENTACION]
-        ).value
-
-        dispositivo = resumen.cell(
-            fila, columnas[TEXTO_ENCABEZADO_DISPOSITIVO]
-        ).value
-
-        codigo = resumen.cell(
-            fila, columnas[TEXTO_ENCABEZADO_CODIGO]
-        ).value
+        identificador = resumen.cell(fila, columnas[TEXTO_ENCABEZADO_ID_PROYECTO]).value
+        implementacion = resumen.cell(fila, columnas[TEXTO_ENCABEZADO_IMPLEMENTACION]).value
+        dispositivo = resumen.cell(fila, columnas[TEXTO_ENCABEZADO_DISPOSITIVO]).value
+        codigo = resumen.cell(fila, columnas[TEXTO_ENCABEZADO_CODIGO]).value
 
         if not identificador or not codigo:
             continue
@@ -499,9 +458,7 @@ def configurar_encabezado_comparacion(
     hoja.merge_cells("A1:C1")
     hoja["A1"] = "COMPARACIÓN · MANUAL / VIBECODING"
     hoja["A1"].fill = PatternFill("solid", fgColor="1F4E78")
-    hoja["A1"].font = Font(
-        name="Calibri", size=14, color="FFFFFF", bold=True
-    )
+    hoja["A1"].font = Font(name="Calibri", size=14, color="FFFFFF", bold=True)
     hoja["A1"].alignment = Alignment(vertical="center")
     hoja.row_dimensions[1].height = 32
 
@@ -546,9 +503,7 @@ def configurar_encabezado_comparacion(
     for direccion in ("B3", "B4"):
         celda = hoja[direccion]
 
-        celda.fill = PatternFill(
-            "solid", fgColor=COLOR_ENCABEZADO_RESUMEN
-        )
+        celda.fill = PatternFill("solid", fgColor=COLOR_ENCABEZADO_RESUMEN)
         celda.font = Font(bold=True, color="000000")
         celda.alignment = Alignment(horizontal="center")
 
@@ -581,9 +536,7 @@ def configurar_tabla_auxiliar(hoja, parejas):
     # H: Código Vibecoding
     # I: Clave ID|dispositivo
 
-    for fila, (identificador, dispositivo, manual, vibecoding) in enumerate(
-        parejas, 2
-    ):
+    for fila, (identificador, dispositivo, manual, vibecoding) in enumerate( parejas, 2):
         hoja.cell(fila, 5, identificador)
         hoja.cell(fila, 6, dispositivo)
         hoja.cell(fila, 7, manual)
@@ -709,10 +662,7 @@ def aplicar_estilo_celda_comparacion(celda, campo, borde):
     if color:
         celda.fill = PatternFill("solid", fgColor=color)
 
-    if campo in (
-        TEXTO_ENCABEZADO_CPU_PROMEDIO,
-        TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN,
-    ):
+    if campo in (TEXTO_ENCABEZADO_CPU_PROMEDIO,TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN):
         celda.number_format = r"0.00\%"
 
 def generar_tabla_comparacion(hoja, resumen, columnas, parejas):
@@ -726,18 +676,14 @@ def generar_tabla_comparacion(hoja, resumen, columnas, parejas):
     # Las métricas empiezan ahora en la fila 7.
     fila_codigo = 7 + campos.index(TEXTO_ENCABEZADO_CODIGO)
 
-    columna_codigo = get_column_letter(
-        columnas[TEXTO_ENCABEZADO_CODIGO]
-    )
+    columna_codigo = get_column_letter(columnas[TEXTO_ENCABEZADO_CODIGO])
 
     rango_codigos = (
         f"'{HOJA_RESUMEN}'!${columna_codigo}$2:"
         f"${columna_codigo}${ultima_resumen}"
     )
 
-    borde = Border(
-        bottom=Side(style="hair", color="D9E2F3")
-    )
+    borde = Border(bottom=Side(style="hair", color="D9E2F3"))
 
     for fila, campo in enumerate(campos, 7):
 
@@ -746,9 +692,7 @@ def generar_tabla_comparacion(hoja, resumen, columnas, parejas):
         etiqueta.font = Font(color="000000", bold=True)
         etiqueta.fill = PatternFill("solid", fgColor="E7EEF4")
         etiqueta.border = borde
-        etiqueta.alignment = Alignment(
-            vertical="center", wrap_text=True
-        )
+        etiqueta.alignment = Alignment(vertical="center", wrap_text=True)
 
         hoja.row_dimensions[fila].height = 30
 
@@ -775,9 +719,7 @@ def generar_tabla_comparacion(hoja, resumen, columnas, parejas):
                     ultima_resumen
                 )
 
-            aplicar_estilo_celda_comparacion(
-                celda, campo, borde
-            )
+            aplicar_estilo_celda_comparacion(celda, campo, borde)
 
 def finalizar_hoja_comparacion(hoja, libro):
     """Configura el formato condicional y recálculo automático."""
@@ -811,48 +753,30 @@ def generar_hojas_comparacion(libro):
     hoja, seleccion_anterior = preparar_hoja_comparacion(libro)
 
     # 4. Configurar título y selectores ID/Dispositivo.
-    configurar_encabezado_comparacion(
-        hoja, parejas, seleccion_anterior
-    )
+    configurar_encabezado_comparacion(hoja, parejas, seleccion_anterior)
 
     # 5. Crear datos auxiliares y listas desplegables.
     configurar_tabla_auxiliar(hoja, parejas)
 
     # 6. Generar la tabla de métricas y sus estilos.
-    generar_tabla_comparacion(
-        hoja, resumen, columnas, parejas
-    )
+    generar_tabla_comparacion(hoja, resumen, columnas, parejas)
 
     # 7. Configurar formato condicional y recálculo.
     finalizar_hoja_comparacion(hoja, libro)
 
 def finalizar_libro(libro_salida, archivo_excel, tipo_proyecto=TIPO_PROYECTO_PC):
-    """Formatea, genera los gráficos del perfil y guarda el libro.
+    """Formatea, genera los gráficos del perfil y guarda el libro."""
 
-    Args:
-        libro_salida: Libro de Excel que se desea finalizar.
-        archivo_excel: Ruta en la que se guarda el libro.
-        incluir_graficos: Indica si deben regenerarse los gráficos.
-        configuracion_graficos: Gráficos a generar; None usa los de PC.
-
-    Raises:
-        OSError: Si no se puede guardar el temporal o reemplazar el archivo final.
-    """
     aplicar_estilos_basicos(libro_salida)
 
-    #si el tipo de proyecto es PC, se generan los graficos de PC, 
-    # si es ESP32_ANDROID se generan los graficos de dispositivos y la hoja de comparacion
-    graficos = []
-   
-    if tipo_proyecto == TIPO_PROYECTO_PC:
-        graficos = CONFIGURACION_GRAFICOS
-   
     if tipo_proyecto == TIPO_PROYECTO_ESP32_ANDROID:
-        graficos = CONFIGURACION_GRAFICOS_DISPOSITIVOS
         generar_hojas_comparacion(libro_salida)
-        
-    graficos = resolver_columnas_graficos(libro_salida, graficos)
-    generar_graficos(libro_salida, graficos)
+        generar_graficos_comparativo_dispositivos(libro_salida)
+    else:
+        # Para PC, conservar exactamente la generación existente.
+        graficos = CONFIGURACION_GRAFICOS if tipo_proyecto == TIPO_PROYECTO_PC else []
+        graficos = resolver_columnas_graficos(libro_salida, graficos)
+        generar_graficos_pc(libro_salida, graficos)
 
     ruta_salida = Path(archivo_excel)
     ruta_salida.parent.mkdir(parents=True, exist_ok=True)
@@ -1238,15 +1162,10 @@ def formatear_celdas_hoja_resumen(hoja, codigo):
             )
 
     # Formato porcentual de CPU y memoria.
-    for encabezado in (
-        TEXTO_ENCABEZADO_CPU_PROMEDIO,
-        TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN,
-    ):
+    for encabezado in (TEXTO_ENCABEZADO_CPU_PROMEDIO,TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN):
         columna = columnas.get(encabezado)
         if columna is not None:
-            hoja.cell(
-                row=fila, column=columna
-            ).number_format = r'0.00\%'
+            hoja.cell(row=fila, column=columna).number_format = r'0.00\%'
 
     # Identificar las columnas que no son métricas.
     campos_identificacion = {
