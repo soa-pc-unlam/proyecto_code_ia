@@ -1,0 +1,73 @@
+{
+  "mode": "concurrent",
+  "environment": {
+    "python": "3.14.5 (main, May 10 2026, 19:20:54) [Clang 22.1.3 ]",
+    "os": "macOS-26.7.1-x86_64-i386-64bit-Mach-O",
+    "processor": "i386",
+    "cpu_count": 8,
+    "pygame": "2.5.8"
+  },
+  "config": {
+    "tick_hz": 8,
+    "fps": 60,
+    "power_seconds": 6,
+    "cell_size": 32
+  },
+  "elapsed_seconds": 88.14847249600007,
+  "cpu_percent_mean": 36.07044832846399,
+  "cpu_percent_max": 85.31013625528428,
+  "rss_mb_mean": 81.95567133103242,
+  "rss_mb_max": 83.078125,
+  "samples": 833,
+  "fps_mean": 58.75314515784727,
+  "update_ms_mean": 0.29609145194154296,
+  "update_ms_max": 0.486183999782952,
+  "ai_seconds_total": 0.706662999006312,
+  "decision_ms_mean": 0.4624757846899948,
+  "decision_ms_max": 7.866348000334256,
+  "tasks_sent": 1528,
+  "tasks_processed": 1528,
+  "tasks_replaced_or_cancelled": 0,
+  "results_dropped_full": 0,
+  "worker_errors": 0,
+  "thread_failures": 0,
+  "clean_shutdown": true,
+  "worker_statistics_complete": true,
+  "counts": {
+    "ticks": 385,
+    "stale": 12,
+    "duplicates": 0,
+    "invalid": 0,
+    "invariant_violations": 0,
+    "missed": 0,
+    "applied": 1516
+  },
+  "final_state": "Pausa",
+  "score": 0,
+  "player": [
+    9,
+    11
+  ],
+  "ghosts": {
+    "Blinky": [
+      6,
+      10
+    ],
+    "Pinky": [
+      6,
+      9
+    ],
+    "Inky": [
+      12,
+      10
+    ],
+    "Clyde": [
+      8,
+      9
+    ]
+  },
+  "scheduled_steps": 701,
+  "execution_completed": true,
+  "run_error": null,
+  "video_driver": "cocoa"
+}

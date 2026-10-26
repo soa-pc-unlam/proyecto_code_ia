@@ -1,0 +1,32 @@
+{
+  "sequential": {
+    "cpu_percent_mean": 15.414799007078445,
+    "cpu_percent_max": 54.257863979428635,
+    "rss_mb_mean": 25.711794969512198,
+    "rss_mb_max": 25.7734375,
+    "update_ms_mean": 4.321357241694083,
+    "decision_ms_mean": 1.0765485840620679,
+    "elapsed_seconds": 3.9835299113331835,
+    "ai_seconds_total": 0.49090615433230295
+  },
+  "concurrent": {
+    "cpu_percent_mean": 19.28759694521282,
+    "cpu_percent_max": 47.305104620967136,
+    "rss_mb_mean": 25.89645579268293,
+    "rss_mb_max": 25.924479166666668,
+    "update_ms_mean": 0.2589003583238991,
+    "decision_ms_mean": 1.140613898071897,
+    "elapsed_seconds": 3.9891538336667813,
+    "ai_seconds_total": 0.5174137799989088
+  },
+  "concurrent_minus_sequential": {
+    "cpu_percent_mean": 3.872797938134374,
+    "cpu_percent_max": -6.952759358461499,
+    "rss_mb_mean": 0.18466082317073074,
+    "rss_mb_max": 0.15104166666666785,
+    "update_ms_mean": -4.062456883370184,
+    "decision_ms_mean": 0.06406531400982907,
+    "elapsed_seconds": 0.005623922333597875,
+    "ai_seconds_total": 0.02650762566660586
+  }
+}

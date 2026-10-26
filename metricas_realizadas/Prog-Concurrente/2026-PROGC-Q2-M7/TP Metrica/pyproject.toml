@@ -1,0 +1,25 @@
+[project]
+name = "maze-chase"
+version = "1.0.0"
+description = "Pac-Man educativo con trabajadores concurrentes y métricas reproducibles"
+requires-python = ">=3.11"
+dependencies = ["pygame-ce>=2.5.5,<3", "psutil>=7,<8"]
+
+[project.scripts]
+maze-chase = "maze_chase.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "ruff>=0.11"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "BLE"]
