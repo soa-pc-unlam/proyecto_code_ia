@@ -1,0 +1,19 @@
+ReparaBarrio portable - Java 21 externo requerido
+
+Extraiga TODO el ZIP en una carpeta local escribible, sin enlaces ni punto y coma.
+Se admiten espacios. Ejecute Iniciar-ReparaBarrio.cmd. Requiere Windows PowerShell.
+Java 21 debe estar en PATH; no requiere IntelliJ, Maven ni fuentes.
+El JAR usa lib/h2-2.3.232.jar mediante su manifiesto.
+
+Comando alternativo desde PowerShell, ubicado en la carpeta extraida:
+java -jar .\app\ReparaBarrio.jar --raiz "$((Get-Location).Path)" --academico-nuevo --portable
+
+Confirme en pantalla la creacion de una sesion academica descartable NUEVA.
+Datos en target/h5-UUID; simulaciones nuevas en target/h6-UUID (H2 en memoria).
+No se reabren sesiones anteriores. No borre ni mueva archivos con la app abierta.
+Prueba manual: crear sesion, registrar orden corta, iniciar escenario corto en
+Simulacion y cerrar con X esperando el cierre seguro completo.
+H4 = PARCIAL / NO APROBADO. Aceptacion integral = PENDIENTE.
+
+Incluye H2 2.3.232, distribuido bajo MPL 2.0 o EPL 1.0; licencias en su JAR.
+No incluye JVM, credenciales, registros ni bases de desarrollo.

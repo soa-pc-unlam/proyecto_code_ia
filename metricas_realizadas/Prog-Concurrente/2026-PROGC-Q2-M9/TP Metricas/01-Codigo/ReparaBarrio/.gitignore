@@ -1,0 +1,22 @@
+﻿# IntelliJ IDEA
+.idea/
+*.iml
+
+# Java / Maven
+target/
+*.class
+
+# Node
+node_modules/
+
+# Archivos temporales
+*.tmp
+*.bak
+
+# Credenciales y configuraciones sensibles
+.env
+.env.*
+*.key
+
+# Registros tecnicos privados de Codex
+metricas/logs/
