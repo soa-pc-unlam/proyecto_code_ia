@@ -1,0 +1,2 @@
+﻿Codigo;Método medición;Modo CPU;CPUs lógicas;Acción 1;CPU Acc1;Acción 2;CPU Acc2;Memoria Acc1 (MB);Memoria Acc2 (MB);Memoria Total (MB)
+M1;psutil;100%=1 núcleo;16;Carga Distribuida;62.6% (Pico 129.0%);Alta Contención;114.2% (Pico 186.4%);72.77;77.22;32660
