@@ -26,7 +26,7 @@ from constantes.definiciones import(
 
 
 
-def analizar_complejidad(proyecto, configuracion, logger, contexto):
+def analizar_complejidad(proyecto, lenguaje, configuracion, logger, contexto):
     """Analiza y clasifica la complejidad de un proyecto de forma segura.
 
     Args:
@@ -41,6 +41,7 @@ def analizar_complejidad(proyecto, configuracion, logger, contexto):
     try:
         metricas, archivo_csv = ejecutar_lizard(
             proyecto=proyecto,
+            lenguaje=lenguaje,
             carpeta_resultados=configuracion[TEXTO_CAMPO_CARPETA_RESULTADOS],
             logger=logger,
         )
@@ -101,6 +102,7 @@ def analizar_mi(proyecto, configuracion, logger, contexto):
 
 def analizar_bugs_smells_seguro(
     proyecto,
+    lenguaje,
     configuracion,
     logger,
     metricas_mi,
@@ -125,10 +127,11 @@ def analizar_bugs_smells_seguro(
     try:
         return analizar_bugs_smells(
             proyecto=proyecto,
+            lenguaje=lenguaje,
             carpeta_resultados=configuracion[TEXTO_CAMPO_CARPETA_RESULTADOS],
             umbrales_isi=configuracion[TEXTO_CAMPO_UMBRALES_ISI],
             logger=logger,
-            loc_codigo=metricas_mi.nloc_mi,
+            loc_codigo=metricas_mi.nloc_mi           
         )
     except DatosProyectoNoEncontrados as aviso:
         logger.warning(f"[{proyecto.codigo}] Análisis Bugs/Smells: {aviso}")
@@ -195,7 +198,7 @@ def analizar_tokens_seguro(
             logger.info(f"[{proyecto.codigo}] Se omite análisis de tokens para implementación manual en dispositivo")
             return None
         if metricas_cc is None:
-            logger.warning(f"[{proyecto.codigo}] Se omite análisis de tokens: no hay métricas de complejidad disponibles")
+            logger.warning(f"[{proyecto.codigo}] Se omite análisis de tokens: sin métricas de complejidad")
             return None
         else:
             return analizar_tokens(

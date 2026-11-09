@@ -1,0 +1,2 @@
+class LenguajeNoSoportadoError(ValueError):
+    pass

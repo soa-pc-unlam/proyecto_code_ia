@@ -1,6 +1,10 @@
 """Normalización de los lenguajes de programación admitidos."""
 
 
+
+from util.exception import LenguajeNoSoportadoError
+
+
 def normalizar_lenguaje(lenguaje):
     """Convierte el nombre de un lenguaje a su identificador canónico.
 
@@ -24,4 +28,4 @@ def normalizar_lenguaje(lenguaje):
     if lenguaje in ["kotlin", "kt"]:
         return "kotlin"
 
-    raise ValueError(f"Lenguaje no soportado: {lenguaje}")
+    raise LenguajeNoSoportadoError(f"Lenguaje no soportado: {lenguaje}")

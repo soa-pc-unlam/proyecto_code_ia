@@ -787,10 +787,7 @@ def finalizar_libro(libro_salida, archivo_excel, tipo_proyecto=TIPO_PROYECTO_PC)
 def leer_fila_por_codigo(libro_entrada, nombre_hoja, codigo, campos, incluir_formato=False):
     """Lee los campos de una única fila identificada por código."""
     if nombre_hoja not in libro_entrada.sheetnames:
-        raise ValueError(
-            f"No existe la solapa '{nombre_hoja}' "
-            f"en el archivo excel con los datos de entrada."
-        )
+        raise ValueError(f"No existe la solapa '{nombre_hoja} 'en el archivo excel con los datos de entrada.")
 
     hoja = libro_entrada[nombre_hoja]
     encabezados = obtener_mapa_encabezados(hoja, normalizar=True)
@@ -798,10 +795,10 @@ def leer_fila_por_codigo(libro_entrada, nombre_hoja, codigo, campos, incluir_for
     filas = buscar_filas_por_codigo(hoja, codigo, columna_codigo)
 
     if not filas:
-        raise DatosProyectoNoEncontrados(f"No se encontró el código '{codigo}' en {nombre_hoja}")
+        raise DatosProyectoNoEncontrados(f"No se encontró el código en {nombre_hoja}")
 
     if len(filas) > 1:
-        raise ValueError(f"Código duplicado '{codigo}' en {nombre_hoja}")
+        raise ValueError(f"Código duplicado en {nombre_hoja}")
 
     valores = {}
     formatos = {}
@@ -1199,9 +1196,9 @@ def aplicar_formato_cpu_memoria(hoja, codigo):
     filas = buscar_filas_por_codigo(hoja, codigo)
 
     if not filas:
-        raise ValueError(f"No se encontró el código '{codigo}' en {hoja.title}")
+        raise ValueError(f"No se encontró el código en {hoja.title}")
     if len(filas) > 1:
-        raise ValueError(f"Código duplicado '{codigo}' en {hoja.title}")
+        raise ValueError(f"Código duplicado en {hoja.title}")
 
     fila = filas[0]
     for columna in (7, 9, 10, 11, 12, 13):

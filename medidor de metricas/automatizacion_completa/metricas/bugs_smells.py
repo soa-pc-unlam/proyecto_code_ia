@@ -13,15 +13,15 @@ from pathlib import Path, PureWindowsPath
 from constantes.definiciones import  ISSUE_CATEGORIA, ISSUE_REGLA, ISSUE_SEVERIDAD, ISSUE_SEVERIDAD_ALTA, ISSUE_SEVERIDAD_BAJA, ISSUE_SEVERIDAD_MEDIA
 from util.archivos import crear_directorio, validar_ruta_proyecto
 from configuracion.configuracion import clasificar_isi
-from util.lenguajes import normalizar_lenguaje
 from modelos.modelos import MetricaBugsSmells
 
 
-def analizar_bugs_smells(proyecto, carpeta_resultados, umbrales_isi, logger, loc_codigo=None):
+def analizar_bugs_smells(proyecto,lenguaje, carpeta_resultados, umbrales_isi, logger, loc_codigo=None):
     """Ejecuta el analizador adecuado y genera las métricas de incidencias.
 
     Args:
         proyecto: Proyecto que debe analizarse.
+        lenguaje: Lenguaje de programación del proyecto.
         carpeta_resultados: Directorio para los reportes generados.
         umbrales_isi: Umbrales del índice de severidad.
         logger: Logger utilizado para registrar la ejecución.
@@ -33,7 +33,6 @@ def analizar_bugs_smells(proyecto, carpeta_resultados, umbrales_isi, logger, loc
     ruta_proyecto = validar_ruta_proyecto(proyecto.ruta_codigo)
     crear_directorio(carpeta_resultados)
 
-    lenguaje = normalizar_lenguaje(proyecto.lenguaje)
     archivo_txt = Path(carpeta_resultados) / f"{proyecto.codigo}_resumen_bugs_smells.txt"
 
     if lenguaje == "java":
@@ -46,7 +45,7 @@ def analizar_bugs_smells(proyecto, carpeta_resultados, umbrales_isi, logger, loc
         analizador = "Detekt"
         issues = ejecutar_detekt(ruta_proyecto, proyecto.codigo, logger)
     else:
-        raise ValueError(f"No hay analizador de bugs/smells para el lenguaje: {proyecto.lenguaje}")
+        raise ValueError(f"No hay analizador de bugs/smells para el lenguaje: {lenguaje}")
 
     loc = loc_codigo if loc_codigo is not None else 0
 

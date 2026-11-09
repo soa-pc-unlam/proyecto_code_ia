@@ -5,15 +5,15 @@ import subprocess
 from pathlib import Path
 
 from util.archivos import crear_directorio, validar_ruta_proyecto
-from util.lenguajes import normalizar_lenguaje
 from modelos.modelos import FuncionCompleja, MetricaComplejidad
 
 
-def ejecutar_lizard(proyecto, carpeta_resultados, logger):
+def ejecutar_lizard(proyecto,lenguaje, carpeta_resultados, logger):
     """Ejecuta Lizard y genera las métricas y el resumen de un proyecto.
 
     Args:
         proyecto: Proyecto que debe analizarse.
+        lenguaje: Lenguaje de programación del proyecto.
         carpeta_resultados: Directorio para los archivos generados.
         logger: Logger utilizado para registrar la ejecución.
 
@@ -21,7 +21,7 @@ def ejecutar_lizard(proyecto, carpeta_resultados, logger):
         tuple[MetricaComplejidad, Path]: Métricas de complejidad y ruta del CSV
             generado, en ese orden.
     """
-    archivo_csv = ejecutar_lizard_csv(proyecto, carpeta_resultados, logger)
+    archivo_csv = ejecutar_lizard_csv(proyecto, lenguaje, carpeta_resultados, logger)
     archivo_txt = Path(carpeta_resultados) / f"{proyecto.codigo}_resumen_lizard.txt"
 
     metricas = procesar_csv_lizard(archivo_csv)
@@ -30,7 +30,7 @@ def ejecutar_lizard(proyecto, carpeta_resultados, logger):
     return metricas, archivo_csv
 
 
-def ejecutar_lizard_csv(proyecto, carpeta_resultados, logger):
+def ejecutar_lizard_csv(proyecto,lenguaje, carpeta_resultados, logger):
     """Ejecuta Lizard y guarda su salida en formato CSV.
 
     Args:
@@ -47,7 +47,7 @@ def ejecutar_lizard_csv(proyecto, carpeta_resultados, logger):
     validar_ruta_proyecto(proyecto.ruta_codigo)
     crear_directorio(carpeta_resultados)
 
-    lenguaje = normalizar_lenguaje(proyecto.lenguaje)
+    
     archivo_csv = Path(carpeta_resultados) / f"{proyecto.codigo}_lizard.csv"
 
     comando = [

@@ -14,6 +14,8 @@ from procesamiento.analisis import (
     analizar_tokens_seguro,
 )
 from modelos.modelos import ContextoAnalisis, ResultadoProyecto
+from util.exception import LenguajeNoSoportadoError
+from util.lenguajes import normalizar_lenguaje
 
 
 def gestionar_procesamiento_proyectos(proyectos, configuracion, libro_salida, libro_entrada, logger):
@@ -89,6 +91,7 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
 
     Args:
         proyecto: Proyecto cuyo código y rúbrica se desean analizar.
+        lenguaje: Lenguaje de programación del proyecto.
         configuracion: Configuración de rutas, ponderaciones y umbrales.
         logger: Registrador de eventos de la ejecución.
         libro_entrada: Libro abierto que contiene la rúbrica de concurrencia.
@@ -110,10 +113,13 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
     try:
         logger.info(f"[{proyecto.codigo}] Inicio - {proyecto.nombre_proyecto}")
 
+        lenguaje_normalizado = normalizar_lenguaje(proyecto.lenguaje)
+
         # Lizard consume bastante CPU y memoria, por eso se limita su ejecución.
         with semaforo_analizadores:
             metricas_cc = analizar_complejidad(
                 proyecto,
+                lenguaje_normalizado,
                 configuracion,
                 logger,
                 contexto,
@@ -131,6 +137,7 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
         with semaforo_analizadores:
             metricas_bugs_smells = analizar_bugs_smells_seguro(
                 proyecto=proyecto,
+                lenguaje=lenguaje_normalizado,
                 configuracion=configuracion,
                 logger=logger,
                 metricas_mi=metricas_mi,
@@ -161,7 +168,11 @@ def procesar_proyecto(proyecto, configuracion, logger, libro_entrada, semaforo_a
             libro_entrada=libro_entrada,
             contexto=contexto,
         )
-        
+
+    except LenguajeNoSoportadoError as error:
+        mensaje_error = str(error)
+        logger.error(f"[{proyecto.codigo}] {mensaje_error}")
+        contexto.errores.append(mensaje_error)
     except Exception as error:
         mensaje_error = f"Error procesando proyecto: {error}"
         logger.exception(f"[{proyecto.codigo}] {mensaje_error}")
