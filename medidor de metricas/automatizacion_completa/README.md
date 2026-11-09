@@ -1,5 +1,5 @@
 # Evaluador de métricas de calidad de código
-
+ 
 Aplicación en Python que analiza proyectos con Lizard y, según el lenguaje,
 PMD, Pylint o Detekt. También incorpora una rúbrica de concurrencia y genera
 un libro Excel consolidado.
