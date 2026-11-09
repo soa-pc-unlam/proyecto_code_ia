@@ -194,6 +194,9 @@ def analizar_tokens_seguro(
         if es_manual_dispositivo:
             logger.info(f"[{proyecto.codigo}] Se omite análisis de tokens para implementación manual en dispositivo")
             return None
+        if metricas_cc is None:
+            logger.warning(f"[{proyecto.codigo}] Se omite análisis de tokens: no hay métricas de complejidad disponibles")
+            return None
         else:
             return analizar_tokens(
                 proyecto=proyecto,

@@ -5,31 +5,31 @@
   "carpeta_logs": "logs",
   "coeficiente_penalizacion_tokens": 0.1,
   "umbrales_cc": [
-    {
-      "min": 1,
-      "max": 5,
-      "nivel": "Bajo",
-      "interpretacion": "Testeabilidad alta"
-    },
-    {
-      "min": 6,
-      "max": 10,
-      "nivel": "Moderado",
-      "interpretacion": "Tolerable"
-    },
-    {
-      "min": 11,
-      "max": 20,
-      "nivel": "Alto",
-      "interpretacion": "Considerar refactoring"
-    },
-    {
-      "min": 21,
-      "max": null,
-      "nivel": "Muy alto",
-      "interpretacion": "Crítico"
-    }
-  ],
+	  {
+		"min": 1,
+		"max": 5,
+		"nivel": "Bajo",
+		"interpretacion": "Testeabilidad alta"
+	  },
+	  {
+		"min": 5,
+		"max": 10,
+		"nivel": "Moderado",
+		"interpretacion": "Tolerable"
+	  },
+	  {
+		"min": 10,
+		"max": 20,
+		"nivel": "Alto",
+		"interpretacion": "Considerar refactoring"
+	  },
+	  {
+		"min": 20,
+		"max": null,
+		"nivel": "Muy alto",
+		"interpretacion": "Crítico"
+	  }
+	],
   "umbrales_mi": [
     {
       "min": 0,
@@ -139,19 +139,19 @@
       "min": 0,
       "max": 29.9,
       "nivel": "Bajo",
-      "interpretacion": "Consumo bajo de CPU"
+      "interpretacion": "Consumo bajo de Memoria"
     },
     {
       "min": 30,
       "max": 59.9,
       "nivel": "Medio",
-      "interpretacion": "Consumo medio de CPU"
+      "interpretacion": "Consumo medio de Memoria"
     },
     {
       "min": 60,
       "max": 100,
       "nivel": "Alto",
-      "interpretacion": "Consumo alto de CPU"
+      "interpretacion": "Consumo alto de Memoria"
     }
   ],
   "umbrales_token": [
