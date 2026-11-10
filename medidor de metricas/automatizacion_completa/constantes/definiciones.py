@@ -51,6 +51,7 @@ HOJA_CPU_MEMORIA_SALIDA = "CPU-Memoria"
 HOJA_COMPARACION = "Comparacion"
 HOJA_GRAFICOS = "Graficos"
 
+
 #texto de las columna de cada hoja del excel
 #textos de las columnas de la hoja Resumen
 TEXTO_ENCABEZADO_CODIGO = "Código"
@@ -106,6 +107,7 @@ TEXTO_ENCABEZADO_CANT_SEVERIDAD_ALTA = "Cant. severidad alta"
 TEXTO_ENCABEZADO_CANT_SEVERIDAD_MEDIA = "Cant. severidad media"
 TEXTO_ENCABEZADO_CANT_SEVERIDAD_BAJA = "Cant. severidad baja"
 TEXTO_ENCABEZADO_REGLAS_INCUMPLIDAS = "Reglas incumplidas"
+
 
 #textos de la columnas de la hoja error
 TEXTO_ENCABEZADO_ERROR = "Error"
@@ -325,6 +327,18 @@ ENCABEZADOS_TOKENS_SALIDA = [
     TEXTO_ENCABEZADO_NIVEL_EFICIENCIA,
     TEXTO_ENCABEZADO_INTERPRETACION,
 ]
+
+#alineacion de las columnas de la hoja resumen, para que los datos numericos se alineen a la derecha
+COLUMNAS_RESUMEN_ALINEADAS_DERECHA = {
+    TEXTO_ENCABEZADO_CCN_PROMEDIO_RESUMEN,
+    TEXTO_ENCABEZADO_MI_RESUMEN,
+    TEXTO_ENCABEZADO_ISSUES_KLOC_RESUMEN,
+    TEXTO_ENCABEZADO_ISI_RESUMEN,
+    TEXTO_ENCABEZADO_PROMEDIO_CONCURRENCIA_RESUMEN,
+    TEXTO_ENCABEZADO_EFICIENCIA_GENERACION_RESUMEN,
+    TEXTO_ENCABEZADO_CPU_PROMEDIO,
+    TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN,
+}
 
 # El resumen de dispositivos incluye los campos del JSON de proyectos.
 # Se inserta una copia de los encabezados comunes, sin modificar el perfil PC.

@@ -159,12 +159,11 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, libro_entrada,
     """
     try:
         es_manual_dispositivo = (
-            proyecto.dispositivo.strip().lower() in (TEXTO_ANDROID, TEXTO_ESP32)
-            and proyecto.implementacion.strip().lower() == TEXTO_MANUAL.tolower()
+            proyecto.dispositivo.strip().lower() in (TEXTO_ANDROID.lower(), TEXTO_ESP32.lower())
+            and proyecto.implementacion.strip().lower() == TEXTO_MANUAL.lower()
         )
-
         if es_manual_dispositivo:
-            logger.info(f"[{proyecto.codigo}] Se omite análisis de concurrencia para implementación manual en dispositivo")
+            logger.debug(f"[{proyecto.codigo}] Se omite análisis de concurrencia para implementación manual en dispositivo")
             return None
         else:
             return analizar_concurrencia(
@@ -190,12 +189,12 @@ def analizar_tokens_seguro(
     """Analiza tokens y registra el error sin interrumpir el proyecto."""
     try:
         es_manual_dispositivo = (
-            proyecto.dispositivo.strip().lower() in (TEXTO_ANDROID, TEXTO_ESP32)
-            and proyecto.implementacion.strip().lower() == TEXTO_MANUAL.tolower()
-        )
+                proyecto.dispositivo.strip().lower() in (TEXTO_ANDROID.lower(), TEXTO_ESP32.lower())
+                and proyecto.implementacion.strip().lower() == TEXTO_MANUAL.lower()
+            )
 
         if es_manual_dispositivo:
-            logger.info(f"[{proyecto.codigo}] Se omite análisis de tokens para implementación manual en dispositivo")
+            logger.debug(f"[{proyecto.codigo}] Se omite análisis de tokens para implementación manual en dispositivo")
             return None
         if metricas_cc is None:
             logger.warning(f"[{proyecto.codigo}] Se omite análisis de tokens: sin métricas de complejidad")

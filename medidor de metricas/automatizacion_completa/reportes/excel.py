@@ -11,6 +11,7 @@ from openpyxl.utils import get_column_letter
 from copy import copy
 from reportes.graficos import generar_graficos_comparativo_dispositivos, generar_graficos_pc
 from constantes.definiciones import (
+    COLUMNAS_RESUMEN_ALINEADAS_DERECHA,
     HOJA_COMPARACION,
     ENCABEZADOS_RESUMEN_DISPOSITIVOS,
     TEXTO_MANUAL,
@@ -1133,37 +1134,16 @@ def formatear_celdas_hoja_resumen(hoja, codigo):
     fila = filas[0]
     columnas = obtener_mapa_encabezados(hoja)
 
-    # Formato de encabezados.
-    for celda in hoja[1]:
-        celda.fill = PatternFill("solid", fgColor=COLOR_ENCABEZADO_RESUMEN)
+    formatear_encabezados(hoja)
+    formatear_codigo_proyecto(hoja, fila, columnas)
+    formatear_datos_proyecto(hoja, fila, columnas)
+    formatear_interpretaciones(hoja, fila, columnas)
 
-    # Formato del código.
-    hoja.cell(row=fila, column=columnas[TEXTO_ENCABEZADO_CODIGO]).fill = (
-        PatternFill("solid", fgColor=COLOR_CODIGO_RESUMEN)
-    )
+    formatear_porcentaje_cpu_mem(hoja, fila, columnas)
 
-    # Formato de datos del proyecto.
-    for encabezado in ENCABEZADOS_DATOS_PROYECTO_RESUMEN:
-        columna = columnas.get(encabezado)
-        if columna is not None:
-            hoja.cell(row=fila, column=columna).fill = PatternFill(
-                "solid", fgColor=COLOR_DATOS_PROYECTO_RESUMEN
-            )
+    mostrar_datos_segun_formato(hoja, fila, columnas)
 
-    # Formato de interpretaciones.
-    for encabezado in ENCABEZADOS_INTERPRETACION_RESUMEN:
-        columna = columnas.get(encabezado)
-        if columna is not None:
-            hoja.cell(row=fila, column=columna).fill = PatternFill(
-                "solid", fgColor=COLOR_INTERPRETACION_RESUMEN
-            )
-
-    # Formato porcentual de CPU y memoria.
-    for encabezado in (TEXTO_ENCABEZADO_CPU_PROMEDIO,TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN):
-        columna = columnas.get(encabezado)
-        if columna is not None:
-            hoja.cell(row=fila, column=columna).number_format = r'0.00\%'
-
+def mostrar_datos_segun_formato(hoja, fila, columnas):
     # Identificar las columnas que no son métricas.
     campos_identificacion = {
         TEXTO_ENCABEZADO_CODIGO,
@@ -1185,11 +1165,57 @@ def formatear_celdas_hoja_resumen(hoja, codigo):
             celda.value = "Sin datos"
             fuente.color = "008000"
             fuente.bold = True
+
+            #alineo las columnas depeendiendo del dato mostrado
+            alineacion = copy(celda.alignment)
+
+            if encabezado in COLUMNAS_RESUMEN_ALINEADAS_DERECHA:
+                alineacion.horizontal = "right"
+            else:
+                alineacion.horizontal = "left"
+            celda.alignment = alineacion
         else:
             fuente.color = "000000"
             fuente.bold = False
 
+                
         celda.font = fuente
+
+def formatear_porcentaje_cpu_mem(hoja, fila, columnas):
+    # Formato porcentual de CPU y memoria.
+    for encabezado in (TEXTO_ENCABEZADO_CPU_PROMEDIO,TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN):
+        columna = columnas.get(encabezado)
+        if columna is not None:
+            hoja.cell(row=fila, column=columna).number_format = r'0.00\%'
+
+def formatear_interpretaciones(hoja, fila, columnas):
+    # Formato de interpretaciones.
+    for encabezado in ENCABEZADOS_INTERPRETACION_RESUMEN:
+        columna = columnas.get(encabezado)
+        if columna is not None:
+            hoja.cell(row=fila, column=columna).fill = PatternFill(
+                "solid", fgColor=COLOR_INTERPRETACION_RESUMEN
+            )
+
+def formatear_datos_proyecto(hoja, fila, columnas):
+    # Formato de datos del proyecto.
+    for encabezado in ENCABEZADOS_DATOS_PROYECTO_RESUMEN:
+        columna = columnas.get(encabezado)
+        if columna is not None:
+            hoja.cell(row=fila, column=columna).fill = PatternFill(
+                "solid", fgColor=COLOR_DATOS_PROYECTO_RESUMEN
+            )
+
+def formatear_codigo_proyecto(hoja, fila, columnas):
+    # Formato del código.
+    hoja.cell(row=fila, column=columnas[TEXTO_ENCABEZADO_CODIGO]).fill = (
+        PatternFill("solid", fgColor=COLOR_CODIGO_RESUMEN)
+    )
+
+def formatear_encabezados(hoja):
+    # Formato de encabezados.
+    for celda in hoja[1]:
+        celda.fill = PatternFill("solid", fgColor=COLOR_ENCABEZADO_RESUMEN)
 
 def aplicar_formato_cpu_memoria(hoja, codigo):
     """Aplica el mismo formato de CPU/memoria a todos los dispositivos."""
