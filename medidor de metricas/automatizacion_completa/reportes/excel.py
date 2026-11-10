@@ -645,7 +645,7 @@ def aplicar_estilo_celda_comparacion(celda, campo, borde):
     """Aplica los estilos correspondientes al tipo de campo."""
 
     celda.font = Font(name="Calibri", size=11, color="000000")
-    celda.alignment = Alignment(vertical="center", wrap_text=True)
+    celda.alignment = Alignment(horizontal="left",vertical="center", wrap_text=True)
     celda.border = borde
 
     if campo == TEXTO_ENCABEZADO_CODIGO:
