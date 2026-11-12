@@ -1,4 +1,5 @@
 from reportes.gestor_libros import GestorLibrosExcel
+from openpyxl import load_workbook
 from reportes.excel_utilidades import UtilidadesExcel
 """Pruebas integrales del flujo compartido y de los dos perfiles Excel."""
 
@@ -21,7 +22,7 @@ RAIZ = Path(__file__).resolve().parents[1]
 
 
 class IntegracionEvaluadoresTest(unittest.TestCase):
-    """Recorre entradas JSON y Excel reales hasta generar el archivo de salida."""
+    """Recorre entradas Excel reales hasta generar el archivo de salida."""
 
     def setUp(self):
         """Prepara rutas temporales sin modificar los datos originales."""
@@ -41,32 +42,44 @@ class IntegracionEvaluadoresTest(unittest.TestCase):
             d.CONFIGURACION_JSON_PC if es_pc
             else d.CONFIGURACION_JSON_ESP32_ANDROID
         )
-        archivo_proyectos = (
-            d.DATOS_PC_PROYECTOS_JSON if es_pc
-            else d.DATOS_ESP32_ANDROID_PROYECTOS_JSON
-        )
         configuracion = json.loads((RAIZ / archivo_config).read_text('utf-8'))
-        proyectos = json.loads((RAIZ / archivo_proyectos).read_text('utf-8'))[:cantidad]
-        if proyectos_alternativos is not None:
-            proyectos = proyectos_alternativos
         etiqueta = 'pc' if es_pc else 'dispositivos'
         salida = self.carpeta / f'reporte_{etiqueta}.xlsx'
         configuracion['archivo_excel_salida'] = str(salida)
-        configuracion['archivo_excel_entrada'] = str(
-            RAIZ / configuracion['archivo_excel_entrada']
-        )
+        origen = RAIZ / configuracion['archivo_excel_entrada']
+        entrada_excel = self.carpeta / f'entrada_{etiqueta}.xlsx'
+        # El libro temporal conserva las hojas de métricas y sustituye sólo
+        # Datos_Proyectos; el original nunca se modifica.
+        libro = load_workbook(origen)
+        hoja = libro[d.HOJA_DATOS_PROYECTOS]
+        encabezados = [celda.value for celda in hoja[1]]
+        datos = list(hoja.iter_rows(min_row=2, values_only=True))[:cantidad]
+        proyectos = [dict(zip(encabezados, fila)) for fila in datos]
+        if proyectos_alternativos is not None:
+            nombres = {
+                'codigo': 'Código', 'id_proyecto': 'ID Proyecto',
+                'nombre_proyecto': 'Nombre Proyecto', 'ruta_codigo': 'Ruta Código',
+                'herramienta_ia': 'Herramienta IA', 'modelo_ia': 'Modelo IA',
+                'lenguaje': 'Lenguaje', 'dispositivo': 'Dispositivo',
+                'implementacion': 'Implementación',
+            }
+            proyectos = [
+                {nombres[campo]: valor for campo, valor in item.items()}
+                for item in proyectos_alternativos
+            ]
+        hoja.delete_rows(2, hoja.max_row)
+        for proyecto in proyectos:
+            hoja.append([proyecto.get(encabezado) for encabezado in encabezados])
+        libro.save(entrada_excel)
+        libro.close()
+        configuracion['archivo_excel_entrada'] = str(entrada_excel)
         configuracion['carpeta_resultados'] = str(self.carpeta / f'resultados_{etiqueta}')
         configuracion['carpeta_logs'] = str(self.carpeta / f'logs_{etiqueta}')
         ruta_config = self.carpeta / f'config_{etiqueta}.json'
-        ruta_proyectos = self.carpeta / f'proyectos_{etiqueta}.json'
         ruta_config.write_text(json.dumps(configuracion), encoding='utf-8')
-        ruta_proyectos.write_text(json.dumps(proyectos), encoding='utf-8')
 
         atributo_config = (
             'CONFIGURACION_JSON_PC' if es_pc else 'CONFIGURACION_JSON_ESP32_ANDROID'
-        )
-        atributo_proyectos = (
-            'DATOS_PC_PROYECTOS_JSON' if es_pc else 'DATOS_ESP32_ANDROID_PROYECTOS_JSON'
         )
         complejidad = MetricaComplejidad(
             cantidad_funciones=2, ccn_total=6, ccn_promedio=3,
@@ -75,7 +88,6 @@ class IntegracionEvaluadoresTest(unittest.TestCase):
         )
         entrada = main_pc.main if es_pc else main_esp32_android.main
         with patch.object(d, atributo_config, str(ruta_config)), \
-             patch.object(d, atributo_proyectos, str(ruta_proyectos)), \
              patch.object(comun, 'limitar_cpu'), \
              patch.object(proceso, 'analizar_complejidad', return_value=complejidad), \
              patch.object(proceso, 'analizar_mi', return_value=None):
@@ -104,21 +116,21 @@ class IntegracionEvaluadoresTest(unittest.TestCase):
             for indice, proyecto in enumerate(proyectos, 2):
                 fila = {celda.value: resumen.cell(indice, celda.column).value
                         for celda in resumen[1]}
-                self.assertEqual(fila[d.TEXTO_ENCABEZADO_CODIGO], proyecto['codigo'])
+                self.assertEqual(fila[d.TEXTO_ENCABEZADO_CODIGO], proyecto['Código'])
                 self.assertEqual(fila[d.TEXTO_ENCABEZADO_CCN_PROMEDIO_RESUMEN], 3)
                 if es_pc:
                     self.assertNotIn(d.TEXTO_ENCABEZADO_DISPOSITIVO, fila)
                 else:
                     self.assertEqual(
-                        fila[d.TEXTO_ENCABEZADO_DISPOSITIVO], proyecto['dispositivo']
+                        fila[d.TEXTO_ENCABEZADO_DISPOSITIVO], proyecto['Dispositivo']
                     )
                     self.assertEqual(
                         fila[d.TEXTO_ENCABEZADO_IMPLEMENTACION],
-                        proyecto['implementacion'],
+                        proyecto['Implementación'],
                     )
                     self.assertEqual(
                         fila[d.TEXTO_ENCABEZADO_ID_PROYECTO],
-                        proyecto['id_proyecto'],
+                        proyecto['ID Proyecto'],
                     )
             hoja_cpu = libro[d.HOJA_CPU_MEMORIA_SALIDA]
             columnas_cpu = UtilidadesExcel().obtener_mapa_encabezados(hoja_cpu)
@@ -152,7 +164,7 @@ class IntegracionEvaluadoresTest(unittest.TestCase):
                     self.assertIsNotNone(primera_fila[d.TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN])
                     self.assertTrue(primera_fila[d.TEXTO_ENCABEZADO_INTERPRETACION_CPU_RESUMEN])
                     self.assertTrue(primera_fila[d.TEXTO_ENCABEZADO_INTERPRETACION_MEMORIA])
-                    if proyectos[0]['codigo'] == 'L1-1C2026-AND-M':
+                    if proyectos[0]['Código'] == 'L1-1C2026-AND-M':
                         self.assertAlmostEqual(
                             primera_fila[d.TEXTO_ENCABEZADO_CPU_PROMEDIO], 0.125
                         )
@@ -192,7 +204,7 @@ class IntegracionEvaluadoresTest(unittest.TestCase):
             actual.close()
 
     def test_main_pc_con_entrada_real_y_salida_excel(self):
-        """Ejecuta main_pc con JSON/Excel auténticos y verifica las hojas."""
+        """Ejecuta main_pc con Excel auténtico y verifica las hojas."""
         self.ejecutar(d.TIPO_PROYECTO_PC, 1)
 
     def test_main_dispositivos_con_manual_y_vibecoding(self):

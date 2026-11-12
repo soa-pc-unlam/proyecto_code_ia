@@ -1,4 +1,5 @@
 from reportes.gestor_libros import GestorLibrosExcel
+from configuracion.lector_proyectos_excel import LectorProyectosExcel
 """Pruebas del flujo compartido y de la selección de entradas por plataforma."""
 
 import unittest
@@ -19,7 +20,7 @@ class ProcesamientoComunTest(unittest.TestCase):
         self.patches = ExitStack()
         self.addCleanup(self.patches.close)
         nombres = (
-            'cargar_configuracion', 'cargar_proyectos', 'crear_directorio',
+            'cargar_configuracion', 'cargar', 'crear_directorio',
             'configurar_logger', 'limitar_cpu', 'crear_o_abrir_salida',
             'abrir_entrada', 'gestionar_procesamiento_proyectos',
             'finalizar',
@@ -27,6 +28,7 @@ class ProcesamientoComunTest(unittest.TestCase):
         self.operaciones = {
             nombre: self.patches.enter_context(
                 patch.object(GestorLibrosExcel, nombre) if nombre in {'crear_o_abrir_salida', 'abrir_entrada', 'finalizar'}
+                else patch.object(LectorProyectosExcel, nombre) if nombre == "cargar"
                 else patch.object(comun, nombre))
             for nombre in nombres
         }
@@ -44,8 +46,8 @@ class ProcesamientoComunTest(unittest.TestCase):
         self.operaciones['cargar_configuracion'].assert_called_once_with(
             definiciones.CONFIGURACION_JSON_PC
         )
-        self.operaciones['cargar_proyectos'].assert_called_once_with(
-            definiciones.DATOS_PC_PROYECTOS_JSON
+        self.operaciones['cargar'].assert_called_once_with(
+            self.operaciones['abrir_entrada'].return_value
         )
         self.operaciones['abrir_entrada'].assert_called_once_with(
             'entrada_pc.xlsx'
@@ -66,8 +68,8 @@ class ProcesamientoComunTest(unittest.TestCase):
         self.operaciones['cargar_configuracion'].assert_called_once_with(
             definiciones.CONFIGURACION_JSON_ESP32_ANDROID
         )
-        self.operaciones['cargar_proyectos'].assert_called_once_with(
-            definiciones.DATOS_ESP32_ANDROID_PROYECTOS_JSON
+        self.operaciones['cargar'].assert_called_once_with(
+            self.operaciones['abrir_entrada'].return_value
         )
         self.operaciones['crear_o_abrir_salida'].assert_called_once_with(
             'salida_pc.xlsx',
@@ -84,7 +86,7 @@ class ProcesamientoComunTest(unittest.TestCase):
         self.operaciones['configurar_logger'].assert_called_once_with('logs')
         self.operaciones['crear_directorio'].assert_any_call('resultados')
         self.operaciones['gestionar_procesamiento_proyectos'].assert_called_once_with(
-            self.operaciones['cargar_proyectos'].return_value,
+            self.operaciones['cargar'].return_value,
             self.configuracion,
             self.operaciones['crear_o_abrir_salida'].return_value,
             self.operaciones['abrir_entrada'].return_value,
@@ -96,7 +98,7 @@ class ProcesamientoComunTest(unittest.TestCase):
         """Conserva el límite de CPU y el uso de gráficos del flujo actual."""
         main_pc.main()
         self.operaciones['limitar_cpu'].assert_called_once_with(
-            0.5, self.operaciones['configurar_logger'].return_value
+            definiciones.PORCENTAJE_MAX_CPU, self.operaciones['configurar_logger'].return_value
         )
         self.assertTrue(
             self.operaciones['finalizar'].call_args.kwargs['incluir_graficos']
@@ -116,7 +118,7 @@ class ProcesamientoComunTest(unittest.TestCase):
         """Si la entrada no abre, se libera el libro de salida ya abierto."""
         self.operaciones['abrir_entrada'].side_effect = FileNotFoundError()
         main_pc.main()
-        self.operaciones['crear_o_abrir_salida'].return_value.close.assert_called_once()
+        self.operaciones['crear_o_abrir_salida'].assert_not_called()
         self.operaciones['gestionar_procesamiento_proyectos'].assert_not_called()
 
     def test_error_guardado_cierra_libros(self):

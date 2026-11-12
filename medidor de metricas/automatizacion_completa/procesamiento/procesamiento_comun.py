@@ -4,7 +4,8 @@ from reportes.gestor_libros import GestorLibrosExcel
 
 import logging
 
-from configuracion.configuracion import cargar_configuracion, cargar_proyectos
+from configuracion.configuracion import cargar_configuracion
+from configuracion.lector_proyectos_excel import LectorProyectosExcel
 from constantes import definiciones
 from util.archivos import crear_directorio
 from util.logging_config import configurar_logger
@@ -21,18 +22,14 @@ class PerfilAnalisis:
     def __init__(self, tipo_proyecto):
         self.tipo_proyecto = tipo_proyecto
         rutas = {
-            definiciones.TIPO_PROYECTO_PC: (
-                definiciones.CONFIGURACION_JSON_PC,
-                definiciones.DATOS_PC_PROYECTOS_JSON,
-            ),
+            definiciones.TIPO_PROYECTO_PC: definiciones.CONFIGURACION_JSON_PC,
             definiciones.TIPO_PROYECTO_ESP32_ANDROID: (
-                definiciones.CONFIGURACION_JSON_ESP32_ANDROID,
-                definiciones.DATOS_ESP32_ANDROID_PROYECTOS_JSON,
+                definiciones.CONFIGURACION_JSON_ESP32_ANDROID
             ),
         }
         if tipo_proyecto not in rutas:
             raise ValueError(f"Tipo de proyecto no admitido: {tipo_proyecto}")
-        self.ruta_configuracion, self.ruta_proyectos = rutas[tipo_proyecto]
+        self.ruta_configuracion = rutas[tipo_proyecto]
         self.hojas_reporte = definiciones.PERFILES_REPORTE[tipo_proyecto]
         self.porcentaje_cpu = definiciones.PORCENTAJE_MAX_CPU
 
@@ -55,13 +52,13 @@ class AplicacionMetricas:
             self.logger.info("Inicio del análisis de métricas")
             limitar_cpu(perfil.porcentaje_cpu, self.logger)
           
-            proyectos = cargar_proyectos(perfil.ruta_proyectos)
+            self.libro_entrada = GestorLibrosExcel().abrir_entrada(
+                configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_ENTRADA]
+            )
+            proyectos = LectorProyectosExcel().cargar(self.libro_entrada)
             self.libro_salida = GestorLibrosExcel().crear_o_abrir_salida(
                 configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA],
                 hojas_reporte=perfil.hojas_reporte,
-            )
-            self.libro_entrada = GestorLibrosExcel().abrir_entrada(
-                configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_ENTRADA]
             )
             gestionar_procesamiento_proyectos(
                 proyectos, configuracion, self.libro_salida, self.libro_entrada,

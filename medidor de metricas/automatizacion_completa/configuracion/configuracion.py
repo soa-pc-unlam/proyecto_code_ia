@@ -1,4 +1,4 @@
-"""Carga y validación de la configuración y los proyectos del análisis."""
+"""Carga y validación de la configuración del análisis."""
 
 import json
 import math
@@ -6,7 +6,6 @@ from numbers import Real
 from pathlib import Path
 
 from constantes import definiciones
-from modelos.modelos import Proyecto
 
 
 def cargar_json(ruta_archivo):
@@ -95,61 +94,6 @@ def validar_umbrales(umbrales, nombre):
             raise ValueError(f"Umbral {posicion} inválido en '{nombre}'")
         if umbral[definiciones.TEXTO_CAMPO_MAX] is not None and umbral[definiciones.TEXTO_CAMPO_MIN] > umbral[definiciones.TEXTO_CAMPO_MAX]:
             raise ValueError(f"Rango invertido en el umbral {posicion} de '{nombre}'")
-
-def cargar_proyectos(ruta_archivo="proyectos_pc.json"):
-    """Carga y valida los proyectos definidos en un archivo JSON.
-
-    Args:
-        ruta_archivo: Ruta del archivo de proyectos. Los campos opcionales
-            id_proyecto, dispositivo e implementacion se conservan si existen.
-
-    Returns:
-        Lista de instancias de ``Proyecto``.
-
-    Raises:
-        ValueError: Si la estructura o algún proyecto son inválidos.
-    """
-    datos = cargar_json(ruta_archivo)
-
-    if not isinstance(datos, list):
-        raise ValueError("El archivo proyectos_pc.json debe contener una lista de proyectos.")
-
-    proyectos = []
-    codigos = set()
-    campos = [
-        "codigo",
-        "nombre_proyecto",
-        "ruta_codigo",
-        "herramienta_ia",
-        "modelo_ia",
-        "lenguaje",
-    ]
-
-    for item in datos:
-        for campo in campos:
-            if campo not in item:
-                raise ValueError(f"Falta el campo '{campo}' en un proyecto del archivo proyectos_pc.json")
-
-        if item["codigo"] in codigos:
-            raise ValueError(f"Código de proyecto duplicado: {item['codigo']}")
-        codigos.add(item["codigo"])
-
-        proyectos.append(
-            Proyecto(
-                codigo=item["codigo"],
-                nombre_proyecto=item["nombre_proyecto"],
-                ruta_codigo=item["ruta_codigo"],
-                herramienta_ia=item["herramienta_ia"],
-                modelo_ia=item["modelo_ia"],
-                lenguaje=item["lenguaje"],
-                id_proyecto=item.get("id_proyecto", ""),
-                dispositivo=item.get("dispositivo", ""),
-                implementacion=item.get("implementacion", ""),
-            )
-        )
-
-    return proyectos
-
 
 def clasificar_por_umbrales(valor, umbrales):
     """Retorna el umbral correspondiente al valor."""

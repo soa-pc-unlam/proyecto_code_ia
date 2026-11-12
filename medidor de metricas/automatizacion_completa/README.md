@@ -38,10 +38,17 @@ disponibles en el entorno utilizado para verificar el soporte Wiring.
 
 1. Definir rutas, ponderaciones y umbrales en `configuracion/configuracion_pc.json`
    o `configuracion/configuracion_esp32_android.json`.
-2. Definir los proyectos en `datos_entrada/proyectos_pc.json` o
-   `datos_entrada/proyectos_esp32-android.json`, según el perfil.
-3. Completar CPU/memoria, Concurrencia y Datos Tokens en el Excel de entrada
-   correspondiente. En dispositivos Manual se omiten concurrencia y tokens.
+2. Definir los proyectos en la hoja `Datos_Proyectos` de
+   `datos_entrada/datos_entrada_pc.xlsx` o
+   `datos_entrada/datos_entrada_esp32_android.xlsx`, según el perfil.
+3. Completar CPU/memoria, Concurrencia y Datos Tokens en el mismo Excel de
+   entrada. En dispositivos Manual se omiten concurrencia y tokens.
+
+La carga identifica las columnas de `Datos_Proyectos` por su encabezado (sin
+importar el orden ni las tildes). Los campos `ID Proyecto`, `Dispositivo` e
+`Implementación` son opcionales para PC. Las filas vacías se ignoran; las
+filas incompletas y los códigos repetidos producen un error de validación.
+El libro de entrada sólo se abre en modo lectura y no se modifica.
 
 Los códigos de proyecto deben ser únicos. Las rutas pueden contener espacios.
 
@@ -110,8 +117,8 @@ La documentación se puede consultar con `help()` desde Python; por ejemplo,
 python main_esp32_android.py
 ```
 
-El flujo usa `configuracion/configuracion_esp32_android.json` y
-`datos_entrada/proyectos_esp32-android.json`. Lee las mediciones de
+El flujo usa `configuracion/configuracion_esp32_android.json` y lee los
+proyectos de `Datos_Proyectos` y las mediciones de
 `datos_entrada/datos_entrada_esp32_android.xlsx` y agrega o actualiza los
 resultados por c?digo en `metricas_resultados_esp32_android.xlsx`, junto a
 Android. Reutiliza Resumen, las hojas de m?tricas, Errores, Comparacion y los

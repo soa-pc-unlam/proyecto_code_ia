@@ -1,12 +1,11 @@
 """Pruebas de carga, clasificación y validación de la configuración."""
 
-import json
 import tempfile
 import unittest
-from pathlib import Path
+from openpyxl import Workbook
+from configuracion.lector_proyectos_excel import LectorProyectosExcel
 
 from configuracion.configuracion import (
-    cargar_proyectos,
     clasificar_por_umbrales,
     validar_coeficiente_penalizacion,
     validar_umbrales,
@@ -31,13 +30,15 @@ class ConfiguracionTest(unittest.TestCase):
             validar_umbrales([{"min": 10, "max": 5}], "prueba")
 
     def test_cargar_proyectos_rechaza_codigos_duplicados(self):
-        """Rechaza archivos con códigos de proyecto duplicados."""
-        proyecto = {"codigo": "M1", "nombre_proyecto": "Prueba", "ruta_codigo": "codigo", "herramienta_ia": "IA", "modelo_ia": "Modelo", "lenguaje": "Python"}
-        with tempfile.TemporaryDirectory() as directorio:
-            ruta = Path(directorio) / "proyectos.json"
-            ruta.write_text(json.dumps([proyecto, proyecto]), encoding="utf-8")
-            with self.assertRaisesRegex(ValueError, "duplicado"):
-                cargar_proyectos(ruta)
+        libro = Workbook()
+        hoja = libro.active
+        hoja.title = "Datos_Proyectos"
+        hoja.append(["Código", "Nombre Proyecto", "Ruta Código", "Herramienta IA", "Modelo IA", "Lenguaje"])
+        hoja.append(["M1", "Prueba", "codigo", "IA", "Modelo", "Python"])
+        hoja.append(["M1", "Prueba", "codigo", "IA", "Modelo", "Python"])
+        with self.assertRaisesRegex(ValueError, "duplicado"):
+            LectorProyectosExcel().cargar(libro)
+        libro.close()
 
     def test_validar_coeficiente_penalizacion(self):
         """Acepta cero y positivos, pero rechaza valores inválidos."""

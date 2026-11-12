@@ -2,18 +2,18 @@ from reportes.escritor_resultados import EscritorResultadosExcel
 from reportes.gestor_libros import GestorLibrosExcel
 """Pruebas de metadatos opcionales y su escritura en perfiles de dispositivos."""
 
-import json
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from configuracion.configuracion import cargar_proyectos
+from configuracion.lector_proyectos_excel import LectorProyectosExcel
+from openpyxl import Workbook, load_workbook
 from constantes import definiciones as d
 from modelos.modelos import Proyecto
 
 
 class MetadatosProyectosTest(unittest.TestCase):
-    """Verifica que los metadatos lleguen del JSON hasta el Excel."""
+    """Verifica que los metadatos lleguen del Excel de entrada al reporte."""
 
     @staticmethod
     def datos_base(codigo="L1-AND-M"):
@@ -28,9 +28,18 @@ class MetadatosProyectosTest(unittest.TestCase):
 
     @staticmethod
     def cargar_temporal(datos, directorio):
-        ruta = Path(directorio) / "proyectos.json"
-        ruta.write_text(json.dumps(datos), encoding="utf-8")
-        return cargar_proyectos(ruta)
+        libro = Workbook()
+        hoja = libro.active
+        hoja.title = "Datos_Proyectos"
+        campos = ["codigo", "nombre_proyecto", "ruta_codigo", "herramienta_ia", "modelo_ia", "lenguaje", "id_proyecto", "dispositivo", "implementacion"]
+        titulos = ["Código", "Nombre Proyecto", "Ruta Código", "Herramienta IA", "Modelo IA", "Lenguaje", "ID Proyecto", "Dispositivo", "Implementación"]
+        hoja.append(titulos)
+        for item in datos:
+            hoja.append([item.get(campo) for campo in campos])
+        try:
+            return LectorProyectosExcel().cargar(libro)
+        finally:
+            libro.close()
 
     @staticmethod
     def datos_hoja(hoja, fila):
@@ -39,7 +48,7 @@ class MetadatosProyectosTest(unittest.TestCase):
             for celda in hoja[1]
         }
 
-    def test_carga_tres_metadatos_desde_json(self):
+    def test_carga_tres_metadatos_desde_excel(self):
         datos = self.datos_base()
         datos.update(
             id_proyecto="L1", dispositivo="Android", implementacion="Manual"
@@ -50,7 +59,7 @@ class MetadatosProyectosTest(unittest.TestCase):
         self.assertEqual(proyecto.dispositivo, "Android")
         self.assertEqual(proyecto.implementacion, "Manual")
 
-    def test_json_sin_metadatos_conserva_compatibilidad_pc(self):
+    def test_excel_sin_metadatos_conserva_compatibilidad_pc(self):
         with TemporaryDirectory() as directorio:
             proyecto = self.cargar_temporal([self.datos_base("M1")], directorio)[0]
         self.assertEqual(proyecto.id_proyecto, "")
@@ -63,9 +72,13 @@ class MetadatosProyectosTest(unittest.TestCase):
         self.assertEqual(proyecto.lenguaje, "Python")
         self.assertEqual(proyecto.dispositivo, "")
 
-    def test_json_real_dispositivos_conserva_metadatos(self):
-        ruta = Path(__file__).resolve().parents[1] / d.DATOS_ESP32_ANDROID_PROYECTOS_JSON
-        proyectos = cargar_proyectos(ruta)
+    def test_excel_real_dispositivos_conserva_metadatos(self):
+        ruta = Path(__file__).resolve().parents[1] / "datos_entrada/datos_entrada_esp32_android.xlsx"
+        libro = load_workbook(ruta, read_only=True, data_only=True)
+        try:
+            proyectos = LectorProyectosExcel().cargar(libro)
+        finally:
+            libro.close()
         self.assertTrue(proyectos)
         self.assertTrue(all(proyecto.id_proyecto for proyecto in proyectos))
         self.assertTrue(all(proyecto.dispositivo for proyecto in proyectos))
