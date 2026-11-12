@@ -1,10 +1,11 @@
+from reportes.comparaciones import GeneradorComparaciones
+from reportes.gestor_libros import GestorLibrosExcel
 """Orquesta el análisis concurrente de métricas y la generación de reportes."""
 
 import logging
 
 from configuracion.configuracion import cargar_configuracion, cargar_proyectos
 from constantes import definiciones
-from reportes.excel import abrir_excel_entrada, crear_o_abrir_excel_salida, finalizar_libro, generar_hojas_comparacion
 from util.archivos import crear_directorio
 from util.logging_config import configurar_logger
 from procesamiento.procesamiento import gestionar_procesamiento_proyectos
@@ -14,70 +15,87 @@ from util.recursos import limitar_cpu
 SEPARADOR_FIN_PROCESO = "========================"
 
 
-def ejecutar_analisis(tipo_proyecto):
-    """Ejecuta el análisis y cierra los libros, registrando los errores.
+class PerfilAnalisis:
+    """Selecciona rutas y el formato de salida del perfil solicitado (Strategy)."""
 
-    Args:
-        tipo_proyecto: Tipo de proyecto PC o ESP32-Android. Selecciona las
-            rutas de configuración y las hojas del reporte correspondientes.
-    """
-    logger = logging.getLogger(__name__)
-    libro_salida = None
-    libro_entrada = None
-    
-    try:
-
-        if tipo_proyecto == definiciones.TIPO_PROYECTO_PC:
-            ruta_configuracion = definiciones.CONFIGURACION_JSON_PC
-            ruta_proyectos = definiciones.DATOS_PC_PROYECTOS_JSON
-            porcentaje_cpu = 0.5
-        elif tipo_proyecto == definiciones.TIPO_PROYECTO_ESP32_ANDROID:
-            ruta_configuracion = definiciones.CONFIGURACION_JSON_ESP32_ANDROID
-            ruta_proyectos = definiciones.DATOS_ESP32_ANDROID_PROYECTOS_JSON
-            porcentaje_cpu = 0.5
-        else:
+    def __init__(self, tipo_proyecto):
+        self.tipo_proyecto = tipo_proyecto
+        rutas = {
+            definiciones.TIPO_PROYECTO_PC: (
+                definiciones.CONFIGURACION_JSON_PC,
+                definiciones.DATOS_PC_PROYECTOS_JSON,
+            ),
+            definiciones.TIPO_PROYECTO_ESP32_ANDROID: (
+                definiciones.CONFIGURACION_JSON_ESP32_ANDROID,
+                definiciones.DATOS_ESP32_ANDROID_PROYECTOS_JSON,
+            ),
+        }
+        if tipo_proyecto not in rutas:
             raise ValueError(f"Tipo de proyecto no admitido: {tipo_proyecto}")
+        self.ruta_configuracion, self.ruta_proyectos = rutas[tipo_proyecto]
+        self.hojas_reporte = definiciones.PERFILES_REPORTE[tipo_proyecto]
+        self.porcentaje_cpu = definiciones.PORCENTAJE_MAX_CPU
 
-        hojas_reporte = definiciones.PERFILES_REPORTE[tipo_proyecto]
 
-        configuracion = cargar_configuracion(ruta_configuracion)
-        inicializar_directorios(configuracion)
+class AplicacionMetricas:
+    """Fachada de alto nivel: adquisición, procesamiento y reporte."""
 
-        logger = configurar_logger(configuracion[definiciones.TEXTO_CAMPO_CARPETA_LOGS])
-        logger.info("Inicio del análisis de métricas")
+    def __init__(self, tipo_proyecto):
+        self.tipo_proyecto = tipo_proyecto
+        self.logger = logging.getLogger(__name__)
+        self.libro_salida = None
+        self.libro_entrada = None
 
-        limitar_cpu(porcentaje_cpu, logger)
+    def ejecutar(self):
+        try:
+            perfil = PerfilAnalisis(self.tipo_proyecto)
+            configuracion = cargar_configuracion(perfil.ruta_configuracion)
+            inicializar_directorios(configuracion)
+            self.logger = configurar_logger(configuracion[definiciones.TEXTO_CAMPO_CARPETA_LOGS])
+            self.logger.info("Inicio del análisis de métricas")
+            limitar_cpu(perfil.porcentaje_cpu, self.logger)
+          
+            proyectos = cargar_proyectos(perfil.ruta_proyectos)
+            self.libro_salida = GestorLibrosExcel().crear_o_abrir_salida(
+                configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA],
+                hojas_reporte=perfil.hojas_reporte,
+            )
+            self.libro_entrada = GestorLibrosExcel().abrir_entrada(
+                configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_ENTRADA]
+            )
+            gestionar_procesamiento_proyectos(
+                proyectos, configuracion, self.libro_salida, self.libro_entrada,
+                self.logger,
+            )
+            # El perfil explícito conserva la comparación Manual/Vibecoding
+            # y sus cuatro gráficos originales. La configuración por columnas
+            # sigue disponible para llamadas históricas directas a finalizar_libro.
+            opciones_graficos = {
+                "incluir_graficos": True,
+                "tipo_proyecto": self.tipo_proyecto,
+            }
+            GestorLibrosExcel().finalizar(
+                self.libro_salida,
+                configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA],
+                **opciones_graficos,
+            )
+            informar_resultados_finales(self.logger, configuracion)
+        except PermissionError:
+            self.logger.error(
+                "No se pudo guardar el informe. Cierre el archivo Excel si está abierto."
+            )
+        except Exception as error:
+            self.logger.error(f"Error en la ejecución: {error}")
+        finally:
+            if self.libro_salida is not None:
+                self.libro_salida.close()
+            if self.libro_entrada is not None:
+                self.libro_entrada.close()
 
-        proyectos = cargar_proyectos(ruta_proyectos)
-        libro_salida = crear_o_abrir_excel_salida(
-            configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA],
-            hojas_reporte=hojas_reporte,
-        )
 
-        libro_entrada = abrir_excel_entrada(configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_ENTRADA])
-
-        gestionar_procesamiento_proyectos(proyectos, configuracion, libro_salida,libro_entrada, logger)
-
-        finalizar_libro(
-            libro_salida,
-            configuracion[definiciones.TEXTO_CAMPO_ARCHIVO_EXCEL_SALIDA],
-            tipo_proyecto=tipo_proyecto,
-        )
-        
-        informar_resultados_finales(logger, configuracion)
-
-    except PermissionError:
-        logger.error("No se pudo guardar el informe."
-                     " Cierre el archivo Excel si está abierto.")
-        
-    except Exception as error:
-        logger.error(f"Error en la ejecución: {error}")
-    finally:
-        if libro_salida is not None:
-            libro_salida.close()
-
-        if libro_entrada is not None:
-            libro_entrada.close()
+def ejecutar_analisis(tipo_proyecto):
+    """Punto de entrada estable que delega a la aplicación orientada a objetos."""
+    return AplicacionMetricas(tipo_proyecto).ejecutar()
 
 
 def inicializar_directorios(configuracion):

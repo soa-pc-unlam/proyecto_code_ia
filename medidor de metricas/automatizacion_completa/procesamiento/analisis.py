@@ -1,13 +1,13 @@
+from reportes.gestor_libros import DatosProyectoNoEncontrados
 """Ejecuta los análisis de métricas y controla sus posibles errores."""
 
 from configuracion.configuracion import clasificar_ccn
-from metricas.bugs_smells import analizar_bugs_smells
-from metricas.complejidad import ejecutar_lizard
-from metricas.concurrencia import analizar_concurrencia
-from metricas.mantenibilidad import analizar_mantenibilidad
-from metricas.tokens import analizar_tokens
-from metricas.cpu_memoria import analizar_cpu_memoria
-from reportes.excel import DatosProyectoNoEncontrados
+from metricas.bugs_smells import AnalizadorIncidencias
+from metricas.complejidad import AnalizadorComplejidad
+from metricas.concurrencia import AnalizadorConcurrencia
+from metricas.mantenibilidad import AnalizadorMantenibilidad
+from metricas.tokens import AnalizadorTokens
+from metricas.cpu_memoria import AnalizadorCpuMemoria
 from constantes.definiciones import(
     TEXTO_ANDROID,
     TEXTO_CAMPO_CARPETA_RESULTADOS,
@@ -26,7 +26,9 @@ from constantes.definiciones import(
 
 
 
-def analizar_complejidad(proyecto, lenguaje, configuracion, logger, contexto):
+def analizar_complejidad(
+    proyecto, lenguaje, configuracion, logger, contexto, fuentes_wiring=None
+):
     """Analiza y clasifica la complejidad de un proyecto de forma segura.
 
     Args:
@@ -39,11 +41,12 @@ def analizar_complejidad(proyecto, lenguaje, configuracion, logger, contexto):
         Las métricas de complejidad o ``None`` si el análisis falla.
     """
     try:
-        metricas, archivo_csv = ejecutar_lizard(
+        metricas, archivo_csv = AnalizadorComplejidad.ejecutar_lizard(
             proyecto=proyecto,
             lenguaje=lenguaje,
             carpeta_resultados=configuracion[TEXTO_CAMPO_CARPETA_RESULTADOS],
             logger=logger,
+            fuentes_wiring=fuentes_wiring,
         )
 
         contexto.archivo_csv_lizard = archivo_csv
@@ -80,15 +83,16 @@ def analizar_mi(proyecto, configuracion, logger, contexto):
     """
     try:
         if contexto.archivo_csv_lizard is None:
-            raise ValueError("No se generó el CSV de Lizard en esta ejecución")
-
-        return analizar_mantenibilidad(
-            proyecto=proyecto,
-            archivo_csv_lizard=contexto.archivo_csv_lizard,
-            carpeta_resultados=configuracion[TEXTO_CAMPO_CARPETA_RESULTADOS],
-            umbrales_mi=configuracion[TEXTO_CAMPO_UMBRALES_MI],
-            logger=logger,
-        )
+            logger.warning(f"[{proyecto.codigo}] no hay métricas de Lizard disponibles")
+            return None
+        else:   
+            return AnalizadorMantenibilidad.analizar_mantenibilidad(
+                proyecto=proyecto,
+                archivo_csv_lizard=contexto.archivo_csv_lizard,
+                carpeta_resultados=configuracion[TEXTO_CAMPO_CARPETA_RESULTADOS],
+                umbrales_mi=configuracion[TEXTO_CAMPO_UMBRALES_MI],
+                logger=logger,
+            )
     except DatosProyectoNoEncontrados as aviso:
         logger.warning(f"[{proyecto.codigo}] Análisis Mantenibilidad: {aviso}")
         return None
@@ -107,6 +111,7 @@ def analizar_bugs_smells_seguro(
     logger,
     metricas_mi,
     contexto,
+    fuentes_wiring=None,
 ):
     """Analiza bugs y code smells, registrando los errores producidos.
 
@@ -125,13 +130,17 @@ def analizar_bugs_smells_seguro(
         return None
 
     try:
-        return analizar_bugs_smells(
+        argumentos_fuentes = (
+            {"fuentes_wiring": fuentes_wiring} if fuentes_wiring is not None else {}
+        )
+        return AnalizadorIncidencias().analizar(
             proyecto=proyecto,
             lenguaje=lenguaje,
             carpeta_resultados=configuracion[TEXTO_CAMPO_CARPETA_RESULTADOS],
             umbrales_isi=configuracion[TEXTO_CAMPO_UMBRALES_ISI],
             logger=logger,
-            loc_codigo=metricas_mi.nloc_mi           
+            loc_codigo=metricas_mi.nloc_mi,
+            **argumentos_fuentes,
         )
     except DatosProyectoNoEncontrados as aviso:
         logger.warning(f"[{proyecto.codigo}] Análisis Bugs/Smells: {aviso}")
@@ -166,7 +175,7 @@ def analizar_concurrencia_seguro(proyecto, configuracion, logger, libro_entrada,
             logger.debug(f"[{proyecto.codigo}] Se omite análisis de concurrencia para implementación manual en dispositivo")
             return None
         else:
-            return analizar_concurrencia(
+            return AnalizadorConcurrencia().analizar_concurrencia(
                 proyecto=proyecto,
                 ponderacion=configuracion[TEXTO_CAMPO_PONDERACION_CONCURRENCIA],
                 umbrales=configuracion[TEXTO_CAMPO_UMBRALES_CONCURRENCIA],
@@ -200,7 +209,7 @@ def analizar_tokens_seguro(
             logger.warning(f"[{proyecto.codigo}] Se omite análisis de tokens: sin métricas de complejidad")
             return None
         else:
-            return analizar_tokens(
+            return AnalizadorTokens().analizar_tokens(
                 proyecto=proyecto,
                 libro_entrada=libro_entrada,
                 nloc_total=metricas_cc.nloc_total,
@@ -220,7 +229,7 @@ def analizar_tokens_seguro(
 def analizar_cpu_memoria_seguro(proyecto, configuracion, logger, libro_entrada, contexto):
     """Analiza CPU/memoria y registra el error sin interrumpir el proyecto."""
     try:
-        return analizar_cpu_memoria(
+        return AnalizadorCpuMemoria().analizar_cpu_memoria(
             proyecto=proyecto,
             libro_entrada=libro_entrada,
             configuracion_cpu=configuracion[TEXTO_CAMPO_UMBRALES_CPU],

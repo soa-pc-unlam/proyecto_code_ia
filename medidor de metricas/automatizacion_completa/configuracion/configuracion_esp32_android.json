@@ -89,7 +89,8 @@
       "min": 4,
       "max": null,
       "nivel": "Muy alto",
-      "interpretacion": "Predominan issues altos"
+      "interpretacion": "Predominan issues altos",
+      "observacion": "Contiene issues altos"
     }
   ],
   "ponderacion_concurrencia": {

@@ -1,3 +1,5 @@
+from reportes.escritor_resultados import EscritorResultadosExcel
+from reportes.gestor_libros import GestorLibrosExcel
 """Pruebas de escritura de resultados en reportes Excel."""
 
 import unittest
@@ -6,12 +8,6 @@ from tempfile import TemporaryDirectory
 
 from openpyxl import Workbook
 
-from reportes.excel import (
-    crear_hojas_si_no_existen,
-    crear_o_abrir_excel_salida,
-    escribir_hoja_tokens,
-    guardar_error_excel,
-)
 from modelos.modelos import MetricaTokens, Proyecto
 from constantes import definiciones as d
 
@@ -23,7 +19,7 @@ class ReportesTest(unittest.TestCase):
         """El perfil de PC sigue siendo el predeterminado del generador."""
         with TemporaryDirectory() as temporal:
             ruta = Path(temporal) / "pc.xlsx"
-            libro = crear_o_abrir_excel_salida(ruta)
+            libro = GestorLibrosExcel().crear_o_abrir_salida(ruta)
             try:
                 self.assertEqual(libro.sheetnames, list(d.HOJAS_REPORTE))
                 for nombre, encabezados in d.HOJAS_REPORTE.items():
@@ -38,7 +34,7 @@ class ReportesTest(unittest.TestCase):
         """Las hojas nuevas respetan exactamente el perfil Android/ESP32."""
         with TemporaryDirectory() as temporal:
             ruta = Path(temporal) / "dispositivos.xlsx"
-            libro = crear_o_abrir_excel_salida(
+            libro = GestorLibrosExcel().crear_o_abrir_salida(
                 ruta, hojas_reporte=d.HOJAS_REPORTE_DISPOSITIVOS
             )
             try:
@@ -55,13 +51,13 @@ class ReportesTest(unittest.TestCase):
         """Reutiliza el archivo existente sin duplicar hojas ni filas."""
         with TemporaryDirectory() as temporal:
             ruta = Path(temporal) / "dispositivos.xlsx"
-            libro = crear_o_abrir_excel_salida(
+            libro = GestorLibrosExcel().crear_o_abrir_salida(
                 ruta, hojas_reporte=d.HOJAS_REPORTE_DISPOSITIVOS
             )
             libro[d.HOJA_COMPLEJIDAD].append(["AND-M", 2])
             libro.save(ruta)
             libro.close()
-            libro = crear_o_abrir_excel_salida(
+            libro = GestorLibrosExcel().crear_o_abrir_salida(
                 ruta, hojas_reporte=d.HOJAS_REPORTE_DISPOSITIVOS
             )
             try:
@@ -81,7 +77,7 @@ class ReportesTest(unittest.TestCase):
                 hoja.title = antiguo
                 hoja.append(d.ENCABEZADOS_CPU_MEMORIA_SALIDA)
                 hoja.append(["M1", "Java", "Manual"])
-                crear_hojas_si_no_existen(libro, d.HOJAS_REPORTE_DISPOSITIVOS)
+                GestorLibrosExcel().crear_hojas_si_no_existen(libro, d.HOJAS_REPORTE_DISPOSITIVOS)
                 self.assertNotIn(antiguo, libro.sheetnames)
                 self.assertIn(d.HOJA_CPU_MEMORIA_SALIDA, libro.sheetnames)
                 cpu = libro[d.HOJA_CPU_MEMORIA_SALIDA]
@@ -98,7 +94,7 @@ class ReportesTest(unittest.TestCase):
         libro.active.title = "CPU-Memoria PC"
         libro.create_sheet("CPU-Memoria Dispositivos")
         with self.assertRaises(ValueError):
-            crear_hojas_si_no_existen(libro, d.HOJAS_REPORTE_DISPOSITIVOS)
+            GestorLibrosExcel().crear_hojas_si_no_existen(libro, d.HOJAS_REPORTE_DISPOSITIVOS)
         self.assertIn("CPU-Memoria PC", libro.sheetnames)
         self.assertIn("CPU-Memoria Dispositivos", libro.sheetnames)
         libro.close()
@@ -107,10 +103,10 @@ class ReportesTest(unittest.TestCase):
         """Conserva todos los errores registrados para un mismo proyecto."""
         libro = Workbook()
         libro.remove(libro.active)
-        crear_hojas_si_no_existen(libro)
+        GestorLibrosExcel().crear_hojas_si_no_existen(libro)
         proyecto = Proyecto("M1", "Prueba", "ruta", "IA", "Modelo", "Python")
-        guardar_error_excel(libro, proyecto, "Primer error")
-        guardar_error_excel(libro, proyecto, "Segundo error")
+        EscritorResultadosExcel().guardar_error(libro, proyecto, "Primer error")
+        EscritorResultadosExcel().guardar_error(libro, proyecto, "Segundo error")
         hoja = libro["Errores"]
         self.assertEqual(hoja.max_row, 3)
         self.assertEqual(hoja.cell(2, 3).value, "Primer error")
@@ -120,12 +116,12 @@ class ReportesTest(unittest.TestCase):
         """Actualiza la fila de tokens correspondiente al mismo código."""
         libro = Workbook()
         libro.remove(libro.active)
-        crear_hojas_si_no_existen(libro)
+        GestorLibrosExcel().crear_hojas_si_no_existen(libro)
         metrica = MetricaTokens("M1", "Chat", 100, 1, 2000, 50, 45.45,
                                 "Alto", "Interpretación")
-        escribir_hoja_tokens(libro["Tokens"], "M1", metrica)
+        EscritorResultadosExcel().escribir_hoja_tokens(libro["Tokens"], "M1", metrica)
         metrica.refinamientos = 2
-        escribir_hoja_tokens(libro["Tokens"], "M1", metrica)
+        EscritorResultadosExcel().escribir_hoja_tokens(libro["Tokens"], "M1", metrica)
         hoja = libro["Tokens"]
         self.assertEqual(hoja.max_row, 2)
         self.assertEqual(hoja.cell(2, 4).value, 2)
@@ -134,9 +130,9 @@ class ReportesTest(unittest.TestCase):
         """No crea filas de datos cuando la métrica no está disponible."""
         libro = Workbook()
         libro.remove(libro.active)
-        crear_hojas_si_no_existen(libro)
-        escribir_hoja_tokens(libro["Tokens"], "M1", None)
-        self.assertEqual(libro["Tokens"].max_row, 2)
+        GestorLibrosExcel().crear_hojas_si_no_existen(libro)
+        EscritorResultadosExcel().escribir_hoja_tokens(libro["Tokens"], "M1", None)
+        self.assertEqual(libro["Tokens"].max_row, 1)
 
 
 if __name__ == "__main__":

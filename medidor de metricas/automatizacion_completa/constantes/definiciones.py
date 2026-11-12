@@ -1,5 +1,11 @@
 """Define las constantes generales de la aplicación."""
 
+#lenguajes de programacion soportados
+LENGUAJE_WIRING = "wiring"
+LENGUAJE_JAVA   = "java"
+LENGUAJE_KOTLIN = "kotlin"
+LENGUAJE_PYTHON = "python"
+
 #define los tipos de proyecto que se pueden procesar
 TIPO_PROYECTO_PC="PC"
 TIPO_PROYECTO_ESP32_ANDROID="ESP32-Android"
@@ -22,6 +28,10 @@ MAX_WORKERS = 3
 
 # Cantidad máxima de analizadores pesados ejecutándose simultáneamente.
 MAX_ANALIZADORES_PESADOS = 1
+
+# Tiempo máximo en segundos para los adaptadores de análisis estático.
+TIEMPO_MAXIMO_ANALIZADOR = 300
+
 
 # Fracción máxima de CPUs lógicas que puede utilizar el programa.
 PORCENTAJE_MAX_CPU = 0.65
@@ -361,7 +371,14 @@ HOJAS_REPORTE = {
     HOJA_CPU_MEMORIA_SALIDA: ENCABEZADOS_CPU_MEMORIA_SALIDA,
 }
 
-
+# Las columnas de observación y reglas incumplidas se limitan a 50 caracteres 
+# dado que son muy largas.Entonces, se muestran solo los primeros 50 caracteres y 
+# los demás se muestran si el usuario hace clic en la celda.
+# Esto evita que se deformen las columnas del excel.
+COLUMNAS_LARGAS_LIMITADAS = {
+        TEXTO_ENCABEZADO_OBSERVACION,
+        TEXTO_ENCABEZADO_REGLAS_INCUMPLIDAS,
+    }
 # Los dispositivos comparten todas las hojas de PC excepto el Resumen.
 HOJAS_REPORTE_DISPOSITIVOS = {
     **HOJAS_REPORTE,
@@ -476,9 +493,44 @@ ISSUE_SEVERIDAD_BAJA             = "Baja"
 #CONSTANTES DEL ARHCIVO CPU_MEMORIA.PY
 TEXTO_CPU_MEDIDA            = "CPU medida"
 
+#constantes para el analisis de los proyectos en Wiring, C y C++
+SEVERIDADES_CPPCHECK = {
+    "error": ISSUE_SEVERIDAD_ALTA,
+    "warning": ISSUE_SEVERIDAD_MEDIA,
+    "performance": ISSUE_SEVERIDAD_MEDIA,
+    "style": ISSUE_SEVERIDAD_BAJA,
+    "portability": ISSUE_SEVERIDAD_BAJA,
+}
+CATEGORIAS_CPPCHECK = {
+    "error": "Bug potencial",
+    "warning": "Bug potencial",
+    "performance": "Rendimiento",
+    "style": "Estilo",
+    "portability": "Portabilidad",
+}
+FALLOS_CPPCHECK = {
+    "syntaxError", "internalError", "preprocessorErrorDirective", "unknownMacro",
+    "noValidConfiguration",
+}
+LIMITACIONES_CPPCHECK = {
+    "missingInclude", "missingIncludeSystem", "toomanyconfigs", "maxConfigs",
+}
 
+EXTENSIONES_WIRING = {".ino", ".c", ".cpp", ".cc", ".cxx", ".h", ".hpp"}
+DIRECTORIOS_EXCLUIDOS = {
+    ".git", ".pio", ".gradle", "build", "bin", "obj", "out", "dist",
+    "target", "generated", "gen", "vendor", "external", "third_party",
+    "third-party", "libraries", "libs", "dependencies", "deps", "node_modules",
+}
+LONGITUD_CABECERA_GENERADA = 2048
+MARCAS_GENERACION = ("@generated", "automatically generated")
 
-
-
+#metricas que se van a analizar en el proyecto. Son las etapas que se van a ejecutar en el proyecto, 
+# y que estan definidas en el archivo etapas.py. Son las etapas del pipline de procesamiento
+#  que se van a ejecutar en el proyecto.
+CAMPOS_METRICAS = (
+    "metricas_cc", "metricas_mi", "metricas_bugs_smells",
+    "metricas_concurrencia", "metricas_tokens", "metricas_cpu_memoria",
+)
 
 

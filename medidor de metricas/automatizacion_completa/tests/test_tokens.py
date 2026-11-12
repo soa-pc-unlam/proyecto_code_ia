@@ -9,7 +9,7 @@ from openpyxl import Workbook, load_workbook
 
 from configuracion.configuracion import cargar_configuracion, clasificar_eficiencia_token
 from constantes.definiciones import CONFIGURACION_JSON_PC, TEXTO_CAMPO_UMBRALES_TOKEN
-from metricas.tokens import analizar_tokens, crear_metrica_tokens
+from metricas.tokens import AnalizadorTokens, CalculadoraTokens
 
 
 class TokensTest(unittest.TestCase):
@@ -24,7 +24,7 @@ class TokensTest(unittest.TestCase):
         """Calcula NLOC por mil tokens y aplica el coeficiente."""
         valores = {"Método utilizado": "Chat", "Refinamientos": 2,
                    "Tokens registrados": 5000}
-        metrica = crear_metrica_tokens("M1", valores, 100, self.umbrales, 0.1)
+        metrica = CalculadoraTokens.crear_metrica_tokens("M1", valores, 100, self.umbrales, 0.1)
         self.assertEqual(metrica.eficiencia_generacion, 20)
         self.assertEqual(metrica.eficiencia_ponderada, 16.67)
         self.assertEqual(metrica.nivel_eficiencia, "Medio")
@@ -41,7 +41,7 @@ class TokensTest(unittest.TestCase):
         """Usa el valor original aunque el almacenado se redondee a 30."""
         valores = {"Método utilizado": "IDE", "Refinamientos": 0,
                    "Tokens registrados": 1000}
-        metrica = crear_metrica_tokens("M1", valores, 29.999, self.umbrales, 0.1)
+        metrica = CalculadoraTokens.crear_metrica_tokens("M1", valores, 29.999, self.umbrales, 0.1)
         self.assertEqual(metrica.eficiencia_ponderada, 30)
         self.assertEqual(metrica.nivel_eficiencia, "Medio")
 
@@ -54,7 +54,7 @@ class TokensTest(unittest.TestCase):
         ]
         for valores in casos:
             with self.assertRaises(ValueError):
-                crear_metrica_tokens("M1", valores, 10, self.umbrales, 0.1)
+                CalculadoraTokens.crear_metrica_tokens("M1", valores, 10, self.umbrales, 0.1)
 
     def test_lee_columnas_por_encabezado(self):
         """Lee correctamente aunque Código no sea la primera columna."""
@@ -64,7 +64,7 @@ class TokensTest(unittest.TestCase):
         hoja.append(["Tokens registrados", "Código", "Refinamientos",
                      "Método utilizado"])
         hoja.append([1000, "M1", 1, "Chat"])
-        metrica = analizar_tokens(Mock(codigo="M1"), libro, 20, self.umbrales, 0.1, Mock())
+        metrica = AnalizadorTokens().analizar_tokens(Mock(codigo="M1"), libro, 20, self.umbrales, 0.1, Mock())
         self.assertEqual(metrica.metodo_utilizado, "Chat")
 
     def test_rechaza_codigo_duplicado(self):
@@ -77,7 +77,7 @@ class TokensTest(unittest.TestCase):
         hoja.append(["M1", "Chat", 0, 1000])
         hoja.append(["M1", "IDE", 1, 2000])
         with self.assertRaisesRegex(ValueError, "duplicado"):
-            analizar_tokens(Mock(codigo="M1"), libro, 20, self.umbrales, 0.1, Mock())
+            AnalizadorTokens().analizar_tokens(Mock(codigo="M1"), libro, 20, self.umbrales, 0.1, Mock())
 
     def test_lee_libro_en_modo_solo_lectura(self):
         """No depende de max_row al buscar códigos en modo de solo lectura."""
@@ -92,7 +92,7 @@ class TokensTest(unittest.TestCase):
             libro.save(ruta)
             libro.close()
             lectura = load_workbook(ruta, read_only=True, data_only=True)
-            metrica = analizar_tokens(Mock(codigo="M1"), lectura, 20, self.umbrales, 0.1, Mock())
+            metrica = AnalizadorTokens().analizar_tokens(Mock(codigo="M1"), lectura, 20, self.umbrales, 0.1, Mock())
             self.assertEqual(metrica.codigo, "M1")
             lectura.close()
 

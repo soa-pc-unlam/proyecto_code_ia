@@ -1,3 +1,5 @@
+from reportes.escritor_resultados import EscritorResultadosExcel
+from reportes.gestor_libros import GestorLibrosExcel
 """Pruebas de metadatos opcionales y su escritura en perfiles de dispositivos."""
 
 import json
@@ -8,7 +10,6 @@ from tempfile import TemporaryDirectory
 from configuracion.configuracion import cargar_proyectos
 from constantes import definiciones as d
 from modelos.modelos import Proyecto
-from reportes.excel import crear_o_abrir_excel_salida, guardar_resultado_excel
 
 
 class MetadatosProyectosTest(unittest.TestCase):
@@ -82,12 +83,12 @@ class MetadatosProyectosTest(unittest.TestCase):
         )
         with TemporaryDirectory() as directorio:
             proyectos = self.cargar_temporal([manual, vibecoding], directorio)
-            libro = crear_o_abrir_excel_salida(
+            libro = GestorLibrosExcel().crear_o_abrir_salida(
                 Path(directorio) / "dispositivos.xlsx", d.HOJAS_REPORTE_DISPOSITIVOS
             )
             try:
                 for proyecto in proyectos:
-                    guardar_resultado_excel(libro, proyecto, None, None)
+                    EscritorResultadosExcel().guardar_resultado(libro, proyecto, None, None)
                 hoja = libro[d.HOJA_RESUMEN]
                 self.assertEqual(hoja.max_row, 3)
                 fila_manual = self.datos_hoja(hoja, 2)
@@ -100,7 +101,7 @@ class MetadatosProyectosTest(unittest.TestCase):
                 cpu = self.datos_hoja(libro[d.HOJA_CPU_MEMORIA_SALIDA], 2)
                 self.assertNotIn(d.TEXTO_ENCABEZADO_DISPOSITIVO, cpu)
                 self.assertEqual(list(cpu), d.ENCABEZADOS_CPU_MEMORIA_SALIDA)
-                guardar_resultado_excel(libro, proyectos[1], None, None)
+                EscritorResultadosExcel().guardar_resultado(libro, proyectos[1], None, None)
                 self.assertEqual(hoja.max_row, 3)
             finally:
                 libro.close()
@@ -108,11 +109,11 @@ class MetadatosProyectosTest(unittest.TestCase):
     def test_pc_no_agrega_columnas_de_dispositivos(self):
         with TemporaryDirectory() as directorio:
             proyecto = self.cargar_temporal([self.datos_base("M1")], directorio)[0]
-            libro = crear_o_abrir_excel_salida(
+            libro = GestorLibrosExcel().crear_o_abrir_salida(
                 Path(directorio) / "pc.xlsx", d.HOJAS_REPORTE
             )
             try:
-                guardar_resultado_excel(libro, proyecto, None, None)
+                EscritorResultadosExcel().guardar_resultado(libro, proyecto, None, None)
                 hoja = libro[d.HOJA_RESUMEN]
                 self.assertEqual(
                     [celda.value for celda in hoja[1]], d.ENCABEZADOS_RESUMEN

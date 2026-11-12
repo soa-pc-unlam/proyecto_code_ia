@@ -14,7 +14,7 @@ from constantes.definiciones import (
     TEXTO_CAMPO_UMBRALES_MEM,
 )
 from modelos.modelos import Proyecto
-from metricas.cpu_memoria import analizar_cpu_memoria, crear_metrica_cpu_memoria
+from metricas.cpu_memoria import AnalizadorCpuMemoria, CalculadoraCpuMemoria
 
 
 class _LoggerNulo:
@@ -41,7 +41,7 @@ class CpuMemoriaTest(unittest.TestCase):
         self.formatos["CPU Acc2"] = "0.00%"
 
     def crear(self):
-        return crear_metrica_cpu_memoria(
+        return CalculadoraCpuMemoria.crear_metrica_cpu_memoria(
             self.proyecto, self.valores, self.formatos,
             self.umbrales_cpu, self.umbrales_memoria
         )
@@ -136,7 +136,7 @@ class CpuMemoriaTest(unittest.TestCase):
     def test_rechaza_codigo_duplicado(self):
         libro = self.crear_libro_entrada(["M1", "M1"])
         with self.assertRaisesRegex(ValueError, "duplicado"):
-            analizar_cpu_memoria(
+            AnalizadorCpuMemoria().analizar_cpu_memoria(
                 self.proyecto, libro, self.umbrales_cpu,
                 self.umbrales_memoria, _LoggerNulo()
             )
@@ -144,7 +144,7 @@ class CpuMemoriaTest(unittest.TestCase):
     def test_rechaza_codigo_inexistente(self):
         libro = self.crear_libro_entrada(["OTRO"])
         with self.assertRaisesRegex(ValueError, "No se encontró"):
-            analizar_cpu_memoria(
+            AnalizadorCpuMemoria().analizar_cpu_memoria(
                 self.proyecto, libro, self.umbrales_cpu,
                 self.umbrales_memoria, _LoggerNulo()
             )

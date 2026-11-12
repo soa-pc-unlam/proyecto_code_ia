@@ -1,6 +1,7 @@
 """Modelos de datos utilizados por el análisis y los reportes."""
 
 from dataclasses import dataclass, field
+from zipfile import Path
 
 
 @dataclass
@@ -222,3 +223,12 @@ class ResultadoProyecto:
     metricas_tokens: object = None
     metricas_cpu_memoria: object = None
     errores: list = None
+    omitir_metricas_codigo: bool = False  # ESP32 sin fuentes Wiring válidas
+
+
+@dataclass(frozen=True)
+class FuentesProyecto:
+    """Selección inmutable de fuentes Wiring de un proyecto."""
+
+    raiz: Path
+    archivos: tuple[Path, ...]

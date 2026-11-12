@@ -1,3 +1,4 @@
+from reportes.gestor_libros import GestorLibrosExcel
 """Cálculo de métricas de uso de CPU y memoria en PC."""
 
 import math
@@ -22,163 +23,167 @@ from constantes.definiciones import (
     TEXTO_ENCABEZADO_MODO_CPU,
 )
 from modelos.modelos import MetricaCpuMemoria
-from reportes.excel import leer_fila_por_codigo
 
+class ValidadorCpuMemoria:
+    """Valida mediciones y formatos de CPU y memoria."""
+    @staticmethod
+    def validar_numero_opcional(valor, nombre):
+        """Valida un número finito no negativo o devuelve None si está vacío."""
 
-def validar_numero_opcional(valor, nombre):
-    """Valida un número finito no negativo o devuelve None si está vacío."""
+        if valor is None or valor == "":
+            return None
 
-    if valor is None or valor == "":
-        return None
+        if isinstance(valor, bool) or not isinstance(valor, Real):
+            raise ValueError(f"{nombre} debe ser un valor numérico válido")
 
-    if isinstance(valor, bool) or not isinstance(valor, Real):
-        raise ValueError(f"{nombre} debe ser un valor numérico válido")
+        if not math.isfinite(valor) or valor < 0:
+            raise ValueError(f"{nombre} debe ser un valor numérico no negativo")
 
-    if not math.isfinite(valor) or valor < 0:
-        raise ValueError(f"{nombre} debe ser un valor numérico no negativo")
+        return float(valor)
 
-    return float(valor)
+    @staticmethod
+    def validar_cpus_logicas(valor, obligatorio=False):
+        """Valida la cantidad de CPUs lógicas cuando es necesaria."""
 
+        if valor is None or valor == "":
+            if obligatorio:
+                raise ValueError("CPUs lógicas debe ser un entero mayor que cero")
+            return None
 
-def validar_cpus_logicas(valor, obligatorio=False):
-    """Valida la cantidad de CPUs lógicas cuando es necesaria."""
-
-    if valor is None or valor == "":
-        if obligatorio:
+        if isinstance(valor, bool) or not isinstance(valor, Real):
             raise ValueError("CPUs lógicas debe ser un entero mayor que cero")
-        return None
 
-    if isinstance(valor, bool) or not isinstance(valor, Real):
-        raise ValueError("CPUs lógicas debe ser un entero mayor que cero")
+        if not float(valor).is_integer() or valor <= 0:
+            raise ValueError("CPUs lógicas debe ser un entero mayor que cero")
 
-    if not float(valor).is_integer() or valor <= 0:
-        raise ValueError("CPUs lógicas debe ser un entero mayor que cero")
+        return int(valor)
 
-    return int(valor)
+    @staticmethod
+    def validar_modo_cpu(valor, hay_medicion_cpu):
+        """Valida el modo de CPU si existe al menos una medición."""
 
+        modo = "" if valor is None else str(valor).strip()
 
-def validar_modo_cpu(valor, hay_medicion_cpu):
-    """Valida el modo de CPU si existe al menos una medición."""
+        if not hay_medicion_cpu and not modo:
+            return ""
 
-    modo = "" if valor is None else str(valor).strip()
+        if modo not in (MODO_CPU_NUCLEO, MODO_CPU_TOTAL):
+            raise ValueError(f"Modo CPU inválido: {valor}")
 
-    if not hay_medicion_cpu and not modo:
-        return ""
+        return modo
 
-    if modo not in (MODO_CPU_NUCLEO, MODO_CPU_TOTAL):
-        raise ValueError(f"Modo CPU inválido: {valor}")
+    @staticmethod
+    def convertir_porcentaje(valor, formato):
+        """Convierte una celda porcentual de Excel a porcentaje numérico."""
+        valor = ValidadorCpuMemoria.validar_numero_opcional(valor, TEXTO_CPU_MEDIDA)
 
-    return modo
+        if valor is None:
+            return None
 
+        if formato and "%" in formato:
+            return valor * 100
 
-def convertir_porcentaje(valor, formato):
-    """Convierte una celda porcentual de Excel a porcentaje numérico."""
-    valor = validar_numero_opcional(valor, TEXTO_CPU_MEDIDA)
+        return valor
 
-    if valor is None:
-        return None
+class CalculadoraCpuMemoria:
+    """Calcula y clasifica las mediciones de CPU/memoria."""
+    @staticmethod
+    def normalizar_cpu(valor, modo_cpu, cpus_logicas):
+        """Normaliza una medición de CPU según el modo informado."""
 
-    if formato and "%" in formato:
-        return valor * 100
+        if valor is None:
+            return None
 
-    return valor
+        if modo_cpu == MODO_CPU_NUCLEO:
+            return valor / cpus_logicas
 
+        return valor
 
-def normalizar_cpu(valor, modo_cpu, cpus_logicas):
-    """Normaliza una medición de CPU según el modo informado."""
+    @staticmethod
+    def calcular_promedio(valores):
+        """Calcula el promedio usando solamente mediciones disponibles."""
+        disponibles = [valor for valor in valores if valor is not None]
 
-    if valor is None:
-        return None
+        if not disponibles:
+            return None
 
-    if modo_cpu == MODO_CPU_NUCLEO:
-        return valor / cpus_logicas
+        return sum(disponibles) / len(disponibles)
 
-    return valor
+    @staticmethod
+    def calcular_maximo(valores):
+        """Calcula el máximo usando solamente mediciones disponibles."""
+        disponibles = [valor for valor in valores if valor is not None]
 
+        return max(disponibles) if disponibles else None
 
-def calcular_promedio(valores):
-    """Calcula el promedio usando solamente mediciones disponibles."""
-    disponibles = [valor for valor in valores if valor is not None]
+    @staticmethod
+    def obtener_cpu(valores, formatos):
+        """Valida y normaliza las dos mediciones de CPU."""
 
-    if not disponibles:
-        return None
+        cpu_1 = ValidadorCpuMemoria.convertir_porcentaje(valores[TEXTO_ENCABEZADO_CPU_ACC1], formatos[TEXTO_ENCABEZADO_CPU_ACC1])
+        cpu_2 = ValidadorCpuMemoria.convertir_porcentaje(valores[TEXTO_ENCABEZADO_CPU_ACC2], formatos[TEXTO_ENCABEZADO_CPU_ACC2])
+        modo = ValidadorCpuMemoria.validar_modo_cpu(valores[TEXTO_ENCABEZADO_MODO_CPU], cpu_1 is not None or cpu_2 is not None)
+        cpus = ValidadorCpuMemoria.validar_cpus_logicas(valores[TEXTO_ENCABEZADO_CPUS_LOGICAS], modo == MODO_CPU_NUCLEO)
 
-    return sum(disponibles) / len(disponibles)
+        return cpu_1, cpu_2, modo, cpus
 
+    @staticmethod
+    def obtener_memoria(valores):
+        """Valida las mediciones de memoria y la memoria total."""
 
-def calcular_maximo(valores):
-    """Calcula el máximo usando solamente mediciones disponibles."""
-    disponibles = [valor for valor in valores if valor is not None]
+        memoria_1 = ValidadorCpuMemoria.validar_numero_opcional(valores[TEXTO_ENCABEZADO_MEMORIA_ACC1_MB], TEXTO_ENCABEZADO_MEMORIA_ACC1_MB)
+        memoria_2 = ValidadorCpuMemoria.validar_numero_opcional(valores[TEXTO_ENCABEZADO_MEMORIA_ACC2_MB], TEXTO_ENCABEZADO_MEMORIA_ACC2_MB)
+        total = ValidadorCpuMemoria.validar_numero_opcional(valores[TEXTO_ENCABEZADO_MEMORIA_TOTAL_ENTRADA_MB], TEXTO_ENCABEZADO_MEMORIA_TOTAL_ENTRADA_MB)
 
-    return max(disponibles) if disponibles else None
+        return memoria_1, memoria_2, total
 
+    @staticmethod
+    def crear_metrica_cpu_memoria(proyecto, valores, formatos, configuracion_cpu, configuracion_memoria):
+        """Valida los datos y construye las métricas de CPU y memoria."""
 
+        cpu_1, cpu_2, modo, cpus = CalculadoraCpuMemoria.obtener_cpu(valores, formatos)
+        norm_1 = CalculadoraCpuMemoria.normalizar_cpu(cpu_1, modo, cpus)
+        norm_2 = CalculadoraCpuMemoria.normalizar_cpu(cpu_2, modo, cpus)
+        cpu_promedio = CalculadoraCpuMemoria.calcular_promedio([norm_1, norm_2])
+        cpu_maxima = CalculadoraCpuMemoria.calcular_maximo([norm_1, norm_2])
+        memoria_1, memoria_2, memoria_total = CalculadoraCpuMemoria.obtener_memoria(valores)
+        memoria_promedio = CalculadoraCpuMemoria.calcular_promedio([memoria_1, memoria_2])
+        memoria_maxima = CalculadoraCpuMemoria.calcular_maximo([memoria_1, memoria_2])
 
+        if memoria_promedio is not None and memoria_total and memoria_total > 0:
+            memoria_norm = (memoria_promedio / memoria_total) * 100 
+        else:
+            memoria_norm=None
 
-def obtener_cpu(valores, formatos):
-    """Valida y normaliza las dos mediciones de CPU."""
+        return CalculadoraCpuMemoria.construir_resultado(proyecto, valores, configuracion_cpu, configuracion_memoria, cpu_1, cpu_2, modo, cpus, norm_1, norm_2, cpu_promedio, cpu_maxima, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima)
 
-    cpu_1 = convertir_porcentaje(valores[TEXTO_ENCABEZADO_CPU_ACC1], formatos[TEXTO_ENCABEZADO_CPU_ACC1])
-    cpu_2 = convertir_porcentaje(valores[TEXTO_ENCABEZADO_CPU_ACC2], formatos[TEXTO_ENCABEZADO_CPU_ACC2])
-    modo = validar_modo_cpu(valores[TEXTO_ENCABEZADO_MODO_CPU], cpu_1 is not None or cpu_2 is not None)
-    cpus = validar_cpus_logicas(valores[TEXTO_ENCABEZADO_CPUS_LOGICAS], modo == MODO_CPU_NUCLEO)
+    @staticmethod
+    def construir_resultado(proyecto, valores, configuracioncpu, configuracionmemoria, cpu_1, cpu_2, modo, cpus, norm_1, norm_2, cpu_promedio, cpu_maxima, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima):
+        """Construye el objeto final conservando valores sin redondear."""
 
-    return cpu_1, cpu_2, modo, cpus
+        # Clasificación de CPU
+        nivel_cpu, int_cpu = clasificar_uso_cpu(cpu_promedio, configuracioncpu)
 
+        # Clasificación de memoria
+        nivel_mem, int_mem = clasificar_uso_mem(memoria_norm, configuracionmemoria)
 
-def obtener_memoria(valores):
-    """Valida las mediciones de memoria y la memoria total."""
+        return MetricaCpuMemoria(proyecto.codigo, proyecto.lenguaje, str(valores[TEXTO_ENCABEZADO_METODO_MEDICION] or "").strip(), modo, cpus, str(valores["Acción 1"] or "").strip(), cpu_1, str(valores["Acción 2"] or "").strip(), cpu_2, norm_1, norm_2, cpu_promedio, cpu_maxima, nivel_cpu, int_cpu, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima, nivel_mem, int_mem)
 
-    memoria_1 = validar_numero_opcional(valores[TEXTO_ENCABEZADO_MEMORIA_ACC1_MB], TEXTO_ENCABEZADO_MEMORIA_ACC1_MB)
-    memoria_2 = validar_numero_opcional(valores[TEXTO_ENCABEZADO_MEMORIA_ACC2_MB], TEXTO_ENCABEZADO_MEMORIA_ACC2_MB)
-    total = validar_numero_opcional(valores[TEXTO_ENCABEZADO_MEMORIA_TOTAL_ENTRADA_MB], TEXTO_ENCABEZADO_MEMORIA_TOTAL_ENTRADA_MB)
+class AnalizadorCpuMemoria:
+    """Lee las mediciones del libro de entrada."""
+    def __init__(self, gestor=None):
+        self.gestor = gestor if gestor is not None else GestorLibrosExcel()
+    def analizar_cpu_memoria(self, proyecto, libro_entrada, configuracion_cpu, configuracion_memoria, logger):
+        """Lee y analiza los datos de CPU y memoria de un proyecto."""
 
-    return memoria_1, memoria_2, total
+        logger.debug(f"[{proyecto.codigo}] Leyendo datos de CPU y memoria")
 
+        valores, formatos = self.gestor.leer_fila_por_codigo(
+            libro_entrada=libro_entrada,
+            nombre_hoja=HOJA_CPU_MEMORIA_ENTRADA,
+            codigo=proyecto.codigo,
+            campos=ENCABEZADOS_CPU_MEMORIA_ENTRADA,
+            incluir_formato=True
+        )
 
-def crear_metrica_cpu_memoria(proyecto, valores, formatos, configuracion_cpu, configuracion_memoria):
-    """Valida los datos y construye las métricas de CPU y memoria."""
-
-    cpu_1, cpu_2, modo, cpus = obtener_cpu(valores, formatos)
-    norm_1 = normalizar_cpu(cpu_1, modo, cpus)
-    norm_2 = normalizar_cpu(cpu_2, modo, cpus)
-    cpu_promedio = calcular_promedio([norm_1, norm_2])
-    cpu_maxima = calcular_maximo([norm_1, norm_2])
-    memoria_1, memoria_2, memoria_total = obtener_memoria(valores)
-    memoria_promedio = calcular_promedio([memoria_1, memoria_2])
-    memoria_maxima = calcular_maximo([memoria_1, memoria_2])
-
-    if memoria_promedio is not None and memoria_total and memoria_total > 0:
-        memoria_norm = (memoria_promedio / memoria_total) * 100 
-    else:
-        memoria_norm=None
-
-    return construir_resultado(proyecto, valores, configuracion_cpu, configuracion_memoria, cpu_1, cpu_2, modo, cpus, norm_1, norm_2, cpu_promedio, cpu_maxima, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima)
-
-
-def construir_resultado(proyecto, valores, configuracioncpu, configuracionmemoria, cpu_1, cpu_2, modo, cpus, norm_1, norm_2, cpu_promedio, cpu_maxima, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima):
-    """Construye el objeto final conservando valores sin redondear."""
-
-    # Clasificación de CPU
-    nivel_cpu, int_cpu = clasificar_uso_cpu(cpu_promedio, configuracioncpu)
-
-    # Clasificación de memoria
-    nivel_mem, int_mem = clasificar_uso_mem(memoria_norm, configuracionmemoria)
-
-    return MetricaCpuMemoria(proyecto.codigo, proyecto.lenguaje, str(valores[TEXTO_ENCABEZADO_METODO_MEDICION] or "").strip(), modo, cpus, str(valores["Acción 1"] or "").strip(), cpu_1, str(valores["Acción 2"] or "").strip(), cpu_2, norm_1, norm_2, cpu_promedio, cpu_maxima, nivel_cpu, int_cpu, memoria_1, memoria_2, memoria_total, memoria_promedio, memoria_norm, memoria_maxima, nivel_mem, int_mem)
-
-
-def analizar_cpu_memoria(proyecto, libro_entrada, configuracion_cpu, configuracion_memoria, logger):
-    """Lee y analiza los datos de CPU y memoria de un proyecto."""
-
-    logger.debug(f"[{proyecto.codigo}] Leyendo datos de CPU y memoria")
-
-    valores, formatos = leer_fila_por_codigo(
-        libro_entrada=libro_entrada,
-        nombre_hoja=HOJA_CPU_MEMORIA_ENTRADA,
-        codigo=proyecto.codigo,
-        campos=ENCABEZADOS_CPU_MEMORIA_ENTRADA,
-        incluir_formato=True
-    )
-
-    return crear_metrica_cpu_memoria(proyecto, valores, formatos, configuracion_cpu, configuracion_memoria)
+        return CalculadoraCpuMemoria.crear_metrica_cpu_memoria(proyecto, valores, formatos, configuracion_cpu, configuracion_memoria)

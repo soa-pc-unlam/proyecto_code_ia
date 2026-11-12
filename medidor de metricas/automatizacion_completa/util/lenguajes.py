@@ -3,6 +3,7 @@
 
 
 from util.exception import LenguajeNoSoportadoError
+from constantes.definiciones import LENGUAJE_WIRING
 
 
 def normalizar_lenguaje(lenguaje):
@@ -15,7 +16,7 @@ def normalizar_lenguaje(lenguaje):
         El identificador normalizado del lenguaje.
 
     Raises:
-        ValueError: Si el lenguaje no está soportado.
+        LenguajeNoSoportadoError: Si el lenguaje no está soportado.
     """
     lenguaje = lenguaje.strip().lower()
 
@@ -27,5 +28,8 @@ def normalizar_lenguaje(lenguaje):
 
     if lenguaje in ["kotlin", "kt"]:
         return "kotlin"
+
+    if lenguaje == LENGUAJE_WIRING:
+        return LENGUAJE_WIRING
 
     raise LenguajeNoSoportadoError(f"Lenguaje no soportado: {lenguaje}")

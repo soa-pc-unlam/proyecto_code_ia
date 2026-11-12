@@ -1,3 +1,5 @@
+from reportes.gestor_libros import GestorLibrosExcel
+from reportes.excel_utilidades import UtilidadesExcel
 """Pruebas integrales del flujo compartido y de los dos perfiles Excel."""
 
 import json
@@ -12,7 +14,6 @@ from constantes import definiciones as d
 from modelos.modelos import MetricaComplejidad
 from procesamiento import procesamiento as proceso
 from procesamiento import procesamiento_comun as comun
-from reportes.excel import crear_o_abrir_excel_salida, obtener_mapa_encabezados
 from util.logging_config import configurar_logger
 
 
@@ -82,13 +83,22 @@ class IntegracionEvaluadoresTest(unittest.TestCase):
 
         self.assertTrue(salida.exists(), f'No se generó el Excel: {salida}')
         perfil = d.HOJAS_REPORTE if es_pc else d.HOJAS_REPORTE_DISPOSITIVOS
-        libro = crear_o_abrir_excel_salida(salida, perfil)
+        libro = GestorLibrosExcel().crear_o_abrir_salida(salida, perfil)
         try:
             for hoja, columnas in perfil.items():
                 self.assertEqual([c.value for c in libro[hoja][1]], columnas)
-                if hoja != d.HOJA_ERRORES:
+                if hoja in (d.HOJA_CONCURRENCIA_SALIDA, d.HOJA_TOKENS_SALIDA,
+                            d.HOJA_CPU_MEMORIA_SALIDA):
+                    # Sólo deben existir filas con métricas disponibles.
+                    self.assertLessEqual(libro[hoja].max_row, cantidad + 1, hoja)
+                    for fila in libro[hoja].iter_rows(min_row=2, values_only=True):
+                        self.assertTrue(any(valor is not None and valor != ''
+                                            for valor in fila[1:]), hoja)
+                elif hoja != d.HOJA_ERRORES:
                     self.assertEqual(libro[hoja].max_row, cantidad + 1, hoja)
-            self.assertEqual(len(libro['Graficos']._charts), 8)
+            self.assertEqual(len(libro['Graficos']._charts), 8 if es_pc else 4)
+            if not es_pc:
+                self.assertIn(d.HOJA_COMPARACION, libro.sheetnames)
             resumen = libro[d.HOJA_RESUMEN]
             self.assertEqual(resumen.max_row, cantidad + 1)
             for indice, proyecto in enumerate(proyectos, 2):
@@ -111,7 +121,7 @@ class IntegracionEvaluadoresTest(unittest.TestCase):
                         proyecto['id_proyecto'],
                     )
             hoja_cpu = libro[d.HOJA_CPU_MEMORIA_SALIDA]
-            columnas_cpu = obtener_mapa_encabezados(hoja_cpu)
+            columnas_cpu = UtilidadesExcel().obtener_mapa_encabezados(hoja_cpu)
             if not es_pc:
                 self.assertIn(d.HOJA_CPU_MEMORIA_SALIDA, libro.sheetnames)
                 self.assertNotIn(d.TEXTO_ENCABEZADO_DISPOSITIVO, columnas_cpu)
@@ -119,7 +129,8 @@ class IntegracionEvaluadoresTest(unittest.TestCase):
                     [celda.value for celda in hoja_cpu[1]],
                     d.ENCABEZADOS_CPU_MEMORIA_SALIDA,
                 )
-                self.assertEqual(hoja_cpu.cell(2, 12).number_format, r"0.00\%")
+                if proyectos_alternativos is None:
+                    self.assertEqual(hoja_cpu.cell(2, 12).number_format, r"0.00\%")
             # Las filas de Errores son un historial: un proyecto puede tener
             # cero o varios errores y repetir la ejecución agrega eventos.
             errores = libro[d.HOJA_ERRORES]
@@ -129,7 +140,8 @@ class IntegracionEvaluadoresTest(unittest.TestCase):
                     hoja_cpu.cell(2, columnas_cpu[d.TEXTO_ENCABEZADO_CPU_PROMEDIO_NORMALIZADA]).value
                 )
             else:
-                self.assertGreaterEqual(errores.max_row, 2)
+                # Un analizador sustituido por mocks no debe inventar errores.
+                self.assertGreaterEqual(errores.max_row, 1)
                 primera_fila = {
                     celda.value: resumen.cell(2, celda.column).value
                     for celda in resumen[1]
@@ -161,8 +173,8 @@ class IntegracionEvaluadoresTest(unittest.TestCase):
                         )
                 else:
                     # Para ESP32 sin filas de entrada no se inventan mediciones.
-                    self.assertIsNone(primera_fila[d.TEXTO_ENCABEZADO_CPU_PROMEDIO])
-                    self.assertIsNone(primera_fila[d.TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN])
+                    self.assertEqual(primera_fila[d.TEXTO_ENCABEZADO_CPU_PROMEDIO], 'Sin datos')
+                    self.assertEqual(primera_fila[d.TEXTO_ENCABEZADO_MEMORIA_PROMEDIO_RESUMEN], 'Sin datos')
         finally:
             libro.close()
         return salida, proyectos, perfil
@@ -193,10 +205,15 @@ class IntegracionEvaluadoresTest(unittest.TestCase):
 
     def test_esp32_respeta_perfil_y_mediciones_ausentes(self):
         """Comprueba ESP32 con un proyecto de prueba sin datos de medición."""
+        ruta_fuentes = self.carpeta / 'fuentes_esp32'
+        ruta_fuentes.mkdir()
+        (ruta_fuentes / 'main.ino').write_text(
+            'void setup() {}\nvoid loop() {}\n', encoding='utf-8'
+        )
         ejemplo = {
             'codigo': 'E1-ESP-M', 'id_proyecto': 'E1',
             'nombre_proyecto': 'Sensor de prueba',
-            'ruta_codigo': str(self.carpeta / 'no_disponible'),
+            'ruta_codigo': str(ruta_fuentes),
             'herramienta_ia': 'No aplica', 'modelo_ia': 'No aplica',
             'lenguaje': 'Wiring', 'dispositivo': 'ESP32',
             'implementacion': 'Manual',

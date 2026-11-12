@@ -1,4 +1,8 @@
 """Verificaciones puntuales de métricas estáticas y compatibilidad PC."""
+from metricas.mantenibilidad import CalculadoraMantenibilidad, LectorLizardMantenibilidad
+
+from metricas.bugs_smells import AnalizadorCppcheck, AnalizadorDetekt, AnalizadorPMD, CalculadoraIncidencias
+
 
 import importlib.util
 import json
@@ -13,14 +17,12 @@ from unittest.mock import Mock, patch
 
 from constantes import definiciones
 from metricas.bugs_smells import (
-    calcular_metricas_bugs_smells,
-    ejecutar_detekt,
-    ejecutar_pmd,
-    parsear_csv_pmd,
-    parsear_xml_detekt,
+    CalculadoraIncidencias,
+    AnalizadorDetekt,
+    AnalizadorPMD,
+    AnalizadorCppcheck,
 )
-from metricas.complejidad import procesar_csv_lizard
-from metricas.mantenibilidad import calcular_metricas_mi, parse_lizard_csv_mi
+from metricas.complejidad import ProcesadorComplejidad
 from modelos.modelos import ContextoAnalisis, Proyecto
 from procesamiento.analisis import analizar_bugs_smells_seguro, analizar_complejidad
 from procesamiento.procesamiento import (
@@ -168,7 +170,7 @@ class MetricasEstaticasTest(unittest.TestCase):
         metricas = analizar_complejidad(proyecto, self.configuracion, self.logger, contexto)
         self.assertEqual(metricas.cantidad_funciones, 4)
         self.assertEqual(metricas.ccn_promedio, 1.25)
-        archivos = parse_lizard_csv_mi(contexto.archivo_csv_lizard, estricto=True)
+        archivos = LectorLizardMantenibilidad.parse_lizard_csv_mi(contexto.archivo_csv_lizard, estricto=True)
         self.assertEqual(len(archivos), 4)
         self.assertGreater(contexto.nloc_codigo, 0)
 
@@ -256,7 +258,7 @@ class MetricasEstaticasTest(unittest.TestCase):
     def test_herramienta_ausente_no_se_convierte_en_cero(self):
         """La ausencia del analizador mantiene CCN y MI y deja calidad en None."""
         proyecto = self.crear_proyecto("Java")
-        with patch("metricas.bugs_smells.buscar_ejecutable", side_effect=RuntimeError(
+        with patch("metricas.bugs_smells.LocalizadorHerramientas.buscar_ejecutable", side_effect=RuntimeError(
             "PMD no instalado en PATH"
         )):
             resultado = self.procesar(proyecto)
@@ -283,7 +285,7 @@ class MetricasEstaticasTest(unittest.TestCase):
         """El flujo nuevo utiliza NLOC medido aunque no pueda obtener MI."""
         proyecto = self.crear_proyecto("Java")
         contexto = ContextoAnalisis(fuentes=seleccionar_fuentes(proyecto), nloc_codigo=100)
-        with patch("procesamiento.analisis.analizar_bugs_smells") as analizar:
+        with patch("procesamiento.analisis.AnalizadorIncidencias.analizar") as analizar:
             metrica = analizar_bugs_smells_seguro(
                 proyecto, self.configuracion, self.logger, None, contexto
             )
@@ -296,7 +298,7 @@ class MetricasEstaticasTest(unittest.TestCase):
         ruta = self.raiz / "sin_tokens.csv"
         ruta.write_text("3,2,0,1,3,f,Main.java,f\n", encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "MI no disponible"):
-            parse_lizard_csv_mi(ruta, estricto=True)
+            LectorLizardMantenibilidad.parse_lizard_csv_mi(ruta, estricto=True)
 
     @unittest.skip("Requiere estricto, ausente en etapa 7")
     def test_pmd_rechaza_prioridad_ausente_en_modo_nuevo(self):
@@ -307,45 +309,43 @@ class MetricasEstaticasTest(unittest.TestCase):
             encoding="utf-8",
         )
         with self.assertRaisesRegex(RuntimeError, "incompleta"):
-            parsear_csv_pmd(ruta, estricto=True)
+            AnalizadorPMD.parsear_csv_pmd(ruta, estricto=True)
 
     def test_cero_incidencias_es_medicion_valida(self):
         """Un XML completo sin incidencias produce densidad e ISI iguales a cero."""
         issues = []  # La versión de etapa 7 no analiza XML de Cppcheck
-        metricas = calcular_metricas_bugs_smells(
+        metricas = CalculadoraIncidencias.calcular_metricas_bugs_smells(
             "Cppcheck", issues, 100, self.configuracion["umbrales_isi"]
         )
         self.assertEqual((metricas.issues_kloc, metricas.isi), (0, 0))
         self.assertEqual(metricas.nivel_isi, "Sin issues")
 
-    @unittest.skip("Requiere parsear_xml_cppcheck, ausente en etapa 7")
     def test_cppcheck_normaliza_una_vez_y_rechaza_fallos(self):
         """Conserva severidad alta y cuenta un diagnóstico con varias ubicaciones."""
         xml = ('<results version="2"><errors><error id="nullPointer" '
                'severity="error" msg="Null"><location file="main.cpp" line="3"/>'
                '<location file="main.cpp" line="1"/></error></errors></results>')
-        issues = parsear_xml_cppcheck(xml, self.logger)
+        issues = AnalizadorCppcheck.parsear_xml_cppcheck(xml, self.logger)
         self.assertEqual(len(issues), 1)
-        metrica = calcular_metricas_bugs_smells(
+        metrica = CalculadoraIncidencias.calcular_metricas_bugs_smells(
             "Cppcheck", issues, 100, self.configuracion["umbrales_isi"]
         )
         self.assertEqual((metrica.issues_kloc, metrica.isi), (10, 5))
         for salida in ("", "<invalido/>", xml.replace("nullPointer", "syntaxError")):
             with self.subTest(salida=salida), self.assertRaises(RuntimeError):
-                parsear_xml_cppcheck(salida, self.logger)
+                AnalizadorCppcheck.parsear_xml_cppcheck(salida, self.logger)
 
     @unittest.skip("Requiere estricto, ausente en etapa 7")
     def test_fallos_de_pmd_y_detekt_no_aceptan_reportes_parciales(self):
         """Un proceso fallido nunca se interpreta como análisis sin incidencias."""
         resultado = subprocess.CompletedProcess([], 1, "", "fallo del analizador")
-        for analizar in (ejecutar_pmd, ejecutar_detekt):
+        for analizar in (AnalizadorPMD.ejecutar_pmd, AnalizadorDetekt.ejecutar_detekt):
             with self.subTest(analizador=analizar.__name__):
-                with patch("metricas.bugs_smells.buscar_ejecutable", return_value="tool"), \
+                with patch("metricas.bugs_smells.LocalizadorHerramientas.buscar_ejecutable", return_value="tool"), \
                      patch("metricas.bugs_smells.subprocess.run", return_value=resultado):
                     with self.assertRaisesRegex(RuntimeError, "no completó"):
                         analizar(self.raiz, "P1", self.logger, estricto=True)
 
-    @unittest.expectedFailure  # falta observacion en ISI Muy alto del JSON existente
     def test_reutiliza_procesadores_java_y_kotlin(self):
         """Los reportes de ambas herramientas utilizan el mismo cálculo ISI."""
         pmd = self.raiz / "pmd.csv"
@@ -359,10 +359,10 @@ class MetricasEstaticasTest(unittest.TestCase):
             'source="detekt.LongMethod" message="Problema"/></file></checkstyle>',
             encoding="utf-8",
         )
-        for nombre, issues in (("PMD", parsear_csv_pmd(pmd)),
-                               ("Detekt", parsear_xml_detekt(detekt))):
+        for nombre, issues in (("PMD", AnalizadorPMD.parsear_csv_pmd(pmd)),
+                               ("Detekt", AnalizadorDetekt.parsear_xml_detekt(detekt))):
             with self.subTest(analizador=nombre):
-                metricas = calcular_metricas_bugs_smells(
+                metricas = CalculadoraIncidencias.calcular_metricas_bugs_smells(
                     nombre, issues, 100, self.configuracion["umbrales_isi"]
                 )
                 self.assertEqual((metricas.issues_kloc, metricas.isi), (10, 5))
@@ -387,13 +387,13 @@ class MetricasEstaticasTest(unittest.TestCase):
             "3,2,15,1,3,f@1-3,src/Main.java,f\n"
             "5,4,25,1,5,g@1-5,other/Main.java,g\n", encoding="utf-8",
         )
-        cc = procesar_csv_lizard(ruta)
-        mi = calcular_metricas_mi(parse_lizard_csv_mi(ruta), self.configuracion["umbrales_mi"])
+        cc = ProcesadorComplejidad.procesar_csv_lizard(ruta)
+        mi = CalculadoraMantenibilidad.calcular_metricas_mi(LectorLizardMantenibilidad.parse_lizard_csv_mi(ruta), self.configuracion["umbrales_mi"])
         self.assertEqual((cc.ccn_promedio, cc.nloc_total, cc.cantidad_funciones), (3, 8, 2))
         self.assertEqual((mi.mi, mi.tokens_codigo, mi.nloc_mi), (68.68, 40, 8))
         self.assertEqual(list(mi.archivos), ["Main.java"])
         issues = [{"severidad": s, "regla": s} for s in ("Alta", "Media", "Baja")]
-        calidad = calcular_metricas_bugs_smells("PMD", issues, 8, self.configuracion["umbrales_isi"])
+        calidad = CalculadoraIncidencias.calcular_metricas_bugs_smells("PMD", issues, 8, self.configuracion["umbrales_isi"])
         self.assertEqual((calidad.issues_kloc, calidad.isi), (375, 2.67))
 
 

@@ -1,3 +1,4 @@
+from reportes.gestor_libros import GestorLibrosExcel
 """Cálculo de eficiencia en tokens de generación de código."""
 
 import math
@@ -13,80 +14,86 @@ from constantes.definiciones import (
     TEXTO_ENCABEZADO_TOKENS_REGISTRADOS,
 )
 from modelos.modelos import MetricaTokens
-from reportes.excel import leer_fila_por_codigo
 
+class ValidadorTokens:
+    """Valida entradas de tokens, refinamientos y método."""
+    @staticmethod
+    def validar_numero(valor, nombre, permitir_cero=True):
+        """Valida un número finito y no negativo."""
 
-def validar_numero(valor, nombre, permitir_cero=True):
-    """Valida un número finito y no negativo."""
+        if isinstance(valor, bool) or not isinstance(valor, Real):
+            raise ValueError(f"{nombre} debe ser un valor numérico válido")
 
-    if isinstance(valor, bool) or not isinstance(valor, Real):
-        raise ValueError(f"{nombre} debe ser un valor numérico válido")
+        if not math.isfinite(valor) or valor < 0:
+            raise ValueError(f"{nombre} debe ser un valor numérico no negativo")
 
-    if not math.isfinite(valor) or valor < 0:
-        raise ValueError(f"{nombre} debe ser un valor numérico no negativo")
+        if not permitir_cero and valor == 0:
+            raise ValueError(f"{nombre} debe ser mayor que cero")
 
-    if not permitir_cero and valor == 0:
-        raise ValueError(f"{nombre} debe ser mayor que cero")
+        return valor
 
-    return valor
+    @staticmethod
+    def validar_refinamientos(valor):
+        """Valida una cantidad entera y no negativa de refinamientos."""
 
+        ValidadorTokens.validar_numero(valor, TEXTO_ENCABEZADO_REFINAMIENTOS)
 
-def validar_refinamientos(valor):
-    """Valida una cantidad entera y no negativa de refinamientos."""
+        if not float(valor).is_integer():
+            raise ValueError("Refinamientos debe representar un número entero")
 
-    validar_numero(valor, TEXTO_ENCABEZADO_REFINAMIENTOS)
+        return int(valor)
 
-    if not float(valor).is_integer():
-        raise ValueError("Refinamientos debe representar un número entero")
+    @staticmethod
+    def validar_metodo(valor):
+        """Valida y normaliza el método utilizado."""
 
-    return int(valor)
+        metodo = "" if valor is None else str(valor).strip()
 
+        if not metodo:
+            raise ValueError("Método utilizado no debe estar vacío")
 
-def validar_metodo(valor):
-    """Valida y normaliza el método utilizado."""
+        return metodo
 
-    metodo = "" if valor is None else str(valor).strip()
+class CalculadoraTokens:
+    """Calcula eficiencia de tokens y su clasificación."""
+    @staticmethod
+    def calcular_eficiencias(nloc_total, tokens, refinamientos, coeficiente):
+        """Calcula las eficiencias sin redondearlas."""
 
-    if not metodo:
-        raise ValueError("Método utilizado no debe estar vacío")
+        eficiencia = nloc_total / tokens * 1000
+        denominador = 1 + coeficiente * refinamientos
 
-    return metodo
+        if denominador <= 0:
+            raise ValueError("El denominador de eficiencia ponderada debe ser mayor que cero")
 
+        return eficiencia, eficiencia / denominador
 
-def calcular_eficiencias(nloc_total, tokens, refinamientos, coeficiente):
-    """Calcula las eficiencias sin redondearlas."""
+    @staticmethod
+    def crear_metrica_tokens(codigo, valores, nloc_total,umbrales, coeficiente):
+        """Valida los datos y construye el resultado de tokens."""
 
-    eficiencia = nloc_total / tokens * 1000
-    denominador = 1 + coeficiente * refinamientos
+        metodo = ValidadorTokens.validar_metodo(valores[TEXTO_ENCABEZADO_METODO_UTILIZADO])
+        refinamientos = ValidadorTokens.validar_refinamientos(valores[TEXTO_ENCABEZADO_REFINAMIENTOS])
+        tokens = ValidadorTokens.validar_numero(valores[TEXTO_ENCABEZADO_TOKENS_REGISTRADOS], TEXTO_ENCABEZADO_TOKENS_REGISTRADOS, False)
+        nloc = ValidadorTokens.validar_numero(nloc_total, TEXTO_ENCABEZADO_NLOC_TOTAL_TOKENS)
 
-    if denominador <= 0:
-        raise ValueError("El denominador de eficiencia ponderada debe ser mayor que cero")
+        eficiencia, ponderada = CalculadoraTokens.calcular_eficiencias(nloc, tokens, refinamientos, coeficiente)
+        nivel, interpretacion = clasificar_eficiencia_token(ponderada,umbrales)
 
-    return eficiencia, eficiencia / denominador
+        return MetricaTokens(codigo, metodo, nloc, refinamientos, tokens,
+                             round(eficiencia, 2), round(ponderada, 2),
+                             nivel, interpretacion)
 
+class AnalizadorTokens:
+    """Lee las mediciones de tokens y delega el cálculo."""
+    def __init__(self, gestor=None):
+        self.gestor = gestor if gestor is not None else GestorLibrosExcel()
+    def analizar_tokens(self, proyecto, libro_entrada, nloc_total,umbrales, coeficiente, logger):
+        """Lee y analiza los datos de tokens correspondientes a un proyecto."""
+        logger.debug(f"[{proyecto.codigo}] Leyendo datos de tokens")
 
-def crear_metrica_tokens(codigo, valores, nloc_total,umbrales, coeficiente):
-    """Valida los datos y construye el resultado de tokens."""
-
-    metodo = validar_metodo(valores[TEXTO_ENCABEZADO_METODO_UTILIZADO])
-    refinamientos = validar_refinamientos(valores[TEXTO_ENCABEZADO_REFINAMIENTOS])
-    tokens = validar_numero(valores[TEXTO_ENCABEZADO_TOKENS_REGISTRADOS], TEXTO_ENCABEZADO_TOKENS_REGISTRADOS, False)
-    nloc = validar_numero(nloc_total, TEXTO_ENCABEZADO_NLOC_TOTAL_TOKENS)
-
-    eficiencia, ponderada = calcular_eficiencias(nloc, tokens, refinamientos, coeficiente)
-    nivel, interpretacion = clasificar_eficiencia_token(ponderada,umbrales)
-
-    return MetricaTokens(codigo, metodo, nloc, refinamientos, tokens,
-                         round(eficiencia, 2), round(ponderada, 2),
-                         nivel, interpretacion)
-
-
-def analizar_tokens(proyecto, libro_entrada, nloc_total,umbrales, coeficiente, logger):
-    """Lee y analiza los datos de tokens correspondientes a un proyecto."""
-    logger.debug(f"[{proyecto.codigo}] Leyendo datos de tokens")
-
-    valores = leer_fila_por_codigo(
-        libro_entrada, HOJA_TOKENS_ENTRADA, proyecto.codigo,
-        ENCABEZADOS_TOKENS_ENTRADA,
-    )
-    return crear_metrica_tokens(proyecto.codigo, valores, nloc_total, umbrales, coeficiente)
+        valores = self.gestor.leer_fila_por_codigo(
+            libro_entrada, HOJA_TOKENS_ENTRADA, proyecto.codigo,
+            ENCABEZADOS_TOKENS_ENTRADA,
+        )
+        return CalculadoraTokens.crear_metrica_tokens(proyecto.codigo, valores, nloc_total, umbrales, coeficiente)

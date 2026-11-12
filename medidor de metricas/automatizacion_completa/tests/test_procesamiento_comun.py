@@ -1,3 +1,4 @@
+from reportes.gestor_libros import GestorLibrosExcel
 """Pruebas del flujo compartido y de la selección de entradas por plataforma."""
 
 import unittest
@@ -19,12 +20,14 @@ class ProcesamientoComunTest(unittest.TestCase):
         self.addCleanup(self.patches.close)
         nombres = (
             'cargar_configuracion', 'cargar_proyectos', 'crear_directorio',
-            'configurar_logger', 'limitar_cpu', 'crear_o_abrir_excel_salida',
-            'abrir_excel_entrada', 'gestionar_procesamiento_proyectos',
-            'finalizar_libro',
+            'configurar_logger', 'limitar_cpu', 'crear_o_abrir_salida',
+            'abrir_entrada', 'gestionar_procesamiento_proyectos',
+            'finalizar',
         )
         self.operaciones = {
-            nombre: self.patches.enter_context(patch.object(comun, nombre))
+            nombre: self.patches.enter_context(
+                patch.object(GestorLibrosExcel, nombre) if nombre in {'crear_o_abrir_salida', 'abrir_entrada', 'finalizar'}
+                else patch.object(comun, nombre))
             for nombre in nombres
         }
         self.configuracion = {
@@ -44,15 +47,16 @@ class ProcesamientoComunTest(unittest.TestCase):
         self.operaciones['cargar_proyectos'].assert_called_once_with(
             definiciones.DATOS_PC_PROYECTOS_JSON
         )
-        self.operaciones['abrir_excel_entrada'].assert_called_once_with(
+        self.operaciones['abrir_entrada'].assert_called_once_with(
             'entrada_pc.xlsx'
         )
-        self.operaciones['crear_o_abrir_excel_salida'].assert_called_once_with(
+        self.operaciones['crear_o_abrir_salida'].assert_called_once_with(
             'salida_pc.xlsx', hojas_reporte=definiciones.HOJAS_REPORTE,
         )
-        self.operaciones['finalizar_libro'].assert_called_once_with(
-            self.operaciones['crear_o_abrir_excel_salida'].return_value,
+        self.operaciones['finalizar'].assert_called_once_with(
+            self.operaciones['crear_o_abrir_salida'].return_value,
             'salida_pc.xlsx', incluir_graficos=True,
+            tipo_proyecto=definiciones.TIPO_PROYECTO_PC,
         )
         self.verificar_cierre_libros()
 
@@ -65,25 +69,25 @@ class ProcesamientoComunTest(unittest.TestCase):
         self.operaciones['cargar_proyectos'].assert_called_once_with(
             definiciones.DATOS_ESP32_ANDROID_PROYECTOS_JSON
         )
-        self.operaciones['crear_o_abrir_excel_salida'].assert_called_once_with(
+        self.operaciones['crear_o_abrir_salida'].assert_called_once_with(
             'salida_pc.xlsx',
             hojas_reporte=definiciones.HOJAS_REPORTE_DISPOSITIVOS,
         )
-        self.operaciones['abrir_excel_entrada'].assert_called_once_with(
+        self.operaciones['abrir_entrada'].assert_called_once_with(
             'entrada_pc.xlsx'
         )
-        self.operaciones['finalizar_libro'].assert_called_once_with(
-            self.operaciones['crear_o_abrir_excel_salida'].return_value,
+        self.operaciones['finalizar'].assert_called_once_with(
+            self.operaciones['crear_o_abrir_salida'].return_value,
             'salida_pc.xlsx', incluir_graficos=True,
-            configuracion_graficos=definiciones.CONFIGURACION_GRAFICOS_DISPOSITIVOS,
+            tipo_proyecto=definiciones.TIPO_PROYECTO_ESP32_ANDROID,
         )
         self.operaciones['configurar_logger'].assert_called_once_with('logs')
         self.operaciones['crear_directorio'].assert_any_call('resultados')
         self.operaciones['gestionar_procesamiento_proyectos'].assert_called_once_with(
             self.operaciones['cargar_proyectos'].return_value,
             self.configuracion,
-            self.operaciones['crear_o_abrir_excel_salida'].return_value,
-            self.operaciones['abrir_excel_entrada'].return_value,
+            self.operaciones['crear_o_abrir_salida'].return_value,
+            self.operaciones['abrir_entrada'].return_value,
             self.operaciones['configurar_logger'].return_value,
         )
         self.verificar_cierre_libros()
@@ -95,7 +99,7 @@ class ProcesamientoComunTest(unittest.TestCase):
             0.5, self.operaciones['configurar_logger'].return_value
         )
         self.assertTrue(
-            self.operaciones['finalizar_libro'].call_args.kwargs['incluir_graficos']
+            self.operaciones['finalizar'].call_args.kwargs['incluir_graficos']
         )
 
     def test_error_procesamiento_cierra_libros(self):
@@ -104,20 +108,20 @@ class ProcesamientoComunTest(unittest.TestCase):
             RuntimeError('fallo de procesamiento')
         )
         main_pc.main()
-        self.operaciones['finalizar_libro'].assert_not_called()
+        self.operaciones['finalizar'].assert_not_called()
         self.operaciones['configurar_logger'].return_value.error.assert_called_once()
         self.verificar_cierre_libros()
 
     def test_error_apertura_entrada_cierra_salida(self):
         """Si la entrada no abre, se libera el libro de salida ya abierto."""
-        self.operaciones['abrir_excel_entrada'].side_effect = FileNotFoundError()
+        self.operaciones['abrir_entrada'].side_effect = FileNotFoundError()
         main_pc.main()
-        self.operaciones['crear_o_abrir_excel_salida'].return_value.close.assert_called_once()
+        self.operaciones['crear_o_abrir_salida'].return_value.close.assert_called_once()
         self.operaciones['gestionar_procesamiento_proyectos'].assert_not_called()
 
     def test_error_guardado_cierra_libros(self):
         """Un reporte bloqueado conserva el aviso y libera los libros."""
-        self.operaciones['finalizar_libro'].side_effect = PermissionError()
+        self.operaciones['finalizar'].side_effect = PermissionError()
         main_pc.main()
         self.operaciones['configurar_logger'].return_value.error.assert_called_once_with(
             'No se pudo guardar el informe. Cierre el archivo Excel si está abierto.'
@@ -126,7 +130,7 @@ class ProcesamientoComunTest(unittest.TestCase):
 
     def verificar_cierre_libros(self):
         """Comprueba que ambos libros se cierran exactamente una vez."""
-        for nombre in ('crear_o_abrir_excel_salida', 'abrir_excel_entrada'):
+        for nombre in ('crear_o_abrir_salida', 'abrir_entrada'):
             self.operaciones[nombre].return_value.close.assert_called_once()
 
 

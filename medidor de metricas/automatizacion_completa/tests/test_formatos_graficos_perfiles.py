@@ -1,3 +1,6 @@
+from reportes.formateador import FormateadorExcel
+from reportes.gestor_libros import GestorLibrosExcel
+from reportes.excel_utilidades import UtilidadesExcel
 """Pruebas de formato de columnas y gráficos por perfil de reporte."""
 
 import unittest
@@ -5,14 +8,6 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from constantes import definiciones as d
-from reportes.excel import (
-    crear_hojas_si_no_existen,
-    crear_o_abrir_excel_salida,
-    finalizar_libro,
-    formatear_celdas_hoja_resumen,
-    obtener_mapa_encabezados,
-    resolver_columnas_graficos,
-)
 
 
 class FormatosGraficosPerfilesTest(unittest.TestCase):
@@ -20,7 +15,7 @@ class FormatosGraficosPerfilesTest(unittest.TestCase):
 
     @staticmethod
     def crear_libro(ruta, perfil):
-        libro = crear_o_abrir_excel_salida(ruta, hojas_reporte=perfil)
+        libro = GestorLibrosExcel().crear_o_abrir_salida(ruta, hojas_reporte=perfil)
         libro[d.HOJA_RESUMEN].append(["P1"])
         libro[d.HOJA_COMPLEJIDAD].append(["P1"])
         return libro
@@ -31,7 +26,7 @@ class FormatosGraficosPerfilesTest(unittest.TestCase):
             libro = self.crear_libro(Path(temporal) / "pc.xlsx", d.HOJAS_REPORTE)
             try:
                 hoja = libro[d.HOJA_RESUMEN]
-                formatear_celdas_hoja_resumen(hoja, "P1")
+                FormateadorExcel().formatear_celdas_hoja_resumen(hoja, "P1")
                 colores = [hoja.cell(2, i).fill.fgColor.rgb[-6:] for i in range(1, 21)]
                 self.assertEqual(colores[0], d.COLOR_CODIGO_RESUMEN)
                 self.assertEqual(colores[1:5], [d.COLOR_DATOS_PROYECTO_RESUMEN] * 4)
@@ -50,8 +45,8 @@ class FormatosGraficosPerfilesTest(unittest.TestCase):
             )
             try:
                 hoja = libro[d.HOJA_RESUMEN]
-                formatear_celdas_hoja_resumen(hoja, "P1")
-                columnas = obtener_mapa_encabezados(hoja)
+                FormateadorExcel().formatear_celdas_hoja_resumen(hoja, "P1")
+                columnas = UtilidadesExcel().obtener_mapa_encabezados(hoja)
                 for encabezado in d.ENCABEZADOS_DATOS_PROYECTO_RESUMEN:
                     self.assertEqual(
                         hoja.cell(2, columnas[encabezado]).fill.fgColor.rgb[-6:],
@@ -78,7 +73,7 @@ class FormatosGraficosPerfilesTest(unittest.TestCase):
             ruta = Path(temporal) / "pc.xlsx"
             libro = self.crear_libro(ruta, d.HOJAS_REPORTE)
             try:
-                finalizar_libro(libro, ruta, incluir_graficos=True)
+                GestorLibrosExcel().finalizar(libro, ruta, incluir_graficos=True)
                 graficos = libro["Graficos"]._charts
                 self.assertEqual(len(graficos), len(d.CONFIGURACION_GRAFICOS))
                 self.assertEqual(graficos[0].series[0].val.numRef.f, "'Resumen'!$F$2")
@@ -92,7 +87,7 @@ class FormatosGraficosPerfilesTest(unittest.TestCase):
             ruta = Path(temporal) / "dispositivos.xlsx"
             libro = self.crear_libro(ruta, d.HOJAS_REPORTE_DISPOSITIVOS)
             try:
-                finalizar_libro(
+                GestorLibrosExcel().finalizar(
                     libro, ruta, incluir_graficos=True,
                     configuracion_graficos=d.CONFIGURACION_GRAFICOS_DISPOSITIVOS,
                 )
@@ -110,8 +105,8 @@ class FormatosGraficosPerfilesTest(unittest.TestCase):
         with TemporaryDirectory() as temporal:
             libro = self.crear_libro(Path(temporal) / "antiguo.xlsx", d.HOJAS_REPORTE)
             try:
-                crear_hojas_si_no_existen(libro, d.HOJAS_REPORTE_DISPOSITIVOS)
-                configuracion = resolver_columnas_graficos(
+                GestorLibrosExcel().crear_hojas_si_no_existen(libro, d.HOJAS_REPORTE_DISPOSITIVOS)
+                configuracion = GestorLibrosExcel().resolver_columnas_graficos(
                     libro, d.CONFIGURACION_GRAFICOS_DISPOSITIVOS
                 )
                 self.assertEqual(configuracion[0][1], 6)
@@ -127,7 +122,7 @@ class FormatosGraficosPerfilesTest(unittest.TestCase):
             )
             try:
                 with self.assertRaisesRegex(ValueError, "Falta la columna 'Inexistente'"):
-                    resolver_columnas_graficos(
+                    GestorLibrosExcel().resolver_columnas_graficos(
                         libro, [(d.HOJA_RESUMEN, "Inexistente", "", "", "A1")]
                     )
             finally:
@@ -138,16 +133,16 @@ class FormatosGraficosPerfilesTest(unittest.TestCase):
         with TemporaryDirectory() as temporal:
             ruta = Path(temporal) / "reporte.xlsx"
             libro = self.crear_libro(ruta, d.HOJAS_REPORTE_DISPOSITIVOS)
-            finalizar_libro(
+            GestorLibrosExcel().finalizar(
                 libro, ruta, incluir_graficos=True,
                 configuracion_graficos=d.CONFIGURACION_GRAFICOS_DISPOSITIVOS,
             )
             libro.close()
 
-            libro = crear_o_abrir_excel_salida(ruta, d.HOJAS_REPORTE_DISPOSITIVOS)
+            libro = GestorLibrosExcel().crear_o_abrir_salida(ruta, d.HOJAS_REPORTE_DISPOSITIVOS)
             try:
                 self.assertEqual(len(libro["Graficos"]._charts), 8)
-                finalizar_libro(
+                GestorLibrosExcel().finalizar(
                     libro, ruta, incluir_graficos=True,
                     configuracion_graficos=d.CONFIGURACION_GRAFICOS_DISPOSITIVOS,
                 )

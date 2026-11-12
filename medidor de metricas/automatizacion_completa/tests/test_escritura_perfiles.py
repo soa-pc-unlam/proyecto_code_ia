@@ -1,3 +1,5 @@
+from reportes.escritor_resultados import EscritorResultadosExcel
+from reportes.gestor_libros import GestorLibrosExcel
 """Regresiones de la escritura común para PC y Android/ESP32."""
 
 import unittest
@@ -5,7 +7,6 @@ from dataclasses import replace
 
 from constantes import definiciones as d
 from modelos.modelos import MetricaCpuMemoria, MetricaComplejidad, Proyecto
-from reportes.excel import crear_o_abrir_excel_salida, guardar_resultado_excel
 
 
 class EscrituraPerfilesTest(unittest.TestCase):
@@ -22,7 +23,7 @@ class EscrituraPerfilesTest(unittest.TestCase):
         )
 
     def guardar(self, libro, proyecto, cpu=None):
-        guardar_resultado_excel(
+        EscritorResultadosExcel().guardar_resultado(
             libro, proyecto, self.complejidad, None, metricas_cpu_memoria=cpu
         )
 
@@ -33,7 +34,7 @@ class EscrituraPerfilesTest(unittest.TestCase):
         }
 
     def test_pc_conserva_la_escritura_posicional_y_cpu_original(self):
-        libro = crear_o_abrir_excel_salida("/ruta/inexistente/reporte_pc.xlsx")
+        libro = GestorLibrosExcel().crear_o_abrir_salida("/ruta/inexistente/reporte_pc.xlsx")
         cpu = MetricaCpuMemoria(
             codigo="L1-M", lenguaje="Java", metodo_medicion="Medición PC",
             modo_cpu="100%=capacidad total", cpus_logicas=8,
@@ -63,7 +64,7 @@ class EscrituraPerfilesTest(unittest.TestCase):
             libro.close()
 
     def test_dispositivos_escriben_en_sus_encabezados_y_actualizan(self):
-        libro = crear_o_abrir_excel_salida(
+        libro = GestorLibrosExcel().crear_o_abrir_salida(
             "/ruta/inexistente/reporte_dispositivos.xlsx",
             hojas_reporte=d.HOJAS_REPORTE_DISPOSITIVOS,
         )
@@ -123,8 +124,8 @@ class EscrituraPerfilesTest(unittest.TestCase):
         finally:
             libro.close()
 
-    def test_dispositivos_reutilizan_normalizacion_y_limpian_datos_ausentes(self):
-        libro = crear_o_abrir_excel_salida(
+    def test_dispositivos_reutilizan_normalizacion_y_omiten_nuevos_datos_ausentes(self):
+        libro = GestorLibrosExcel().crear_o_abrir_salida(
             "/ruta/inexistente/reporte_dispositivos.xlsx",
             hojas_reporte=d.HOJAS_REPORTE_DISPOSITIVOS,
         )
@@ -149,20 +150,19 @@ class EscrituraPerfilesTest(unittest.TestCase):
             self.assertEqual(hoja_cpu[d.TEXTO_ENCABEZADO_CPU_PROMEDIO_NORMALIZADA], 85)
             self.assertEqual(hoja_cpu[d.TEXTO_ENCABEZADO_MEMORIA_NORMALIZADA_PROMEDIO], 65)
             self.assertEqual(hoja_cpu[d.TEXTO_ENCABEZADO_CPU_MEDIDA_1], 15)
-            self.guardar(libro, self.proyecto, None)
-            self.assertEqual(
-                self.valores(libro[d.HOJA_CPU_MEMORIA_SALIDA])[
-                    d.TEXTO_ENCABEZADO_CPU_MEDIDA_1
-                ], ""
-            )
+            # Sin datos, el escritor no crea nuevas filas. La actualización
+            # de filas anteriores se comprueba por separado, fuera de este caso.
+            otro = replace(self.proyecto, codigo="SIN-MEDICION")
+            self.guardar(libro, otro, None)
+            self.assertEqual(libro[d.HOJA_CPU_MEMORIA_SALIDA].max_row, 2)
         finally:
             libro.close()
 
     def test_migracion_hoja_dispositivos_anterior_conserva_mediciones(self):
         """Reordena una hoja antigua conservando datos normalizados existentes."""
-        from reportes.excel import crear_hojas_si_no_existen
+        crear_hojas_si_no_existen = GestorLibrosExcel().crear_hojas_si_no_existen
 
-        libro = crear_o_abrir_excel_salida(
+        libro = GestorLibrosExcel().crear_o_abrir_salida(
             "/ruta/inexistente/reporte_dispositivos.xlsx",
             hojas_reporte=d.HOJAS_REPORTE_DISPOSITIVOS,
         )
@@ -195,12 +195,12 @@ class EscrituraPerfilesTest(unittest.TestCase):
             libro.close()
 
     def test_libro_existente_con_columnas_agregadas_se_actualiza_bien(self):
-        libro = crear_o_abrir_excel_salida(
+        libro = GestorLibrosExcel().crear_o_abrir_salida(
             "/ruta/inexistente/reporte_dispositivos.xlsx",
             hojas_reporte=d.HOJAS_REPORTE,
         )
         # Simula que el libro previo tenía los encabezados de PC.
-        from reportes.excel import crear_hojas_si_no_existen
+        crear_hojas_si_no_existen = GestorLibrosExcel().crear_hojas_si_no_existen
         crear_hojas_si_no_existen(libro, d.HOJAS_REPORTE_DISPOSITIVOS)
         try:
             self.guardar(libro, self.proyecto)
