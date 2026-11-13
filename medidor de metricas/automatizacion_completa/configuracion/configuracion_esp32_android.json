@@ -7,19 +7,19 @@
   "umbrales_cc": [
     {
       "min": 1,
-      "max": 5,
+      "max": 5.99,
       "nivel": "Bajo",
       "interpretacion": "Testeabilidad alta"
     },
     {
       "min": 6,
-      "max": 10,
+      "max": 10.99,
       "nivel": "Moderado",
       "interpretacion": "Tolerable"
     },
     {
       "min": 11,
-      "max": 20,
+      "max": 20.99,
       "nivel": "Alto",
       "interpretacion": "Considerar refactoring"
     },

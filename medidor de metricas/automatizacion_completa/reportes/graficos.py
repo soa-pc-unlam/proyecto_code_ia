@@ -119,18 +119,6 @@ def preparar_hoja_graficos_comparacion(hoja):
             celda.alignment = Alignment(horizontal="center" if columna > 1 else "left")
         hoja.row_dimensions[fila].height = 25
 
-    hoja.merge_cells("A27:D29")
-    
-    hoja["A27"] = (
-        "MI requiere un valor del analizador. CPU de ESP32 requiere "
-        "instrumentación adecuada. Las mediciones deben utilizar "
-        "el mismo hardware y la misma carga."
-    )
-    hoja["A27"].fill = PatternFill("solid", fgColor="F4F8FB")
-    hoja["A27"].font = Font(name="Calibri", size=11, color="5D7081")
-    hoja["A27"].alignment = Alignment(vertical="top", wrap_text=True)
-    hoja.row_dimensions[27].height = 46
-
 
 def cargar_metricas_graficos_comparacion(hoja, comparacion):
     """Enlaza las métricas por nombre, sin depender de filas fijas."""
