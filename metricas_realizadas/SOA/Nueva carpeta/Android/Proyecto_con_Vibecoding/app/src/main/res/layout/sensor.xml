@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:padding="16dp">
+
+    <!-- Top App Bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title=""
+        app:menu="@menu/top_menu" />
+
+    <!-- Values -->
+    <GridLayout
+        android:id="@+id/valueGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="2"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:id="@+id/leftDistanceText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="Distancia Izquierda"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/rightDistanceText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="Distancia Derecha"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/lightText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="Luz"
+            android:textSize="20sp" />
+
+    </GridLayout>
+
+    <!-- Sensor Output -->
+    <TextView
+        android:id="@+id/txtSensorOutput"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="FORWARD"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- Bottom Navigation -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnController"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Activity 1" />
+
+        <Button
+            android:id="@+id/btnSensors"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="Activity 2" />
+
+    </LinearLayout>
+
+</LinearLayout>
