@@ -12,6 +12,19 @@ from util.fuentes_wiring import preparar_fuentes_wiring
 from modelos.modelos import FuncionCompleja, MetricaComplejidad
 from metricas.herramientas import EjecutorHerramientas
 
+carpetas_excluidas_lizard = {
+       ".venv",
+        "venv",
+        "env",
+        "site-packages",
+        "__pycache__",
+        "target",
+        "build",
+        ".gradle",
+        "dist",
+        "out",
+}
+
 class AnalizadorComplejidad:
     """Orquesta la medición de complejidad de un proyecto."""
     @staticmethod
@@ -68,16 +81,16 @@ class EjecutorLizard:
 
         preparacion = nullcontext((proyecto.ruta_codigo, {}))
         lenguaje_lizard = lenguaje
+
         if lenguaje == LENGUAJE_WIRING:
             preparacion = preparar_fuentes_wiring(proyecto.ruta_codigo, fuentes_wiring)
             lenguaje_lizard = "cpp"
 
         with preparacion as (ruta_fuentes, rutas_originales):
-            comando = ["lizard", str(ruta_fuentes), "--languages", lenguaje_lizard, "--csv"]
+            comando = EjecutorLizard.obtener_comando_lizard(lenguaje, lenguaje_lizard, ruta_fuentes)
             logger.debug(f"[{proyecto.codigo}] Lizard: {' '.join(comando)}")
-            resultado = EjecutorHerramientas().ejecutar(
-                comando, timeout=TIEMPO_MAXIMO_ANALIZADOR
-            )
+            resultado = EjecutorHerramientas().ejecutar( comando, timeout=TIEMPO_MAXIMO_ANALIZADOR)
+        
             if resultado.returncode != 0:
                 raise RuntimeError(f"Error ejecutando Lizard para {proyecto.codigo}: {resultado.stderr}")
             if lenguaje == LENGUAJE_WIRING:
@@ -85,6 +98,17 @@ class EjecutorLizard:
             else:
                 archivo_csv.write_text(resultado.stdout, encoding="utf-8")
         return archivo_csv
+
+    @staticmethod
+    def obtener_comando_lizard(lenguaje, lenguaje_lizard, ruta_fuentes):
+        comando = ["lizard", str(ruta_fuentes), "--languages", lenguaje_lizard, "--csv"]
+
+        
+        
+        if lenguaje != LENGUAJE_WIRING:
+            for carpeta in (carpetas_excluidas_lizard):
+                comando.extend(["-x", f"*/{carpeta}/*"])
+        return comando
 
     @staticmethod
     def guardar_csv_wiring(salida, archivo_csv, rutas_originales):

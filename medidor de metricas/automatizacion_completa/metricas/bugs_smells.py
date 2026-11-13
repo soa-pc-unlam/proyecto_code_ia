@@ -34,6 +34,12 @@ from modelos.modelos import MetricaBugsSmells
 from metricas.herramientas import EjecutorHerramientas
 
 
+carpetas_excluidas_pmd = {
+        ".venv", "venv", "env",
+        "site-packages", "__pycache__",
+        "target", "build", ".gradle",
+        "dist", "out",
+    }
 
 @dataclass
 class RegistroCoberturaCppcheck:
@@ -371,32 +377,56 @@ class AnalizadorPMD:
         """
         ejecutable = LocalizadorHerramientas.buscar_ejecutable(["pmd", "pmd.bat", "pmd.cmd"])
 
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as temporal:
+
+        archivos_java = []
+
+        for raiz, carpetas, archivos in os.walk(ruta_proyecto):
+            carpetas[:] = sorted(carpeta for carpeta in carpetas
+                                if carpeta.lower() not in carpetas_excluidas_pmd)
+
+            for archivo in sorted(archivos):
+                if archivo.lower().endswith(".java"):
+                    archivos_java.append(str(Path(raiz) / archivo))
+
+        if not archivos_java:
+            raise RuntimeError(f"No se encontraron archivos Java para {proyecto_codigo}")
+
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            suffix=".txt",
+            delete=False
+        ) as temporal:
+            temporal.write("\n".join(archivos_java) + "\n")
+            archivo_lista = Path(temporal.name)
+
+        with tempfile.NamedTemporaryFile(
+            delete=False, suffix=".csv"
+        ) as temporal:
             archivo_csv = Path(temporal.name)
 
         comando = [
             ejecutable,
             "check",
-            "-d",
-            str(ruta_proyecto),
-            "-R",
-            "rulesets/java/quickstart.xml",
-            "-f",
-            "csv",
-            "-r",
-            str(archivo_csv),
+            "--file-list", str(archivo_lista),
+            "-R", "rulesets/java/quickstart.xml",
+            "-f", "csv",
+            "-r", str(archivo_csv),
         ]
 
         logger.debug(f"[{proyecto_codigo}] PMD: {' '.join(comando)}")
+
         try:
             resultado = EjecutorHerramientas().ejecutar(comando, timeout=300)
-            if not archivo_csv.exists() or (
-                resultado.returncode != 0 and archivo_csv.stat().st_size == 0
-            ):
+
+            if not archivo_csv.exists() or (resultado.returncode != 0 and archivo_csv.stat().st_size == 0):
                 raise RuntimeError(f"PMD no generó el archivo CSV. {resultado.stderr}")
+
             return AnalizadorPMD.parsear_csv_pmd(archivo_csv)
+
         finally:
             archivo_csv.unlink(missing_ok=True)
+            archivo_lista.unlink(missing_ok=True)
 
     @staticmethod
     def parsear_csv_pmd(archivo_csv):
@@ -490,8 +520,12 @@ class AnalizadorPylint:
             subprocess.TimeoutExpired: Si el análisis supera los 300 segundos.
         """
         ejecutable = LocalizadorHerramientas.buscar_ejecutable(["pylint"])
-        comando = [ejecutable, str(ruta_proyecto), "--output-format=text"]
-
+        comando = [
+            ejecutable,
+            str(ruta_proyecto),
+            "--output-format=text",
+            "--ignore=.venv,venv,env,site-packages,__pycache__,build,dist",
+        ]
         logger.debug(f"[{proyecto_codigo}] Pylint: {' '.join(comando)}")
         resultado = EjecutorHerramientas().ejecutar(comando, timeout=300)
         if resultado.returncode >= 32:
@@ -605,6 +639,12 @@ class AnalizadorDetekt:
             ejecutable,
             "--input",
             str(ruta_proyecto),
+            "--excludes",
+            "**/build/**,"
+            "**/.gradle/**,"
+            "**/.kotlin/**,"
+            "**/out/**,"
+            "**/target/**",
             "--report",
             f"xml:{archivo_xml}",
         ]
