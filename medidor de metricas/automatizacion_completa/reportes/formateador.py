@@ -8,6 +8,7 @@ from openpyxl.formatting.rule import FormulaRule
 from openpyxl.utils import get_column_letter
 from constantes.definiciones import *
 from reportes.graficos import generar_graficos_comparativo_dispositivos, generar_graficos_pc
+from reportes.excel_utilidades import UtilidadesExcel
 
 
 class FormateadorExcel:
@@ -118,17 +119,27 @@ class FormateadorExcel:
         for celda in hoja[1]:
             celda.fill = PatternFill('solid', fgColor=COLOR_ENCABEZADO_RESUMEN)
 
+   
     def aplicar_formato_cpu_memoria(self, hoja, codigo):
-        """Aplica el mismo formato de CPU/memoria a todos los dispositivos."""
-        from reportes.excel_utilidades import UtilidadesExcel
+        """Aplica el formato de CPU/memoria según el lenguaje."""
         filas = UtilidadesExcel().buscar_filas_por_codigo(hoja, codigo)
         if not filas:
             raise ValueError(f'No se encontró el código en {hoja.title}')
         if len(filas) > 1:
             raise ValueError(f'Código duplicado en {hoja.title}')
+
         fila = filas[0]
+
         for columna in (7, 9, 10, 11, 12, 13):
             hoja.cell(row=fila, column=columna).number_format = '0.00\\%'
+
         hoja.cell(row=fila, column=20).number_format = '0.00\\%'
+
+        lenguaje = str(hoja.cell(row=fila, column=2).value or "").strip().lower()
+
+        formato_memoria = '0.000000' if lenguaje == 'wiring' else '0.00'
+
         for columna in (16, 17, 18, 19, 21):
-            hoja.cell(row=fila, column=columna).number_format = '0.00'
+            hoja.cell(row=fila, column=columna).number_format = (
+                formato_memoria if columna in (16, 17, 18, 19) else '0.00'
+            )
